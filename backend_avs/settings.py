@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'backend_avs.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'avs',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
