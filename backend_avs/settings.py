@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-jt3o9(jzhgwtgjtnwa%1l!aob1i)(9h)zemnd0e@!povz=jm^b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'backend-avs.herokuapp.com', 'localhost', '0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 import django_heroku
 # django_heroku.settings(locals())
