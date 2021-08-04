@@ -92,14 +92,21 @@ WSGI_APPLICATION = 'backend_avs.wsgi.application'
 
 import dj_database_url
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'd6b8obcn194q0l',
+#         'USER': 'exyycsbaebbrer',
+#         'PASSWORD': '072d835a475b03f6c93e5e4a4f2d317c86a0e0801c7feed15e6fe5b0e82de639',
+#         'HOST': 'ec2-44-194-183-115.compute-1.amazonaws.com:',
+#         'PORT': '5432'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd6b8obcn194q0l',
-        'USER': 'exyycsbaebbrer',
-        'PASSWORD': '072d835a475b03f6c93e5e4a4f2d317c86a0e0801c7feed15e6fe5b0e82de639',
-        'HOST': 'ec2-44-194-183-115.compute-1.amazonaws.com:',
-        'PORT': '5432'
+        dj_database_url.config(default=config('DATABASE_URL')
+                                  )
     }
 }
 
