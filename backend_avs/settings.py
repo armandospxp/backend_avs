@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 import django_heroku
 
@@ -26,10 +26,10 @@ SECRET_KEY = 'django-insecure-jt3o9(jzhgwtgjtnwa%1l!aob1i)(9h)zemnd0e@!povz=jm^b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'backend-avs.herokuapp.com', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'backend-avs.herokuapp.com', 'localhost', '0.0.0.0']
 
 import django_heroku
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 # Application definition
 
@@ -144,7 +144,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 # Extra places for collectstatic to find static files.
