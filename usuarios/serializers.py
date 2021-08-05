@@ -32,8 +32,8 @@ class UsuarioLoginSerializer(serializers.Serializer):
     # Primero validamos los datos
     def validate(self, data):
         # authenticate recibe las credenciales, si son válidas devuelve el objeto del usuario
-        Usuario = authenticate(Usuarioname=data['email'], password=data['password'])
-        if not Usuario:
+        usuario = authenticate(username=data['email'], password=data['password'])
+        if not usuario:
             raise serializers.ValidationError('Las credenciales no son válidas')
 
         # Guardamos el usuario en el contexto para posteriormente en create recuperar el token
@@ -42,7 +42,7 @@ class UsuarioLoginSerializer(serializers.Serializer):
 
     def create(self, data):
         """Generar o recuperar token."""
-        token, created = Token.objects.get_or_create(Usuario=self.context['Usuario'])
+        token, created = Token.objects.get_or_create(usuario=self.context['usuario'])
         return self.context['Usuario'], token.key
 
 
@@ -50,7 +50,7 @@ class UsuarioSignUpSerializer(serializers.Serializer):
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=Usuario.objects.all())]
     )
-    Usuarioname = serializers.CharField(
+    username = serializers.CharField(
         min_length=4,
         max_length=20,
         validators=[UniqueValidator(queryset=Usuario.objects.all())]
@@ -99,5 +99,5 @@ class UsuarioSignUpSerializer(serializers.Serializer):
 
     def create(self, data):
         data.pop('password_confirmation')
-        usuario = Usuario.objects.create_Usuario(**data)
+        usuario = Usuario.objects.create_usuario(**data)
         return usuario
