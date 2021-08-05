@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 
-class Usuario(AbstractUser):
+class User(AbstractUser):
     """Modelo de usuario.
     Se extiende de la clase base AbstractUser y se agrega campos.
     """
@@ -12,7 +12,7 @@ class Usuario(AbstractUser):
         'email address',
         unique=True,
         error_messages={
-            'unique': 'A user with that email already exists.'
+            'unique': 'A users with that email already exists.'
         }
     )
 

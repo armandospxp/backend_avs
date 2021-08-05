@@ -1,21 +1,21 @@
-"""Usuarios serializers."""
+"""Users serializers."""
 
 # Django
 from django.contrib.auth import password_validation, authenticate
+from django.core.validators import RegexValidator, FileExtensionValidator
 
 # Django REST Framework
-from django.core.validators import FileExtensionValidator, RegexValidator
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
+from rest_framework.validators import UniqueValidator
 
 # Models
-from rest_framework.validators import UniqueValidator
-from usuarios.models import Usuario
+from users.models import User
 
 
-class UsuarioModelSerializer(serializers.ModelSerializer):
+class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Usuario
+        model = User
         fields = (
             'username',
             'first_name',
@@ -24,7 +24,7 @@ class UsuarioModelSerializer(serializers.ModelSerializer):
         )
 
 
-class UsuarioLoginSerializer(serializers.Serializer):
+class UserLoginSerializer(serializers.Serializer):
     # Campos que vamos a requerir
     email = serializers.EmailField()
     password = serializers.CharField(min_length=8, max_length=64)
@@ -32,28 +32,28 @@ class UsuarioLoginSerializer(serializers.Serializer):
     # Primero validamos los datos
     def validate(self, data):
         # authenticate recibe las credenciales, si son válidas devuelve el objeto del usuario
-        usuario = authenticate(username=data['email'], password=data['password'])
-        if not usuario:
+        user = authenticate(username=data['email'], password=data['password'])
+        if not user:
             raise serializers.ValidationError('Las credenciales no son válidas')
 
         # Guardamos el usuario en el contexto para posteriormente en create recuperar el token
-        self.context['user'] = usuario
+        self.context['users'] = user
         return data
 
     def create(self, data):
         """Generar o recuperar token."""
-        token, created = Token.objects.get_or_create(usuario=self.context['usuario'])
-        return self.context['Usuario'], token.key
+        token, created = Token.objects.get_or_create(user=self.context['users'])
+        return self.context['users'], token.key
 
 
-class UsuarioSignUpSerializer(serializers.Serializer):
+class UserSignUpSerializer(serializers.Serializer):
     email = serializers.EmailField(
-        validators=[UniqueValidator(queryset=Usuario.objects.all())]
+        validators=[UniqueValidator(queryset=User.objects.all())]
     )
     username = serializers.CharField(
         min_length=4,
         max_length=20,
-        validators=[UniqueValidator(queryset=Usuario.objects.all())]
+        validators=[UniqueValidator(queryset=User.objects.all())]
     )
 
     photo = serializers.ImageField(
@@ -99,5 +99,5 @@ class UsuarioSignUpSerializer(serializers.Serializer):
 
     def create(self, data):
         data.pop('password_confirmation')
-        usuario = Usuario.objects.create_user(**data)
-        return usuario
+        user = User.objects.create_user(**data)
+        return user

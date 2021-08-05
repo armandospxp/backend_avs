@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework.authtoken',
     'rest_framework',
-    'usuarios',
+    'users',
     'corsheaders',
 ]
 
@@ -160,7 +160,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'usuarios.Usuario'
+AUTH_USER_MODEL = 'users.Usuario'
 
 USER_DETAILS_SERIALIZER = 'rest_auth.views.UserDetailsView'
 

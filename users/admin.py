@@ -4,10 +4,10 @@
 from django.contrib import admin
 
 # Models
-from usuarios.models import Usuario
+from users.models import User
 
 
-@admin.register(Usuario)
+@admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     """User admin."""
 
