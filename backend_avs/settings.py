@@ -160,7 +160,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.Usuario'
+AUTH_USER_MODEL = 'users.User'
 
 USER_DETAILS_SERIALIZER = 'rest_auth.views.UserDetailsView'
 
