@@ -33,6 +33,8 @@ class UserLoginSerializer(serializers.Serializer):
     def validate(self, data):
         # authenticate recibe las credenciales, si son válidas devuelve el objeto del usuario
         user = authenticate(username=data['email'], password=data['password'])
+        import pdb
+        pdb.set_trace()
         if not user:
             raise serializers.ValidationError('Las credenciales no son válidas')
 

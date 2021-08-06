@@ -103,7 +103,13 @@ import dj_database_url
 #     }
 # }
 
-DATABASES = { 'default': dj_database_url.config() }
+ON_HEROKU = os.environ.get('ON_HEROKU')
+if ON_HEROKU:
+    DATABASE_URL = 'postgres://ezlkwocisupbaf:cd20db178ca37cccc2fc2291d9d86e4f1f0b071ff8380ad6a9b39088ef38fe72@ec2-34-194-14-176.compute-1.amazonaws.com:5432/dfec6s42138k7j'
+else:
+    DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/avs'
+
+DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
 
 
 
