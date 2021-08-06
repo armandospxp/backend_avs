@@ -16,7 +16,6 @@ import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -29,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 import django_heroku
+
 # django_heroku.settings(locals())
 
 # Application definition
@@ -86,7 +86,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend_avs.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -104,14 +103,21 @@ import dj_database_url
 # }
 
 ON_HEROKU = os.environ.get('ON_HEROKU')
-if ON_HEROKU:
-    DATABASE_URL = 'postgres://ezlkwocisupbaf:cd20db178ca37cccc2fc2291d9d86e4f1f0b071ff8380ad6a9b39088ef38fe72@ec2-34-194-14-176.compute-1.amazonaws.com:5432/dfec6s42138k7j'
-else:
-    DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/avs'
+# if ON_HEROKU:
+#     DATABASE_URL = 'postgres://ezlkwocisupbaf:cd20db178ca37cccc2fc2291d9d86e4f1f0b071ff8380ad6a9b39088ef38fe72@ec2-34-194-14-176.compute-1.amazonaws.com:5432/dfec6s42138k7j'
+# else:
+DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/avs'
 
-DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
-
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'avs',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -131,7 +137,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -144,7 +149,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
