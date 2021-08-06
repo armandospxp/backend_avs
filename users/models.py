@@ -15,6 +15,8 @@ class User(AbstractUser):
             'unique': 'A users with that email already exists.'
         }
     )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         """Return username."""
