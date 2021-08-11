@@ -6,7 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 # Serializers
-from users.serializers import UserLoginSerializer, UserModelSerializer
+from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpdateSerializer
 
 # Models
 from users.models import User
@@ -47,21 +47,21 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer = UserModelSerializer(user, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     """User Update"""
 
     @action(detail=False, methods=['get'])
-    def user_update(self, request):
+    def user_update(self, request, username):
         """User update"""
-        serializer = UserSignUpSerializer(data=request.data)
+        user = User.objects.get(username=username)
+        serializer = UserUpdateSerializer(request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        user = serializer.update(user, request.data)
         data = UserModelSerializer(user).data
-        return Response(data, status=status.HTTP_201_CREATED)
+        return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
-    def user_delete(self, id):
+    def user_delete(self, username):
         """User delete"""
-        user = User.objects.get(id=id)
+        user = User.objects.get(username=username)
         user.delete()
         return Response({}, status=status.HTTP_200_OK)

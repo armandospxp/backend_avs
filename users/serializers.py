@@ -98,7 +98,6 @@ class UserUpdateSerializer(serializers.Serializer):
         return data
 
     def update(self, instance, data):
-        data.pop('password_confirmation')
         user = User.objects.update(data)
         return user
 
