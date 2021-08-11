@@ -15,7 +15,6 @@ from users.serializers import UserSignUpSerializer
 
 
 class UserViewSet(viewsets.GenericViewSet):
-
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserModelSerializer
 
@@ -41,4 +40,28 @@ class UserViewSet(viewsets.GenericViewSet):
         data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['get'])
+    def user_list(self, request):
+        """User list"""
+        user = User.objects.all()
+        data = UserModelSerializer(user).data
+        return Response(data, status=status.HTTP_200_OK)
 
+
+    """User Update"""
+
+    @action(detail=False, methods=['get'])
+    def user_update(self, request):
+        """User update"""
+        serializer = UserSignUpSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        data = UserModelSerializer(user).data
+        return Response(data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'])
+    def user_delete(self, id):
+        """User delete"""
+        user = User.objects.get(id=id)
+        user.delete()
+        return Response({}, status=status.HTTP_200_OK)
