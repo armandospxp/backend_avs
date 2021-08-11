@@ -44,8 +44,8 @@ class UserViewSet(viewsets.GenericViewSet):
     def user_list(self, request):
         """User list"""
         user = User.objects.all()
-        data = UserModelSerializer(user).data
-        return Response(data, status=status.HTTP_200_OK)
+        serializer = UserModelSerializer(user, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
     """User Update"""
