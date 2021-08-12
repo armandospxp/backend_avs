@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer
-from models import Articulo, Marca
+from articulos.models import Articulo, Marca
 
 
 class ArticuloDetail(APIView):
