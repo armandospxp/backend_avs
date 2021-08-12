@@ -2,6 +2,7 @@
 
 # Django
 from django.contrib.auth import password_validation, authenticate
+from django.contrib.auth.models import Group, Permission
 from django.core.validators import RegexValidator, FileExtensionValidator
 
 # Django REST Framework
@@ -157,3 +158,13 @@ class UserSignUpSerializer(serializers.Serializer):
         data.pop('password_confirmation')
         user = User.objects.create_user(**data)
         return user
+
+
+class GroupModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+
+
+class PermisosModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission

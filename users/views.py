@@ -1,12 +1,16 @@
 """Users views."""
 
 # Django REST Framework
+from django.contrib.auth.models import Group, Permission
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 # Serializers
-from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpdateSerializer
+from rest_framework.views import APIView
+
+from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpdateSerializer, GroupModelSerializer, \
+    PermisosModelSerializer
 
 # Models
 from users.models import User
@@ -67,3 +71,45 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response({}, status=status.HTTP_200_OK)
 
 
+class GroupList(APIView):
+    """Lista, crea, actualiza o elimina todos los grupos"""
+
+    def get_object(self, pk):
+        try:
+            return Group.objects.get(pk=pk)
+        except Group.DoesNotExist:
+            raise status.HTTP_404_NOT_FOUND
+
+    def get(self, request, format=None):
+        group = Group.objects.all()
+        serializer = GroupModelSerializer(group)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = GroupModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk, format=None):
+        group = self.get_object(pk)
+        serializer = GroupModelSerializer(group, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        group = self.get_object(pk)
+        group.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PermissionList(APIView):
+    """Lista todos los permisos"""
+
+    def get(self, request):
+        permission = Permission.objects.all()
+        serializer = PermisosModelSerializer(permission)
+        return Response(serializer.data)
