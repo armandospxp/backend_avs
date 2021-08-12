@@ -1,17 +1,11 @@
-"""Users URLs."""
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
-# Django
-from django.urls import include, path
+from articulos.views import ArticuloList, ArticuloDetail, MarcaList, MarcaDetail
 
-# Django REST Framework
-from rest_framework.routers import DefaultRouter
-
-# Views
-from articulos import views as articulo_views
-
-router = DefaultRouter()
-router.register(r'users', articulo_views.UserViewSet, basename='users')
-
-urlpatterns = [
-    path('', include(router.urls))
-]
+urlpatterns = format_suffix_patterns([
+    path('articulos/', ArticuloList.as_view(), name='articulos'),
+    path('articulos/<int:pk>/', ArticuloDetail.as_view(), name='articulo'),
+    path('marcas/', MarcaList.as_view(), name='marcas'),
+    path('marca/<int:pk>/', MarcaDetail.as_view(), name='marca'),
+])
