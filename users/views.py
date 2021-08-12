@@ -65,3 +65,5 @@ class UserViewSet(viewsets.GenericViewSet):
         user = User.objects.get(username=username)
         user.delete()
         return Response({}, status=status.HTTP_200_OK)
+
+
