@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('articulos/', include(('articulos.urls', 'articulos'), namespace='articulos')),
     path('marcas/', include(('marcas.urls', 'marcas'), namespace='marcas')),
+    path('roles/', include(('roles.urls', 'roles'), namespace='roles')),
     path('', include(('users.urls', 'users'), namespace='users')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
