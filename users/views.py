@@ -54,8 +54,9 @@ class UserViewSet(viewsets.GenericViewSet):
     """User Update"""
 
     @action(detail=False, methods=['get'])
-    def user_update(self, request, username):
+    def user_update(self, request):
         """User update"""
+        username = request.GET.get('username', '')
         user = User.objects.get(username=username)
         serializer = UserUpdateSerializer(request.data)
         serializer.is_valid(raise_exception=True)
@@ -64,9 +65,9 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
-    def user_delete(self, username):
+    def user_delete(self, request):
         """User delete"""
+        username = request.GET.get('username','')
         user = User.objects.get(username=username)
         user.delete()
         return Response({}, status=status.HTTP_200_OK)
-
