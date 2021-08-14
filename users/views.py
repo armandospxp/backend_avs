@@ -58,7 +58,7 @@ class UserViewSet(viewsets.GenericViewSet):
         """User update"""
         username = request.GET.get('username', '')
         user = User.objects.get(username=username)
-        serializer = UserUpdateSerializer(request.data)
+        serializer = UserUpdateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.update(user, request.data)
         data = UserModelSerializer(user).data
