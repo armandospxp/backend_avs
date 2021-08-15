@@ -8,7 +8,7 @@ class Marca(models.Model):
 
 class Articulo(models.Model):
     """Modelo de articulos """
-    id_articulo = models.IntegerField(primary_key=True)
+    id_articulo = models.BigAutoField(primary_key=True)
     codigo = models.ForeignKey(Marca, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=80, blank=False, null=False)
     costo = models.DecimalField(decimal_places=2, max_digits=32)
