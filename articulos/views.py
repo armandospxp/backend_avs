@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -10,11 +11,13 @@ class ArticuloDetail(APIView):
     """
     Retorna, actualiza o borra una instancia de articulo.
     """
+    serializer_class = ArticuloModelSerializer
+
     def get_object(self, pk):
         try:
             return Articulo.objects.get(pk=pk)
         except Articulo.DoesNotExist:
-            raise status.HTTP_404_NOT_FOUND
+            raise Http404
 
     def get(self, request, pk, format=None):
         articulo = self.get_object(pk)
@@ -34,8 +37,10 @@ class ArticuloDetail(APIView):
         articulo.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class ArticuloList(APIView):
     """Lista los articulos o los crea"""
+    serializer_class = ArticuloModelSerializer
 
     def get(self, request, format=None):
         articulo = Articulo.objects.all()
@@ -49,15 +54,18 @@ class ArticuloList(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class MarcaDetail(APIView):
     """
     Retorna, actualiza o borra una instancia de marca.
     """
+    serializer_class = MarcaModelSerializer
+
     def get_object(self, pk):
         try:
             return Marca.objects.get(pk=pk)
         except Marca.DoesNotExist:
-            raise status.HTTP_404_NOT_FOUND
+            raise Http404
 
     def get(self, request, pk, format=None):
         marca = self.get_object(pk)
@@ -77,12 +85,15 @@ class MarcaDetail(APIView):
         marca.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 class MarcaList(APIView):
     """Lista las marcas o los crea"""
 
+    serializer_class = MarcaModelSerializer
+
     def get(self, request, format=None):
         marca = Marca.objects.all()
-        serializer = ArticuloModelSerializer(marca, many=True)
+        serializer = MarcaModelSerializer(marca, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):

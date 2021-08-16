@@ -163,8 +163,10 @@ class UserSignUpSerializer(serializers.Serializer):
 class GroupModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
+        fields = ['id', 'name', 'permissions']
 
 
 class PermisosModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
+        fields = ['id']

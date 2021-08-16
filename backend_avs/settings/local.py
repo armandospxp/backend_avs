@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-import django_heroku
+# import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'articulos',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -60,11 +61,11 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-MIDDLEWARE_CLASSES = (
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-)
+#MIDDLEWARE_CLASSES = (
+#    'whitenoise.middleware.WhiteNoiseMiddleware',
+#)
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'backend_avs.urls'
 
@@ -87,30 +88,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend_avs.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-import dj_database_url
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'd6b8obcn194q0l',
-#         'USER': 'exyycsbaebbrer',
-#         'PASSWORD': '072d835a475b03f6c93e5e4a4f2d317c86a0e0801c7feed15e6fe5b0e82de639',
-#         'HOST': 'ec2-44-194-183-115.compute-1.amazonaws.com:',
-#         'PORT': '5432'
-#     }
-# }
-
-ON_HEROKU = os.environ.get('ON_HEROKU')
-if ON_HEROKU:
-    DATABASE_URL = 'postgres://ezlkwocisupbaf:cd20db178ca37cccc2fc2291d9d86e4f1f0b071ff8380ad6a9b39088ef38fe72@ec2-34-194-14-176.compute-1.amazonaws.com:5432/dfec6s42138k7j'
-else:
-    DATABASE_URL = 'postgres://postgres:postgres@localhost:5432/avs'
-
-DATABASES = {'default': dj_database_url.config(default=DATABASE_URL)}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'avs',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 
