@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'users',
     'articulos',
     'django_extensions',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +160,11 @@ AUTH_USER_MODEL = 'users.User'
 USER_DETAILS_SERIALIZER = 'rest_auth.views.UserDetailsView'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    )
+}
