@@ -14,6 +14,8 @@ from pathlib import Path
 # import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+from rest_framework import permissions
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'users',
     'articulos',
     'django_extensions',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -159,3 +162,13 @@ AUTH_USER_MODEL = 'users.User'
 USER_DETAILS_SERIALIZER = 'rest_auth.views.UserDetailsView'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissions'
+    ]
+}
