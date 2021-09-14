@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.serializers import GroupModelSerializer, PermisosModelSerializer
+from roles.serializers import GroupModelSerializer, PermisosModelSerializer
 
 
 class RolList(APIView):
