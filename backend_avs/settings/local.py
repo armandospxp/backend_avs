@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'articulos',
-    'roles',
     'django_extensions',
     'rest_framework_simplejwt',
 ]
