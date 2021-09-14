@@ -1,4 +1,6 @@
-from roles.models import Rol, Permiso, Modulo
+from roles.models import Rol
+from roles.models import Permiso
+from roles.models import Modulo
 
 from articulos import serializers
 
