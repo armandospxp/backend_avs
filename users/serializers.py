@@ -158,25 +158,3 @@ class UserSignUpSerializer(serializers.Serializer):
         data.pop('password_confirmation')
         user = User.objects.create_user(**data)
         return user
-
-
-class PermisosModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = ['name', 'content_type', 'codename']
-
-
-class GroupModelSerializer(serializers.ModelSerializer):
-    permissions = PermisosModelSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Group
-        fields = ['id', 'permissions']
-
-
-# class GroupModelSerializer(serializers.ModelSerializer):
-#     permission = serializers.CharField(source='group__permissions')
-#
-#     class Meta:
-#         model = Group
-#         fields = ['permissions', ]

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from users.serializers import GroupModelSerializer, PermisosModelSerializer
 
 
-class GroupList(APIView):
+class RolList(APIView):
     """Lista, crea, actualiza o elimina todos los grupos"""
     serializer_class = GroupModelSerializer
 
@@ -51,3 +51,23 @@ class PermissionList(APIView):
         permission = Permission.objects.values_list('id')
         serializer = PermisosModelSerializer(permission)
         return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = PermisosModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, pk, format=None):
+        permiso = self.get_object(pk)
+        serializer = PermisosModelSerializer(permiso, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        permiso = self.get_object(pk)
+        permiso.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
