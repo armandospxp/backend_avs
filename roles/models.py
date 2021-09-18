@@ -10,7 +10,7 @@ class Rol(models.Model):
 
 
 class Modulo(models.Model):
-    id_modulo = models.AutoField()
+    id_modulo = models.AutoField(primary_key=True)
     nombre_modulo = models.CharField(max_length=30)
 
 
@@ -20,6 +20,7 @@ class Permiso(models.Model):
 
 
 class PermisoModuloRol(models.Model):
+    id_permiso_modulo_rol = models.AutoField(primary_key=True)
     permiso = models.ManyToManyField(Permiso)
     modulo = models.ManyToManyField(Modulo)
     rol = models.ManyToManyField(Rol)
