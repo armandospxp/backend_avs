@@ -1,8 +1,9 @@
-# from django.urls import path
-# from rest_framework.urlpatterns import format_suffix_patterns
-# from roles.views import RolList, PermissionList
-#
-# urlpatterns = format_suffix_patterns([
-#     path('', RolList.as_view(), name='roles'),
-#     path('permisos/', PermissionList.as_view(), name='permisos'),
-# ])
+from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+from roles.views import RolList, RolDetail, PermissionList
+
+urlpatterns = format_suffix_patterns([
+    path('roles/', RolList.as_view(), name='roles'),
+    path('roles/<pk>', RolDetail.as_view(), name='roles_detalles'),
+    path('permisos/', PermissionList.as_view(), name='permisos'),
+])
