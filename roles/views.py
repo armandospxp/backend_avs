@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from roles.models import Modulo
 from roles.serializers import GroupModelSerializer, PermisosModelSerializer, ModuloModelSerializer
 
 
@@ -65,4 +66,16 @@ class PermissionList(APIView):
 
 
 class ModuloListView(APIView):
-    pass
+    serializer_class = ModuloModelSerializer
+
+    def get(self, request):
+        modulo = Modulo.objects.values_list('id')
+        serializer = ModuloModelSerializer(modulo)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = ModuloModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

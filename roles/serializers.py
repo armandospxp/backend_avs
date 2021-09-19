@@ -23,3 +23,5 @@ class ModuloModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Modulo
         fields = ['*']
+
+
