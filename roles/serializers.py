@@ -22,4 +22,4 @@ class GroupModelSerializer(serializers.ModelSerializer):
 class ModuloModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Modulo
-        fields = ['*']
+        fields = ['id_modulo', 'nombre_modulo', 'permisomodulorol']
