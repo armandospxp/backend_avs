@@ -9,15 +9,14 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-
 urlpatterns = [
-    # Django Admin
-    path('admin/', admin.site.urls),
-    path('articulos/', include(('articulos.urls', 'articulos'), namespace='articulos')),
-    path('marcas/', include(('marcas.urls', 'marcas'), namespace='marcas')),
-    path('roles/', include(('roles.urls', 'roles'), namespace='roles')),
-    path('', include(('users.urls', 'users'), namespace='users')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                  # Django Admin
+                  path('admin/', admin.site.urls),
+                  path('articulos/', include(('articulos.urls', 'articulos'), namespace='articulos')),
+                  path('marcas/', include(('marcas.urls', 'marcas'), namespace='marcas')),
+                  path('roles/', include(('roles.urls', 'roles'), namespace='roles')),
+                  path('', include(('users.urls', 'users'), namespace='users')),
+                  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
