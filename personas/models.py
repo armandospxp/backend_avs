@@ -17,13 +17,13 @@ class Persona(models.Model):
     id_persona = models.AutoField(primary_key=True)
     tipo_persona = models.CharField(max_length=1,
                                     choices=TIPO_PERSONA_CHOICES, default=FISICA)
-    nombre_apellido = models.CharField(blank=False, null=False)
-    propietario = models.CharField(null=True, blank=True)
-    direccion = models.CharField(null=False, blank=False)
-    telefono = models.CharField(null=False, blank=False)
-    ruc = models.CharField(null=True, blank=True)
-    cedula = models.CharField(null=True, blank=True)
-    correo_electronico = models.CharField(null=True, blank=True)
+    nombre_apellido = models.CharField(blank=False, null=False, max_length=100)
+    propietario = models.CharField(null=True, blank=True, max_length=50)
+    direccion = models.CharField(null=False, blank=False, max_length=100)
+    telefono = models.CharField(null=False, blank=False, max_length=40)
+    ruc = models.CharField(null=True, blank=True, max_length=50)
+    cedula = models.CharField(null=True, blank=True, max_length=50)
+    correo_electronico = models.CharField(null=True, blank=True, max_length=50)
     es_cliente = models.CharField(max_length=1,
                                   choices=VERDADER_FALSO_CHOICES, default=VERDADERO)
     es_proveedor = models.CharField(max_length=1,

@@ -9,4 +9,4 @@ class Configuracion(models.Model):
     ruc_empresa = models.CharField(max_length=40)
     direccion = models.CharField(max_length=50)
     telefono = models.CharField(max_length=50)
-    pagina_web = models.CharField(null=True, blank=True)
+    pagina_web = models.CharField(null=True, blank=True, max_length=100)
