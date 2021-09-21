@@ -13,7 +13,7 @@ class RolList(APIView):
     serializer_class = GroupModelSerializer
 
     def get(self, request, format=None):
-        group = Rol.models.all()
+        group = Rol.objects.all()
         serializer = GroupModelSerializer(group)
         return Response(serializer.data)
 
