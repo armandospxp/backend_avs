@@ -3,6 +3,7 @@ from rest_framework import serializers
 from roles.models import Rol
 from roles.models import Permiso
 from roles.models import Modulo
+from users.serializers import UserModelSerializer
 
 
 class PermisosModelSerializer(serializers.ModelSerializer):
@@ -12,6 +13,8 @@ class PermisosModelSerializer(serializers.ModelSerializer):
 
 
 class GroupModelSerializer(serializers.ModelSerializer):
+    usuario = UserModelSerializer(read_only=True, many=True)
+
     class Meta:
         model = Rol
         fields = ['id_rol', 'nombre_rol', 'usuario']
