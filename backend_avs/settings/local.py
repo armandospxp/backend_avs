@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'users',
     'articulos',
     'roles',
+    'personas',
+    'configuracion',
+    'cajas',
     'django_extensions',
     'rest_framework_simplejwt',
 ]

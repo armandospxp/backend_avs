@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'users',
     'articulos',
     'roles',
+    'personas',
+    'configuracion',
+    'cajas',
 ]
 
 MIDDLEWARE = [
