@@ -14,7 +14,7 @@ class PermisosModelSerializer(serializers.ModelSerializer):
 class GroupModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
-        fields = ['id_rol', 'nombre_rol', 'usuario']
+        fields = '__all__'
 
 
 class ModuloModelSerializer(serializers.ModelSerializer):
