@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'personas',
     'configuracion',
     'cajas',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
