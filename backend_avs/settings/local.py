@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'cajas',
     'django_extensions',
     'rest_framework_simplejwt',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
