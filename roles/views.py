@@ -28,6 +28,8 @@ class RolList(APIView):
 class RolDetail(APIView):
     """Vista para update, delete, view detallado de un rol en especifico"""
 
+    serializer_class = GroupModelSerializer
+
     def get_object(self, pk):
         try:
             return Group.objects.get(pk=pk)

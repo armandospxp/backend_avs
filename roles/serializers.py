@@ -12,11 +12,9 @@ class PermisosModelSerializer(serializers.ModelSerializer):
 
 
 class GroupModelSerializer(serializers.ModelSerializer):
-    permissions = PermisosModelSerializer(read_only=True, many=True)
-
     class Meta:
         model = Rol
-        fields = ['id_rol', 'permissions']
+        fields = ['id_rol', 'nombre_rol', 'usuario']
 
 
 class ModuloModelSerializer(serializers.ModelSerializer):
