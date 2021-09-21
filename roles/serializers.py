@@ -8,13 +8,13 @@ from roles.models import Modulo
 class PermisosModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permiso
-        fields = ['descripcion']
+        fields = ['id_permiso', 'descripcion']
 
 
 class GroupModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
-        fields = '__all__'
+        fields = ['id_rol', 'nombre_rol', 'usuario']
 
 
 class ModuloModelSerializer(serializers.ModelSerializer):
