@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from roles.models import Modulo
+from roles.models import Modulo, Rol, Permiso
 from roles.serializers import GroupModelSerializer, PermisosModelSerializer, ModuloModelSerializer
 
 
@@ -13,7 +13,7 @@ class RolList(APIView):
     serializer_class = GroupModelSerializer
 
     def get(self, request, format=None):
-        group = Group.objects.values_list('id', 'name', 'permissions')
+        group = Rol.models.all()
         serializer = GroupModelSerializer(group)
         return Response(serializer.data)
 
@@ -53,7 +53,7 @@ class PermissionList(APIView):
     serializer_class = PermisosModelSerializer
 
     def get(self, request):
-        permission = Permission.objects.values_list('id')
+        permission = Permiso.objects.all()
         serializer = PermisosModelSerializer(permission)
         return Response(serializer.data)
 
@@ -69,7 +69,7 @@ class ModuloListView(APIView):
     serializer_class = ModuloModelSerializer
 
     def get(self, request):
-        modulo = Modulo.objects.values_list('id')
+        modulo = Modulo.objects.all()
         serializer = ModuloModelSerializer(modulo)
         return Response(serializer.data)
 
