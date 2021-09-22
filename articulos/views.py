@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,7 +8,7 @@ from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer
 from articulos.models import Articulo, Marca
 
 
-class ArticuloDetail(APIView):
+class ArticuloDetail(APIView, PageNumberPagination):
     """
     Retorna, actualiza o borra una instancia de articulo.
     """
@@ -21,8 +22,9 @@ class ArticuloDetail(APIView):
 
     def get(self, request, pk, format=None):
         articulo = self.get_object(pk)
-        serializer = ArticuloModelSerializer(articulo)
-        return Response(serializer.data)
+        articulo_paginated = self.paginate_queryset(articulo, view=self)
+        serializer = ArticuloModelSerializer(articulo_paginated)
+        return self.get_paginated_response(serializer.data)
 
     def put(self, request, pk, format=None):
         articulo = self.get_object(pk)
@@ -44,8 +46,9 @@ class ArticuloList(APIView):
 
     def get(self, request, format=None):
         articulo = Articulo.objects.all()
-        serializer = ArticuloModelSerializer(articulo, many=True)
-        return Response(serializer.data)
+        articulo_paginated = self.paginate_queryset(articulo, view=self)
+        serializer = ArticuloModelSerializer(articulo_paginated, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
         serializer = ArticuloModelSerializer(data=request.data)
@@ -70,7 +73,7 @@ class MarcaDetail(APIView):
     def get(self, request, pk, format=None):
         marca = self.get_object(pk)
         serializer = MarcaModelSerializer(marca)
-        return Response(serializer.data)
+        return self.get_paginated_response(serializer.data)
 
     def put(self, request, pk, format=None):
         marca = self.get_object(pk)
