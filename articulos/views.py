@@ -46,8 +46,7 @@ class ArticuloList(APIView, PageNumberPagination):
 
     def get(self, request, format=None):
         articulo = Articulo.objects.all()
-        articulo_paginated = self.paginate_queryset(articulo, view=self)
-        serializer = ArticuloModelSerializer(articulo_paginated, many=True)
+        serializer = ArticuloModelSerializer(articulo, many=True)
         return self.get_paginated_response(serializer.data)
 
     def post(self, request, format=None):
