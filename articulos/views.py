@@ -1,6 +1,5 @@
 from django.http import Http404
 from rest_framework import status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -8,7 +7,7 @@ from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer
 from articulos.models import Articulo, Marca
 
 
-class ArticuloDetail(APIView, PageNumberPagination):
+class ArticuloDetail(APIView):
     """
     Retorna, actualiza o borra una instancia de articulo.
     """
@@ -22,9 +21,8 @@ class ArticuloDetail(APIView, PageNumberPagination):
 
     def get(self, request, pk, format=None):
         articulo = self.get_object(pk)
-        articulo_paginated = self.paginate_queryset(articulo, view=self)
-        serializer = ArticuloModelSerializer(articulo_paginated)
-        return self.get_paginated_response(serializer.data)
+        serializer = ArticuloModelSerializer(articulo)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         articulo = self.get_object(pk)
@@ -40,14 +38,14 @@ class ArticuloDetail(APIView, PageNumberPagination):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ArticuloList(APIView, PageNumberPagination):
+class ArticuloList(APIView):
     """Lista los articulos o los crea"""
     serializer_class = ArticuloModelSerializer
 
     def get(self, request, format=None):
         articulo = Articulo.objects.all()
         serializer = ArticuloModelSerializer(articulo, many=True)
-        return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
 
     def post(self, request, format=None):
         serializer = ArticuloModelSerializer(data=request.data)
@@ -72,7 +70,7 @@ class MarcaDetail(APIView):
     def get(self, request, pk, format=None):
         marca = self.get_object(pk)
         serializer = MarcaModelSerializer(marca)
-        return self.get_paginated_response(serializer.data)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         marca = self.get_object(pk)
