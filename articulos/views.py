@@ -40,7 +40,7 @@ class ArticuloDetail(APIView, PageNumberPagination):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ArticuloList(APIView):
+class ArticuloList(APIView, PageNumberPagination):
     """Lista los articulos o los crea"""
     serializer_class = ArticuloModelSerializer
 
