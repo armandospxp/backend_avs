@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework import status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -7,11 +8,40 @@ from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer
 from articulos.models import Articulo, Marca
 
 
+class BasicPagination(PageNumberPagination):
+    page_size_query_param = 'limit'
+
+
+class MyPaginationMixin(object):
+    pagination_class = PageNumberPagination
+    @property
+    def paginator(self):
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset,
+                                                self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
+
+
 class ArticuloDetail(APIView):
     """
     Retorna, actualiza o borra una instancia de articulo.
     """
     serializer_class = ArticuloModelSerializer
+    pagination_class = PageNumberPagination
 
     def get_object(self, pk):
         try:
@@ -21,6 +51,10 @@ class ArticuloDetail(APIView):
 
     def get(self, request, pk, format=None):
         articulo = self.get_object(pk)
+        page = self.paginate_queryset(articulo)
+        if page is not None:
+            serializer = self.serializer_class(page, many=True)
+            return self.get_paginated_response(serializer.data)
         serializer = ArticuloModelSerializer(articulo)
         return Response(serializer.data)
 
@@ -38,13 +72,18 @@ class ArticuloDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ArticuloList(APIView):
+class ArticuloList(APIView, MyPaginationMixin):
     """Lista los articulos o los crea"""
     serializer_class = ArticuloModelSerializer
 
     def get(self, request, format=None):
         articulo = Articulo.objects.all()
-        serializer = ArticuloModelSerializer(articulo, many=True)
+        page = self.paginate_queryset(articulo)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page,
+                                                                           many=True).data)
+        else:
+            serializer = self.serializer_class(articulo, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -55,7 +94,7 @@ class ArticuloList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MarcaDetail(APIView):
+class MarcaDetail(APIView, MyPaginationMixin):
     """
     Retorna, actualiza o borra una instancia de marca.
     """
