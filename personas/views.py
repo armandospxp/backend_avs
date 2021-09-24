@@ -1,5 +1,6 @@
 from django.http import Http404
-from rest_framework import status
+from rest_framework import status, mixins, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -84,3 +85,55 @@ class PersonaList(APIView, MyPaginationMixin):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PersonaClienteList(APIView, MyPaginationMixin):
+    """Lista los clientes"""
+    serializer_class = PersonaModelSerializers
+
+    def get(self, request, format=None):
+        persona = Persona.objects.filter(es_cliente='V')
+        page = self.paginate_queryset(persona)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page,
+                                                                           many=True).data)
+        else:
+            serializer = self.serializer_class(persona, many=True)
+        return Response(serializer.data)
+
+
+class PersonaProveedorList(APIView, MyPaginationMixin):
+    """Lista los proveedores"""
+    serializer_class = PersonaModelSerializers
+
+    def get(self, request, format=None):
+        persona = Persona.objects.filter(es_proveedor='V')
+        page = self.paginate_queryset(persona)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page,
+                                                                           many=True).data)
+        else:
+            serializer = self.serializer_class(persona, many=True)
+        return Response(serializer.data)
+
+
+# class PersonaSearchViewSet(mixins.ListModelMixin,
+#                            viewsets.GenericViewSet):
+#     filter_backends = (SearchFilter,)
+#     queryset = Persona.objects.filter(is_active=True, is_recruiter=False)
+#     serializer_class = PersonaModelSerializers
+#     search_fields = (
+#         'id_persona',
+#         'tipo_persona',
+#         'nombre_apellido',
+#         'propietario',
+#         'direccion',
+#         'telefono',
+#         'ruc',
+#         'cedula',
+#         'correo_electronico',
+#         'es_cliente',
+#         'es_proveedor',
+#         'fecha_nacimiento',
+#         'estado_activo',
+#     )
