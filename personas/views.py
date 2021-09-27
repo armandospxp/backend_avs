@@ -119,7 +119,28 @@ class PersonaProveedorList(APIView, MyPaginationMixin):
 
 class PersonaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter]
-    queryset = Persona.objects.all()
+    queryset = Persona.objects.filter(estado_activo="V")
+    serializer_class = PersonaModelSerializers
+    search_fields = (
+        'id_persona',
+        'tipo_persona',
+        'nombre_apellido',
+        'propietario',
+        'direccion',
+        'telefono',
+        'ruc',
+        'cedula',
+        'correo_electronico',
+        'es_cliente',
+        'es_proveedor',
+        'fecha_nacimiento',
+        'estado_activo',
+    )
+
+
+class PersonaProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = Persona.objects.filter(estado_activo="V", es_proveedor='V')
     serializer_class = PersonaModelSerializers
     search_fields = (
         'id_persona',
