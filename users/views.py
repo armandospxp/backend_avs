@@ -1,9 +1,12 @@
 """Users views."""
 
 # Django REST Framework
+from django.utils.decorators import method_decorator
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
+
 
 # Serializers
 from rest_framework.views import APIView
@@ -52,6 +55,7 @@ class UserViewSet(viewsets.GenericViewSet):
     """User Update"""
 
     @action(detail=False, methods=['get'])
+    @method_decorator(csrf_exempt)
     def user_update(self, request):
         """User update"""
         username = request.GET.get('username', '')
@@ -63,6 +67,7 @@ class UserViewSet(viewsets.GenericViewSet):
         return Response(data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['get'])
+    @method_decorator(csrf_exempt)
     def user_delete(self, request):
         """User delete"""
         username = request.GET.get('username','')
