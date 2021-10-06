@@ -16,4 +16,6 @@ router.register(r'users', user_views.UserViewSet, basename='users')
 urlpatterns = [
     path('', include(router.urls)),
     path('users/<int:pk>/', user_views.UserDetail.as_view(), name='user_detail'),
+    path('users/', user_views.UserList.as_view(), name='user_detail'),
+    path('users/busqueda/', user_views.UserSearchViewSet.as_view({'get': 'list'}), name='user_detail'),
 ]
