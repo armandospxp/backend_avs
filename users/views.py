@@ -54,7 +54,7 @@ class UserViewSet(viewsets.GenericViewSet):
 
     """User Update"""
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['put'])
     @method_decorator(csrf_exempt)
     def user_update(self, request):
         """User update"""
@@ -66,7 +66,7 @@ class UserViewSet(viewsets.GenericViewSet):
         data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['delete'])
     @method_decorator(csrf_exempt)
     def user_delete(self, request):
         """User delete"""
