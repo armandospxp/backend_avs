@@ -1,12 +1,12 @@
 """Users views."""
 
 # Django REST Framework
+from django.http import Http404
 from django.utils.decorators import method_decorator
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
-
 
 # Serializers
 from rest_framework.views import APIView
@@ -52,25 +52,33 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer = UserModelSerializer(user, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    """User Update"""
 
-    @action(detail=False, methods=['put'])
-    @method_decorator(csrf_exempt)
-    def user_update(self, request):
-        """User update"""
-        username = request.GET.get('username', '')
-        user = User.objects.get(username=username)
-        serializer = UserUpdateSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.update(user, request.data)
-        data = UserModelSerializer(user).data
-        return Response(data, status=status.HTTP_200_OK)
+class UserDetail(APIView):
+    """
+    Retorna, actualiza o borra una instancia de Caja.
+    """
+    serializer_class = UserModelSerializer
 
-    @action(detail=False, methods=['delete'])
-    @method_decorator(csrf_exempt)
-    def user_delete(self, request):
-        """User delete"""
-        username = request.GET.get('username','')
-        user = User.objects.get(username=username)
+    def get_object(self, pk):
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = UserModelSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        user = self.get_object(pk)
+        serializer = UserModelSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        user = self.get_object(pk)
         user.delete()
-        return Response({}, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_204_NO_CONTENT)
