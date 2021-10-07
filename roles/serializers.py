@@ -12,15 +12,17 @@ class PermisosModelSerializer(serializers.ModelSerializer):
         fields = ['id_permiso', 'descripcion']
 
 
-class GroupModelSerializer(serializers.ModelSerializer):
-    usuario = UserModelSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = Rol
-        fields = ['id_rol', 'nombre_rol', 'usuario']
-
-
 class ModuloModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Modulo
         fields = ['id_modulo', 'nombre_modulo', 'permisomodulorol']
+
+
+class RolModelSerializer(serializers.ModelSerializer):
+    usuario = UserModelSerializer(read_only=True, many=True)
+    permiso = PermisosModelSerializer(read_only=True, many=True)
+    modulo = ModuloModelSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Rol
+        fields = ['id_rol', 'nombre_rol', 'usuario', 'permiso', 'modulo']

@@ -2,11 +2,9 @@
 
 # Django REST Framework
 from django.http import Http404
-from django.utils.decorators import method_decorator
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
 
 # Serializers
 from rest_framework.views import APIView

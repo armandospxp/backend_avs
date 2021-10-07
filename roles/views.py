@@ -5,20 +5,20 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from roles.models import Modulo, Rol, Permiso
-from roles.serializers import GroupModelSerializer, PermisosModelSerializer, ModuloModelSerializer
+from roles.serializers import RolModelSerializer, PermisosModelSerializer, ModuloModelSerializer
 
 
 class RolList(APIView):
     """Lista, crea, actualiza o elimina todos los grupos"""
-    serializer_class = GroupModelSerializer
+    serializer_class = RolModelSerializer
 
     def get(self, request, format=None):
         group = Rol.objects.all()
-        serializer = GroupModelSerializer(group)
+        serializer = RolModelSerializer(group)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = GroupModelSerializer(data=request.data)
+        serializer = RolModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -28,7 +28,7 @@ class RolList(APIView):
 class RolDetail(APIView):
     """Vista para update, delete, view detallado de un rol en especifico"""
 
-    serializer_class = GroupModelSerializer
+    serializer_class = RolModelSerializer
 
     def get_object(self, pk):
         try:
@@ -38,7 +38,7 @@ class RolDetail(APIView):
 
     def put(self, request, pk, format=None):
         group = self.get_object(pk)
-        serializer = GroupModelSerializer(group, data=request.data)
+        serializer = RolModelSerializer(group, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
