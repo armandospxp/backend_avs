@@ -11,7 +11,7 @@ from rest_framework.response import Response
 # Serializers
 from rest_framework.views import APIView
 
-from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpdateSerializer
+from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpdateSerializer, UserUpdatePassword
 
 # Models
 from users.models import User
@@ -127,3 +127,17 @@ class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
         'last_name',
         'email',
     )
+
+
+class UserUpdatePasswordView(APIView):
+
+    serializer_class = UserUpdatePassword
+
+    def put(self, request, pk, format=None):
+        print(pk)
+        user = User.objects.get(id=pk)
+        serializer = UserUpdatePassword(data=request.data)
+        if serializer.is_valid(self):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
