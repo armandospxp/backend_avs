@@ -4,6 +4,8 @@
 from django.http import Http404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.filters import SearchFilter
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 # Serializers
@@ -15,6 +17,31 @@ from users.serializers import UserLoginSerializer, UserModelSerializer, UserUpda
 from users.models import User
 
 from users.serializers import UserSignUpSerializer
+
+
+class MyPaginationMixin(object):
+    pagination_class = PageNumberPagination
+
+    @property
+    def paginator(self):
+        if not hasattr(self, '_paginator'):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        else:
+            pass
+        return self._paginator
+
+    def paginate_queryset(self, queryset):
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset,
+                                                self.request, view=self)
+
+    def get_paginated_response(self, data):
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
 
 
 class UserViewSet(viewsets.GenericViewSet):
@@ -43,12 +70,20 @@ class UserViewSet(viewsets.GenericViewSet):
         data = UserModelSerializer(user).data
         return Response(data, status=status.HTTP_201_CREATED)
 
-    @action(detail=False, methods=['get'])
-    def user_list(self, request):
-        """User list"""
+
+class UserList(APIView, MyPaginationMixin):
+    """Clase para listar usuarios"""
+    serializer_class = UserModelSerializer
+
+    def get(self, request, format=None):
         user = User.objects.all()
-        serializer = UserModelSerializer(user, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        page = self.paginate_queryset(user)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page,
+                                                                           many=True).data)
+        else:
+            serializer = self.serializer_class(user, many=True)
+        return Response(serializer.data)
 
 
 class UserDetail(APIView):
@@ -80,3 +115,15 @@ class UserDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = User.objects.all()
+    serializer_class = UserModelSerializer
+    search_fields = (
+        'username',
+        'first_name',
+        'last_name',
+        'email',
+    )
