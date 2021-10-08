@@ -15,7 +15,7 @@ class PermisosModelSerializer(serializers.ModelSerializer):
 class ModuloModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Modulo
-        fields = ['id_modulo', 'nombre_modulo', 'permisomodulorol']
+        fields = '__all__'
 
 
 class RolModelSerializer(serializers.ModelSerializer):

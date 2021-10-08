@@ -14,11 +14,11 @@ class RolList(APIView):
 
     def get(self, request, format=None):
         group = Rol.objects.all()
-        serializer = RolModelSerializer(group)
+        serializer = RolModelSerializer(group, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = RolModelSerializer(data=request.data)
+        serializer = RolModelSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -56,11 +56,11 @@ class PermissionList(APIView):
 
     def get(self, request):
         permission = Permiso.objects.all()
-        serializer = PermisosModelSerializer(permission)
+        serializer = PermisosModelSerializer(permission, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        serializer = PermisosModelSerializer(data=request.data)
+        serializer = PermisosModelSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -72,7 +72,7 @@ class ModuloListView(APIView):
 
     def get(self, request):
         modulo = Modulo.objects.all()
-        serializer = ModuloModelSerializer(modulo)
+        serializer = ModuloModelSerializer(modulo, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
