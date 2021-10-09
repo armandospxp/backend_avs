@@ -1,12 +1,8 @@
-from django.contrib.auth.models import Group, Permission
 from users.models import User
-from django.db.models import query
-from django.http import Http404
-from rest_framework import status, viewsets
+from rest_framework import viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from roles.models import Modulo, Rol, Permiso
 from roles.serializers import RolModelSerializer, PermisosModelSerializer, ModuloModelSerializer
