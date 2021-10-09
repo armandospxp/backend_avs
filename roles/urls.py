@@ -4,7 +4,7 @@ from roles.views import RolList, RolDetail, PermissionList, ModuloListView
 
 urlpatterns = format_suffix_patterns([
     path('roles/', RolList.as_view(), name='roles'),
-    path('roles/<pk>', RolDetail.as_view(), name='roles_detalles'),
+    path('roles/<pk>/', RolDetail.as_view(), name='roles_detalles'),
     path('permisos/', PermissionList.as_view(), name='permisos'),
     path('modulos/', ModuloListView.as_view(), name='modulos')
 ])
