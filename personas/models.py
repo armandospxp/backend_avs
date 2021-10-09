@@ -31,3 +31,6 @@ class Persona(models.Model):
     fecha_nacimiento = models.DateField(blank=True, null=True)
     estado_activo = models.CharField(max_length=1,
                                      choices=VERDADER_FALSO_CHOICES, default=VERDADERO)
+
+    def __str__(self):
+        return '{}'.format(self.nombre_apellido)
