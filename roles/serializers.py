@@ -9,7 +9,7 @@ from users.serializers import UserModelSerializer
 class PermisosModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permiso
-        fields = ['id_permiso', 'descripcion']
+        fields = '__all__'
 
 
 class ModuloModelSerializer(serializers.ModelSerializer):
@@ -20,9 +20,10 @@ class ModuloModelSerializer(serializers.ModelSerializer):
 
 class RolModelSerializer(serializers.ModelSerializer):
     usuario = UserModelSerializer(read_only=True, many=True)
-    permiso = PermisosModelSerializer(read_only=True, many=True)
-    modulo = ModuloModelSerializer(read_only=True, many=True)
+    # permiso = PermisosModelSerializer(read_only=True, many=True)
+    # modulo = ModuloModelSerializer(read_only=True, many=True)
 
     class Meta:
         model = Rol
-        fields = ['id_rol', 'nombre_rol', 'usuario', 'permiso', 'modulo']
+        fields = '__all__'
+        depth = 1
