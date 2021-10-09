@@ -1,5 +1,9 @@
 from django.contrib import admin
 
-from roles.models import Rol
+from roles.models import Rol, Modulo, User
 
 admin.site.register(Rol)
+
+admin.site.register(User)
+
+admin.site.register(Modulo)

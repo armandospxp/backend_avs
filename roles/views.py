@@ -64,13 +64,12 @@ class RolDetail(APIView):
 
     def get_object(self, pk):
         try:
-            return Group.objects.filter(pk=pk)
+            return Group.objects.get(pk=pk)
         except Group.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
         rol = self.get_object(pk)
-        print(rol)
         serializer = RolModelSerializer(rol, many=True)
         print(serializer.data)
         return Response(serializer.data)
