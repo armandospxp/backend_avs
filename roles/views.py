@@ -133,7 +133,6 @@ class RolView(viewsets.ModelViewSet):
     serializer_class = RolModelSerializer
     queryset = Rol.objects.all()
 
-
     def get_queryset(self):
         rol = Rol.objects.all()
         return rol
