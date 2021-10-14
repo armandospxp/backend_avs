@@ -16,6 +16,7 @@ urlpatterns = [
                   path('marcas/', include(('marcas.urls', 'marcas'), namespace='marcas')),
                   path('roles/', include(('roles.urls', 'roles'), namespace='roles')),
                   path('personas/', include(('personas.urls', 'personas'), namespace='personas')),
+                  path('proveedores/', include(('proveedores.urls', 'proveedores'), namespace='proveedores')),
                   path('configuracion/', include(('configuracion.urls', 'configuracion'), namespace='configuracion')),
                   path('cajas/', include(('cajas.urls', 'cajas'), namespace='cajas')),
                   path('', include(('users.urls', 'users'), namespace='users')),
