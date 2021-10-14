@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework_simplejwt',
     'ventas',
+    'proveedores',
 ]
 
 MIDDLEWARE = [
