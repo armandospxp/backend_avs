@@ -122,10 +122,10 @@ class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserModelSerializer
     search_fields = (
-        'username',
-        'first_name',
-        'last_name',
-        'email',
+        '^username',
+        '^first_name',
+        '^last_name',
+        '^email',
     )
 
 

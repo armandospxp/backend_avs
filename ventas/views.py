@@ -4,6 +4,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
+from articulos.models import Articulo
 from ventas.models import DetalleVenta, Venta
 from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
 
@@ -58,3 +59,11 @@ class DetalleVentaView(viewsets.ModelViewSet):
         nuevo_detalle_venta = DetalleVenta.objects.create(id_venta = data["id_venta"], id_articulo = data["id_articulo"], cantidad = data["cantidad"], subtotal=data["subtotal"], total=data["total"])
         serializer = DetalleVentaModelSerializer(nuevo_detalle_venta)
         return Response(serializer.data)
+
+
+def descontar_stock(pk, estado):
+    """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando cada vez que se compra o vende"""
+    if estado == 'C':
+        articulo = Articulo.objects.get(id=pk)
+        if articulo.stock_minimo <= articulo.stock_actual:
+            raise 

@@ -180,8 +180,8 @@ class ModuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Modulo.objects.all()
     serializer_class = ModuloModelSerializer
     search_fields = (
-        'id_modulo',
-        'nombre_modulo',
+        '^id_modulo',
+        '^nombre_modulo',
     )
 
 
