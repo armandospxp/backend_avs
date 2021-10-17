@@ -1,3 +1,4 @@
+from typing import Tuple
 from django.db import models
 
 
@@ -16,13 +17,11 @@ class Proveedor(models.Model):
     ]
     id_proveedor = models.AutoField(primary_key=True)
     tipo_persona = models.CharField(max_length=1,
-                                    choices=TIPO_PERSONA_CHOICES, default=FISICA)
-    nombre = models.CharField(blank=False, null=False, max_length=100)
-    apellido = models.CharField(blank=False, null=False, max_length=100)
-    propietario = models.CharField(null=True, blank=True, max_length=50)
+                                    choices=TIPO_PERSONA_CHOICES, default=FISICA, null=False, blank=False)
+    propietario = models.CharField(null=False, blank=False, max_length=50)
     direccion = models.CharField(null=False, blank=False, max_length=100)
     telefono = models.CharField(null=False, blank=False, max_length=40)
-    ruc = models.CharField(null=True, blank=True, max_length=50)
+    ruc = models.CharField(null=False, blank=False, max_length=50)
     correo_electronico = models.CharField(null=True, blank=True, max_length=50)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     estado_activo = models.CharField(max_length=1,

@@ -61,9 +61,9 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-def descontar_stock(pk, estado):
-    """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando cada vez que se compra o vende"""
-    if estado == 'C':
-        articulo = Articulo.objects.get(id=pk)
-        if articulo.stock_minimo <= articulo.stock_actual:
-            raise 
+# def descontar_stock(pk, estado):
+#     """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando cada vez que se compra o vende"""
+#     if estado == 'C':
+#         articulo = Articulo.objects.get(id=pk)
+#         if articulo.stock_minimo <= articulo.stock_actual:
+#             raise 
