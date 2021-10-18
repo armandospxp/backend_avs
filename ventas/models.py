@@ -4,11 +4,12 @@ from django.db.models.base import Model
 from articulos.models import Articulo
 from personas.models import Persona
 from django.utils import timezone
+from django import utils
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    fecha = models.DateField(default=timezone.now())
+    fecha = models.DateField(default=utils.timezone.now)
     hora = models.TimeField(default=timezone.now().strftime("%H:%M:%S"))
 
 class DetalleVenta(models.Model):

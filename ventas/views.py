@@ -32,7 +32,7 @@ class MyPaginationMixin(object):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
 
-class CompraView(viewsets.ModelViewSet):
+class VentaView(viewsets.ModelViewSet):
     serializer_class = VentaModelSerializer
     queryset = Venta.objects.all()
 

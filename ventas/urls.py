@@ -1,7 +1,7 @@
 from django.urls import path, include
-from ventas.views import Venta, DetalleVenta
+from ventas.views import VentaView, DetalleVentaView
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register('ventas', Venta)
-router.register('detalle-ventas', DetalleVenta)
+router.register('ventas', VentaView)
+router.register('detalle-ventas', DetalleVentaView)
