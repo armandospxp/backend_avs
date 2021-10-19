@@ -7,6 +7,7 @@ from rest_framework.serializers import Serializer
 from articulos.models import Articulo
 from ventas.models import DetalleVenta, Venta
 from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
+from django.http import HttpResponseNotAllowed
 
 class MyPaginationMixin(object):
     pagination_class = PageNumberPagination
@@ -58,12 +59,16 @@ class DetalleVentaView(viewsets.ModelViewSet):
         data = request.data
         nuevo_detalle_venta = DetalleVenta.objects.create(id_venta = data["id_venta"], id_articulo = data["id_articulo"], cantidad = data["cantidad"], subtotal=data["subtotal"], total=data["total"])
         serializer = DetalleVentaModelSerializer(nuevo_detalle_venta)
+        descontar_stock(data["id_articulo"], 'V')
         return Response(serializer.data)
 
 
-# def descontar_stock(pk, estado):
-#     """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando cada vez que se compra o vende"""
-#     if estado == 'C':
-#         articulo = Articulo.objects.get(id=pk)
-#         if articulo.stock_minimo <= articulo.stock_actual:
-#             raise 
+def descontar_stock(pk, estado):
+    """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando cada vez que se compra o vende"""
+    if estado == 'V':
+        articulo = Articulo.objects.get(id=pk)
+        if articulo.stock_minimo <= articulo.stock_actual:
+            raise HttpResponseNotAllowed
+        else:
+            stock_actual = articulo.stock_actual
+            articulo.objects.set(stock_actual=stock_actual - 1)

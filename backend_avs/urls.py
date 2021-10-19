@@ -19,6 +19,7 @@ urlpatterns = [
                   path('proveedores/', include(('proveedores.urls', 'proveedores'), namespace='proveedores')),
                   path('configuracion/', include(('configuracion.urls', 'configuracion'), namespace='configuracion')),
                   path('cajas/', include(('cajas.urls', 'cajas'), namespace='cajas')),
+                  path('ventas/', include(('ventas.urls', 'ventas'), namespace='ventas')),
                   path('', include(('users.urls', 'users'), namespace='users')),
                   path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
                   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
