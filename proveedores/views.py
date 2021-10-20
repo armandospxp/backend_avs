@@ -92,12 +92,12 @@ class ProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter]
     queryset = Proveedor.objects.filter(estado_activo="V")
     serializer_class = ProveedorModelSerializer
-    search_fields = ['^id_proveedor',
-                     '^tipo_persona',
-                     '^propietario',
-                     '^direccion',
-                     '^telefono',
-                     '^ruc',
-                     '^correo_electronico',
-                     '^fecha_nacimiento',
-                     '^estado_activo']
+    search_fields = ['id_proveedor',
+                     'tipo_persona',
+                     'propietario',
+                     'direccion',
+                     'telefono',
+                     'ruc',
+                     'correo_electronico',
+                     'fecha_nacimiento',
+                     'estado_activo']

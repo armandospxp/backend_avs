@@ -15,6 +15,7 @@ class BasicPagination(PageNumberPagination):
 
 class MyPaginationMixin(object):
     pagination_class = PageNumberPagination
+
     @property
     def paginator(self):
         if not hasattr(self, '_paginator'):
@@ -146,17 +147,17 @@ class MarcaList(APIView):
 
 class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter]
-    queryset = Articulo.objects.all()
+    queryset = Articulo.objects.filter()
     serializer_class = ArticuloModelSerializer
-    search_fields = ['^id_articulo',
-    '^nombre',
-    '^costo',
-    '^porc_iva',
-    '^porc_comision',
-    '^stock_actual',
-    '^stock_minimo',
-    '^ultima_compra',
-    '^unidad_medida',
-    '^precio_unitario',
-    '^precio_mayorista',
-    '^precio_especial',]
+    search_fields = ['id_articulo',
+                     'nombre',
+                     'costo',
+                     'porc_iva',
+                     'porc_comision',
+                     'stock_actual',
+                     'stock_minimo',
+                     'ultima_compra',
+                     'unidad_medida',
+                     'precio_unitario',
+                     'precio_mayorista',
+                     'precio_especial', ]
