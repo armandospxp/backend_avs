@@ -80,8 +80,9 @@ class ProveedorList(APIView, MyPaginationMixin):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        # cliente = request["id_cliente"]
         serializer = ProveedorModelSerializer(data=request.data)
-        if serializer.is_valid() and request["id_cliente"] is None:
+        if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
