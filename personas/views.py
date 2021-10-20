@@ -122,19 +122,19 @@ class PersonaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Persona.objects.filter(estado_activo="V")
     serializer_class = PersonaModelSerializers
     search_fields = (
-        'id_persona',
-        'tipo_persona',
-        'nombre_apellido',
-        'propietario',
-        'direccion',
-        'telefono',
-        'ruc',
-        'cedula',
-        'correo_electronico',
-        'es_cliente',
-        'es_proveedor',
-        'fecha_nacimiento',
-        'estado_activo',
+        '^id_persona',
+        '^tipo_persona',
+        '^nombre_apellido',
+        '^propietario',
+        '^direccion',
+        '^telefono',
+        '^ruc',
+        '^cedula',
+        '^correo_electronico',
+        '^es_cliente',
+        '^es_proveedor',
+        '^fecha_nacimiento',
+        '^estado_activo',
     )
 
 

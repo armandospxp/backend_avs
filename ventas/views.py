@@ -43,10 +43,14 @@ class VentaView(viewsets.ModelViewSet):
         return venta
 
     def create(self, request, *args, **kwargs):
-        data = request.data
-        nueva_venta = Venta.objects.create(id_cliente=data["id_cliente"])
-        serializer = VentaModelSerializer(nueva_venta)
-        return Response(serializer.data)
+        # nueva_venta = Venta.objects.create(id_venta=data["id_venta"], id_cliente=data["id_cliente"], fecha=data['fecha'], hora=data['hora'])
+        # nueva_venta.save()
+        serializer = VentaModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 
 class DetalleVentaView(viewsets.ModelViewSet):
     serializer_class = DetalleVentaModelSerializer
@@ -74,6 +78,14 @@ class DetalleVentaView(viewsets.ModelViewSet):
         detalle_venta = get_object_or_404(queryset, pk)
         detalle_venta.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def update(self, request, pk):
+        detalle_venta = self.get_object(pk)
+        serializer = DetalleVentaModelSerializer(detalle_venta, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def actualizar_stock(pk, estado):
     """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando 

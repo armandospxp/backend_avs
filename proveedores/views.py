@@ -81,7 +81,7 @@ class ProveedorList(APIView, MyPaginationMixin):
 
     def post(self, request, format=None):
         serializer = ProveedorModelSerializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid() and request["id_cliente"] is None:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -93,8 +93,6 @@ class ProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProveedorModelSerializer
     search_fields = ['^id_proveedor',
                      '^tipo_persona',
-                     '^nombre',
-                     '^apellido',
                      '^propietario',
                      '^direccion',
                      '^telefono',

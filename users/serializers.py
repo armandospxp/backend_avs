@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
+from roles.models import Rol
 
 # Models
 from users.models import User
@@ -41,13 +42,15 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError('Las credenciales no son válidas')
 
         # Guardamos el usuario en el contexto para posteriormente en create recuperar el token
+        rol = Rol.objects.get(usuario=user.id)
         self.context['users'] = user
+        self.context['rol'] = rol
         return data
 
     def create(self, data):
         """Generar o recuperar token."""
         token, created = Token.objects.get_or_create(user=self.context['users'])
-        return self.context['users'], token.key
+        return self.context['users'], token.key, self.context['rol']
 
 
 # class UserUpdatePassword(serializers.ModelSerializer):

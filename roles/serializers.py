@@ -26,4 +26,3 @@ class RolModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rol
         fields = '__all__'
-        depth = 1

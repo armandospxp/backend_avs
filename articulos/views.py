@@ -1,5 +1,6 @@
 from django.http import Http404
-from rest_framework import status
+from rest_framework import status, viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -141,3 +142,21 @@ class MarcaList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = Articulo.objects.all()
+    serializer_class = ArticuloModelSerializer
+    search_fields = ['^id_articulo',
+    '^nombre',
+    '^costo',
+    '^porc_iva',
+    '^porc_comision',
+    '^stock_actual',
+    '^stock_minimo',
+    '^ultima_compra',
+    '^unidad_medida',
+    '^precio_unitario',
+    '^precio_mayorista',
+    '^precio_especial',]

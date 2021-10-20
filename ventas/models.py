@@ -8,7 +8,7 @@ from django import utils
 
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
-    id_cliente = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=utils.timezone.now)
     hora = models.TimeField(default=timezone.now().strftime("%H:%M:%S"))
 
