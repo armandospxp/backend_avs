@@ -7,6 +7,14 @@ class Marca(models.Model):
 
 
 class Articulo(models.Model):
+    KG = "Kiligramos"
+    CJ = "Caja"
+    UN = "Unidad"
+    UNIDAD_MEDIDA_CHOICES = [
+        (KG, 'kILOGRAMOS'),
+        (CJ, 'CAJA'),
+        (UN, 'UNIDAD'),
+    ]
     """Modelo de articulos """
     id_articulo = models.BigAutoField(primary_key=True)
     id_marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
@@ -18,7 +26,7 @@ class Articulo(models.Model):
     stock_actual = models.PositiveBigIntegerField()
     stock_minimo = models.IntegerField()
     ultima_compra = models.DateField()
-    unidad_medida = models.CharField(max_length=4)
+    unidad_medida = models.CharField(max_length=10, choices=UNIDAD_MEDIDA_CHOICES)
     precio_unitario = models.DecimalField(decimal_places=4, max_digits=32)
     precio_mayorista = models.DecimalField(decimal_places=4, max_digits=32)
     precio_especial = models.DecimalField(decimal_places=4, max_digits=32)
