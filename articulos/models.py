@@ -10,8 +10,9 @@ class Articulo(models.Model):
     KG = "Kiligramos"
     CJ = "Caja"
     UN = "Unidad"
+    CC = "Centimetros Cúbicos"
     UNIDAD_MEDIDA_CHOICES = [
-        (KG, 'kILOGRAMOS'),
+        (KG, 'KILOGRAMOS'),
         (CJ, 'CAJA'),
         (UN, 'UNIDAD'),
         (CC, 'CENTIMETROS CUBICOS')
