@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer
+from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer, ArticuloSearchModelSerializer
 from articulos.models import Articulo, Marca
 
 
@@ -148,8 +148,9 @@ class MarcaList(APIView):
 class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [SearchFilter]
     queryset = Articulo.objects.filter()
-    serializer_class = ArticuloModelSerializer
+    serializer_class = ArticuloSearchModelSerializer
     search_fields = ['id_articulo',
+                     'id_marca__descripcion',
                      'codigo_barras',
                      'nombre',
                      'costo',
