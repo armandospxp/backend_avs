@@ -153,7 +153,7 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
                      'nombre',
                      'costo',
                      'codigo',
-                     'codigo_barra',
+                     'codigo_barras',
                      'porc_iva',
                      'porc_comision',
                      'stock_actual',
