@@ -52,10 +52,6 @@ class ArticuloDetail(APIView):
 
     def get(self, request, pk, format=None):
         articulo = self.get_object(pk)
-        page = self.paginate_queryset(articulo)
-        if page is not None:
-            serializer = self.serializer_class(page, many=True)
-            return self.get_paginated_response(serializer.data)
         serializer = ArticuloModelSerializer(articulo)
         return Response(serializer.data)
 
