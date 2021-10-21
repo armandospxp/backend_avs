@@ -10,7 +10,7 @@ class Articulo(models.Model):
     """Modelo de articulos """
     id_articulo = models.BigAutoField(primary_key=True)
     codigo = models.ForeignKey(Marca, on_delete=models.CASCADE)
-    codigo_barra = models.CharField(max_length=15, blank=False, null=False)
+    codigo_barras = models.CharField(max_length=15, blank=False, null=False)
     nombre = models.CharField(max_length=80, blank=False, null=False)
     costo = models.DecimalField(decimal_places=2, max_digits=32)
     porc_iva = models.PositiveIntegerField()
