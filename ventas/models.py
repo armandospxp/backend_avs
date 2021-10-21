@@ -19,5 +19,5 @@ class DetalleVenta(models.Model):
     id_detalle_venta = models.AutoField(primary_key=True)
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
-    cantidad = models.IntegerField
-    sub_total = models.IntegerField
+    cantidad = models.IntegerField(blank=False, null=False, default=1)
+    sub_total = models.IntegerField(blank=False, null=False, default=0)
