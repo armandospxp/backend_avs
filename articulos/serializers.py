@@ -30,12 +30,11 @@ class MarcaModelSerializer(serializers.ModelSerializer):
 
 
 class ArticuloSearchModelSerializer(serializers.ModelSerializer):
-    id_marca = MarcaModelSerializer(read_only=True)
+    # id_marca = MarcaModelSerializer(read_only=True)
 
     class Meta:
         model = Articulo
         fields = ['id_articulo',
-                  'id_marca'
                   'codigo_barras',
                   'nombre',
                   'costo',

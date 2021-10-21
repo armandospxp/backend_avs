@@ -150,7 +150,6 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Articulo.objects.filter()
     serializer_class = ArticuloSearchModelSerializer
     search_fields = ['id_articulo',
-                     'id_marca__descripcion',
                      'codigo_barras',
                      'nombre',
                      'costo',
