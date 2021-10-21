@@ -100,7 +100,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
 
 
 def actualizar_stock(pk, estado):
-    """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando 
+    """Procedimiento para descontar stock de articulo, de tal forma a que se vaya actualizando
     cada vez que se compra o vende.
     Dependiendo del estado, si es venta o reposicion, se restara o se sumara un articulo."""
 
@@ -111,3 +111,13 @@ def actualizar_stock(pk, estado):
         else:
             stock_actual = articulo.stock_actual
             articulo.objects.set(stock_actual=stock_actual - 1)
+
+
+def actualizar_total(pk, estado, cantidad):
+    """Procedimiento para actualizar el stock de articulos, de tal forma que si se agrega o se quita,
+    se tenga que sumar o restar respectivamente el subtotal de cada articulo"""
+    venta = Venta.objects.get(pk=pk)
+    if estado == 'S':
+        venta.total = venta.total + cantidad
+    elif estado == 'R':
+        venta.total = venta.total - cantidad
