@@ -6,11 +6,14 @@ from personas.models import Persona
 from django.utils import timezone
 from django import utils
 
+
 class Venta(models.Model):
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=utils.timezone.now)
     hora = models.TimeField(default=timezone.now().strftime("%H:%M:%S"))
+    total = models.IntegerField
+
 
 class DetalleVenta(models.Model):
     id_detalle_venta = models.AutoField(primary_key=True)
@@ -18,5 +21,3 @@ class DetalleVenta(models.Model):
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     cantidad = models.IntegerField
     sub_total = models.IntegerField
-    precio_total = models.IntegerField
-

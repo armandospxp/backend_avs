@@ -163,3 +163,11 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
                      'precio_mayorista',
                      'precio_especial',
                      ]
+
+
+class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = Marca.objects.filter()
+    serializer_class = MarcaModelSerializer
+    search_fields = ['id_marca',
+                     'descripcion']

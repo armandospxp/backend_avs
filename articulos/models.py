@@ -5,6 +5,9 @@ class Marca(models.Model):
     id_marca = models.CharField(primary_key=True, max_length=64)
     descripcion = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.descripcion
+
 
 class Articulo(models.Model):
     KILOGRAMOS = "KG"
