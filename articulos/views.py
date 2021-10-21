@@ -43,7 +43,6 @@ class ArticuloDetail(APIView):
     Retorna, actualiza o borra una instancia de articulo.
     """
     serializer_class = ArticuloModelSerializer
-    pagination_class = PageNumberPagination
 
     def get_object(self, pk):
         try:
