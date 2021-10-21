@@ -15,7 +15,7 @@ class Articulo(models.Model):
         (KG, 'KILOGRAMOS'),
         (CJ, 'CAJA'),
         (UN, 'UNIDAD'),
-        (CC, 'CENTIMETROS CUBICOS')
+        (CC, 'CENTIMETROS CÚBICOS')
     ]
     """Modelo de articulos """
     id_articulo = models.BigAutoField(primary_key=True)
