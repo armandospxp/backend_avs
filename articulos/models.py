@@ -7,14 +7,14 @@ class Marca(models.Model):
 
 
 class Articulo(models.Model):
-    KG = "Kiligramos"
-    CJ = "Caja"
-    UN = "Unidad"
-    CC = "Centimetros Cubicos"
+    KILOGRAMOS = "KG"
+    CAJA = "CJ"
+    UNIDAD = "UN"
+    CC = "CC"
     UNIDAD_MEDIDA_CHOICES = [
-        (KG, 'KILOGRAMOS'),
-        (CJ, 'CAJA'),
-        (UN, 'UNIDAD'),
+        (KILOGRAMOS, 'KILOGRAMOS'),
+        (CAJA, 'CAJA'),
+        (UNIDAD, 'UNIDAD'),
         (CC, 'CENTIMETROS CÚBICOS')
     ]
     """Modelo de articulos """
