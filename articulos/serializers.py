@@ -37,7 +37,6 @@ class ArticuloSearchModelSerializer(serializers.ModelSerializer):
         model = Articulo
         fields = ['id_articulo',
                   'id_marca'
-                  'nombre_marca',
                   'codigo_barras',
                   'nombre',
                   'costo',
