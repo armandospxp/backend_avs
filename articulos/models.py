@@ -2,14 +2,14 @@ from django.db import models
 
 
 class Marca(models.Model):
-    codigo = models.CharField(primary_key=True, max_length=64)
+    id_marca = models.CharField(primary_key=True, max_length=64)
     descripcion = models.CharField(max_length=100)
 
 
 class Articulo(models.Model):
     """Modelo de articulos """
     id_articulo = models.BigAutoField(primary_key=True)
-    codigo = models.ForeignKey(Marca, on_delete=models.CASCADE)
+    id_marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
     codigo_barras = models.CharField(max_length=15, blank=False, null=False)
     nombre = models.CharField(max_length=80, blank=False, null=False)
     costo = models.DecimalField(decimal_places=2, max_digits=32)

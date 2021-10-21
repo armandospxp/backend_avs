@@ -1,3 +1,5 @@
+import pdb
+
 from django.http import response
 from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
@@ -48,9 +50,13 @@ class VentaView(viewsets.ModelViewSet):
         # nueva_venta = Venta.objects.create(id_venta=data["id_venta"], id_cliente=data["id_cliente"], fecha=data['fecha'], hora=data['hora'])
         # nueva_venta.save()
         serializer = VentaModelSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        data = request.data
+        pk = data.get('id_cliente')
+        # pdb.set_trace()
+        if pk is not None:
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

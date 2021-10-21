@@ -6,7 +6,7 @@ from articulos.models import Articulo, Marca
 class ArticuloModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Articulo
-        fields = ['id_articulo', 'codigo', 'codigo_barras', 'nombre', 'costo', 'porc_iva', 'porc_comision', 'stock_actual', 'stock_minimo', 'ultima_compra',
+        fields = ['id_articulo', 'id_marca', 'codigo_barras', 'nombre', 'costo', 'porc_iva', 'porc_comision', 'stock_actual', 'stock_minimo', 'ultima_compra',
                   'unidad_medida', 'precio_unitario', 'precio_mayorista', 'precio_especial']
 
 
