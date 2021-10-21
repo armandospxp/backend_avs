@@ -8,7 +8,7 @@ from personas.serializers import PersonaModelSerializers
 class VentaModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venta
-        fields = ['id_venta', 'id_cliente', 'fecha', 'hora']
+        fields = ['id_venta', 'id_cliente', 'fecha', 'hora', 'total']
 
 
 class DetalleVentaModelSerializer(serializers.ModelSerializer):
