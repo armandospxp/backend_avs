@@ -10,6 +10,7 @@ from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 
+
 class MyPaginationMixin(object):
     pagination_class = PageNumberPagination
 
@@ -34,6 +35,7 @@ class MyPaginationMixin(object):
         assert self.paginator is not None
         return self.paginator.get_paginated_response(data)
 
+
 class VentaView(viewsets.ModelViewSet):
     serializer_class = VentaModelSerializer
     queryset = Venta.objects.all()
@@ -50,7 +52,7 @@ class VentaView(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
 class DetalleVentaView(viewsets.ModelViewSet):
     serializer_class = DetalleVentaModelSerializer
@@ -62,7 +64,9 @@ class DetalleVentaView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        nuevo_detalle_venta = DetalleVenta.objects.create(id_venta = data["id_venta"], id_articulo = data["id_articulo"], cantidad = data["cantidad"], subtotal=data["subtotal"], total=data["total"])
+        nuevo_detalle_venta = DetalleVenta.objects.create(id_venta=data["id_venta"], id_articulo=data["id_articulo"],
+                                                          cantidad=data["cantidad"], subtotal=data["subtotal"],
+                                                          total=data["total"])
         serializer = DetalleVentaModelSerializer(nuevo_detalle_venta)
         actualizar_stock(data["id_articulo"], 'V')
         return Response(serializer.data)
@@ -87,11 +91,12 @@ class DetalleVentaView(viewsets.ModelViewSet):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 def actualizar_stock(pk, estado):
     """Funcion para descontar stock de articulo, de tal forma a que se vaya actualizando 
     cada vez que se compra o vende.
     Dependiendo del estado, si es venta o reposicion, se restara o se sumara un articulo."""
-    
+
     if estado == 'V':
         articulo = Articulo.objects.get(id=pk)
         if articulo.stock_minimo <= articulo.stock_actual:
