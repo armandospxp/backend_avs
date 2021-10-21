@@ -65,7 +65,8 @@ class ArticuloDetail(APIView):
 
     def delete(self, request, pk, format=None):
         articulo = self.get_object(pk)
-        articulo.delete()
+        articulo.estado = 'H'
+        articulo.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -74,7 +75,7 @@ class ArticuloList(APIView, MyPaginationMixin):
     serializer_class = ArticuloModelSerializer
 
     def get(self, request, format=None):
-        articulo = Articulo.objects.all()
+        articulo = Articulo.objects.filter(estado='A')
         page = self.paginate_queryset(articulo)
         if page is not None:
             serializer = self.get_paginated_response(self.serializer_class(page,
@@ -118,7 +119,8 @@ class MarcaDetail(APIView, MyPaginationMixin):
 
     def delete(self, request, pk, format=None):
         marca = self.get_object(pk)
-        marca.delete()
+        marca.estado = 'H'
+        marca.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -128,7 +130,7 @@ class MarcaList(APIView):
     serializer_class = MarcaModelSerializer
 
     def get(self, request, format=None):
-        marca = Marca.objects.all()
+        marca = Marca.objects.filter(estado='A')
         serializer = MarcaModelSerializer(marca, many=True)
         return Response(serializer.data)
 

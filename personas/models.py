@@ -1,7 +1,9 @@
 from django.db import models
 
+from utilidades.base_name import BaseModel
 
-class Persona(models.Model):
+
+class Persona(BaseModel):
     FISICA = 'F'
     JURIDICA = 'J'
     VERDADERO = 'V'

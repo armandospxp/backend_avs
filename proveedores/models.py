@@ -1,8 +1,10 @@
 from typing import Tuple
 from django.db import models
 
+from utilidades.base_name import BaseModel
 
-class Proveedor(models.Model):
+
+class Proveedor(BaseModel):
     FISICA = 'F'
     JURIDICA = 'J'
     VERDADERO = 'V'

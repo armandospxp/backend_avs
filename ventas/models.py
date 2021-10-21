@@ -6,8 +6,10 @@ from personas.models import Persona
 from django.utils import timezone
 from django import utils
 
+from utilidades.base_name import BaseModel
 
-class Venta(models.Model):
+
+class Venta(BaseModel):
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=utils.timezone.now)
@@ -15,7 +17,7 @@ class Venta(models.Model):
     total = models.IntegerField(blank=False, null=False, default=0)
 
 
-class DetalleVenta(models.Model):
+class DetalleVenta(BaseModel):
     id_detalle_venta = models.AutoField(primary_key=True)
     id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)

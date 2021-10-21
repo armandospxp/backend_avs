@@ -1,7 +1,8 @@
 from django.db import models
+from utilidades.base_name import BaseModel
 
 
-class Marca(models.Model):
+class Marca(BaseModel):
     id_marca = models.CharField(primary_key=True, max_length=64)
     descripcion = models.CharField(max_length=100)
 
@@ -9,7 +10,7 @@ class Marca(models.Model):
         return self.descripcion
 
 
-class Articulo(models.Model):
+class Articulo(BaseModel):
     KILOGRAMOS = "KG"
     CAJA = "CJ"
     UNIDAD = "UN"

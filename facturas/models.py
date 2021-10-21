@@ -1,6 +1,9 @@
 from django.db import models
 
-class Factura(models.Model):\
+from utilidades.base_name import BaseModel
+
+
+class Factura(BaseModel):
     CONTADO = 'CON'
     CREDITO = 'CRE'
     TIPO_FACTURA_CHOICES = [
