@@ -14,6 +14,7 @@ class Articulo(models.Model):
         (KG, 'kILOGRAMOS'),
         (CJ, 'CAJA'),
         (UN, 'UNIDAD'),
+        (CC, 'CENTIMETROS CUBICOS')
     ]
     """Modelo de articulos """
     id_articulo = models.BigAutoField(primary_key=True)
@@ -26,7 +27,7 @@ class Articulo(models.Model):
     stock_actual = models.PositiveBigIntegerField()
     stock_minimo = models.IntegerField()
     ultima_compra = models.DateField()
-    unidad_medida = models.CharField(max_length=10, choices=UNIDAD_MEDIDA_CHOICES)
+    unidad_medida = models.CharField(max_length=20, choices=UNIDAD_MEDIDA_CHOICES)
     precio_unitario = models.DecimalField(decimal_places=4, max_digits=32)
     precio_mayorista = models.DecimalField(decimal_places=4, max_digits=32)
     precio_especial = models.DecimalField(decimal_places=4, max_digits=32)
