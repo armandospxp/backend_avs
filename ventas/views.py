@@ -63,13 +63,14 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return detalle_venta
 
     def create(self, request, *args, **kwargs):
-        data = request.data
-        nuevo_detalle_venta = DetalleVenta.objects.create(id_venta=data["id_venta"], id_articulo=data["id_articulo"],
-                                                          cantidad=data["cantidad"], subtotal=data["subtotal"],
-                                                          total=data["total"])
-        serializer = DetalleVentaModelSerializer(nuevo_detalle_venta)
-        actualizar_stock(data["id_articulo"], 'V')
-        return Response(serializer.data)
+        serializer = DetalleVentaModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = request.data
+            pk = data.get('id_detalle_venta')
+            actualizar_stock(pk, 'V')
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
         queryset = DetalleVenta.objects.all()

@@ -152,6 +152,7 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['id_articulo',
                      'nombre',
                      'costo',
+                     'codigo',
                      'codigo_barra',
                      'porc_iva',
                      'porc_comision',
