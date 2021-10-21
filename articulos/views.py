@@ -150,10 +150,9 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Articulo.objects.filter()
     serializer_class = ArticuloModelSerializer
     search_fields = ['id_articulo',
+                     'codigo_barras',
                      'nombre',
                      'costo',
-                     'id_marca',
-                     'codigo_barras',
                      'porc_iva',
                      'porc_comision',
                      'stock_actual',
@@ -162,4 +161,5 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
                      'unidad_medida',
                      'precio_unitario',
                      'precio_mayorista',
-                     'precio_especial', ]
+                     'precio_especial',
+                     ]
