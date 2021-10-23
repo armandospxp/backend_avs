@@ -23,3 +23,6 @@ class DetalleVenta(BaseModel):
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     cantidad = models.IntegerField(blank=False, null=False, default=1)
     sub_total = models.IntegerField(blank=False, null=False, default=0)
+
+
+    

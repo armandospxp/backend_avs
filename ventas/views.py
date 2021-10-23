@@ -69,12 +69,30 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return detalle_venta
 
     def create(self, request, *args, **kwargs):
-        serializer = DetalleVentaModelSerializer(data=request.data)
+        data = request.data
+        cantidad = data.get('cantidad')
+        pk_articulo = data.get('id_articulo')
+        pk_venta = data.get('id_venta')
+        sub_total = actualizar_subtotal(pk_articulo, cantidad)
+        # remember old state
+        _mutable = data._mutable
+
+        # set to mutable
+        data._mutable = True
+
+        # сhange the values you want
+        data['sub_total'] = sub_total
+
+        # set mutable flag back
+        data._mutable = _mutable
+        serializer = DetalleVentaModelSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            # serializer.save()
             data = request.data
-            pk = data.get('id_detalle_venta')
-            actualizar_stock(pk, 'V')
+            pk_venta = data.get('id_venta')
+            actualizar_stock(pk_articulo, 'V', cantidad)
+            actualizar_total(pk_venta, 'S', cantidad, pk_articulo)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -82,6 +100,8 @@ class DetalleVentaView(viewsets.ModelViewSet):
         queryset = DetalleVenta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk=pk)
         serializer = DetalleVentaModelSerializer(detalle_venta)
+        if serializer.is_valid():
+            serializer.save()
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
@@ -99,25 +119,38 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def actualizar_stock(pk, estado):
+def actualizar_stock(pk, estado, cantidad):
     """Procedimiento para descontar stock de articulo, de tal forma a que se vaya actualizando
     cada vez que se compra o vende.
     Dependiendo del estado, si es venta o reposicion, se restara o se sumara un articulo."""
 
     if estado == 'V':
-        articulo = Articulo.objects.get(id=pk)
-        if articulo.stock_minimo <= articulo.stock_actual:
+        articulo = Articulo.objects.get(pk=pk)
+        if articulo.stock_actual <= articulo.stock_minimo:
             raise HttpResponseNotAllowed
         else:
             stock_actual = articulo.stock_actual
-            articulo.objects.set(stock_actual=stock_actual - 1)
+            # articulo.objects.set(stock_actual=stock_actual - cantidad)
+            articulo.stock_actual = int(articulo.stock_actual) - int(cantidad)
+            articulo.save()
 
 
-def actualizar_total(pk, estado, cantidad):
-    """Procedimiento para actualizar el stock de articulos, de tal forma que si se agrega o se quita,
-    se tenga que sumar o restar respectivamente el subtotal de cada articulo"""
+def actualizar_subtotal(pk_articulo, cantidad):
+    """Funcion para obtener el subtotal de un detalle_venta con respecto a un articulo especifico"""
+    articulo = Articulo.objects.get(pk=pk_articulo)
+    sub_total = (int(articulo.precio_unitario) * int(cantidad))
+    return sub_total
+
+
+def actualizar_total(pk, estado, cantidad, pk_articulo):
+    """Procedimiento para actualizar el total de venta, al cual esta relacionado uno o varios detalle-ventas.
+    Se obtiene la id de venta, luego se realiza operaciones para actualizar tanto el subtotal de detalle-venta y
+    venta"""
     venta = Venta.objects.get(pk=pk)
+    subtotal = 0
     if estado == 'S':
-        venta.total = venta.total + cantidad
+        subtotal = actualizar_subtotal(pk_articulo, cantidad)
+        venta.total = int(venta.total) + int(subtotal)
+        venta.save()
     elif estado == 'R':
         venta.total = venta.total - cantidad
