@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -168,3 +169,9 @@ class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MarcaModelSerializer
     search_fields = ['id_marca',
                      'descripcion']
+
+@api_view(('GET',))
+def articulos_lista_sin_paginacion(request, format=None):
+    articulo = Articulo.objects.filter(estado='A')
+    serializer = ArticuloModelSerializer(articulo)
+    return Response(serializer.data)

@@ -74,20 +74,10 @@ class DetalleVentaView(viewsets.ModelViewSet):
         pk_articulo = data.get('id_articulo')
         pk_venta = data.get('id_venta')
         sub_total = actualizar_subtotal(pk_articulo, cantidad)
-        # remember old state
-        _mutable = data._mutable
-
-        # set to mutable
-        data._mutable = True
-
-        # сhange the values you want
+        data.copy()
         data['sub_total'] = sub_total
-
-        # set mutable flag back
-        data._mutable = _mutable
         serializer = DetalleVentaModelSerializer(data=data)
         if serializer.is_valid():
-            # serializer.save()
             data = request.data
             pk_venta = data.get('id_venta')
             actualizar_stock(pk_articulo, 'V', cantidad)
@@ -107,7 +97,8 @@ class DetalleVentaView(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         queryset = DetalleVenta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk)
-        detalle_venta.delete()
+        detalle_venta.estado='H'
+        detalle_venta.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk):
