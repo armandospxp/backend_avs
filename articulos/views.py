@@ -177,9 +177,6 @@ class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
 @api_view(('GET',))
 def articulos_lista_sin_paginacion(request, format=None):
     articulos = Articulo.objects.filter(estado='A')
-    data = []
-    for articulo in articulos:
-        serializer = ArticuloListSerializer(articulo)
-        data.append(serializer.data)
-    return Response(data)
+    serializer = ArticuloModelSerializer(articulos, many=True)
+    return Response(serializer.data)
 
