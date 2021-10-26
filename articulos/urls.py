@@ -8,5 +8,5 @@ urlpatterns = format_suffix_patterns([
     path('<int:pk>/', ArticuloDetail.as_view(), name='articulo'),
     path('busqueda/', ArticuloSearchViewSet.as_view({'get': 'list'}), name='busqueda-articulo'),
     path('marca/busqueda/', MarcaSearchViewSet.as_view({'get': 'list'}), name='busqueda-marca'),
-    path('articulos/', articulos_lista_sin_paginacion, name='listado_articulos')
+    path('articulos-lista/', articulos_lista_sin_paginacion, name='listado_articulos')
 ])

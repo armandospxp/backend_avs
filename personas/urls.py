@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from personas.views import PersonaList, PerosnaDetail, PersonaProveedorList, PersonaClienteList, PersonaSearchViewSet, \
-    PersonaProveedorSearchViewSet
+    PersonaProveedorSearchViewSet, personas_lista_sin_paginacion
 
 urlpatterns = format_suffix_patterns([
     path('', PersonaList.as_view(), name='personas'),
@@ -11,4 +11,5 @@ urlpatterns = format_suffix_patterns([
     path('busquedaproveedor/', PersonaProveedorSearchViewSet.as_view({'get': 'list'}), name='personaproveedorsearch'),
     path('proveedores/', PersonaProveedorList.as_view(), name='personaempleado'),
     path('clientes/', PersonaClienteList.as_view(), name='personaproveedor'),
+    path('clientes-lista/', personas_lista_sin_paginacion, name='lista-clientes')
 ])

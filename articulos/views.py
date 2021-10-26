@@ -1,3 +1,5 @@
+import pdb
+
 from django.http import Http404
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
@@ -6,7 +8,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer, ArticuloSearchModelSerializer
+from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer, ArticuloSearchModelSerializer, \
+    ArticuloListSerializer
 from articulos.models import Articulo, Marca
 
 
@@ -170,8 +173,13 @@ class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['id_marca',
                      'descripcion']
 
+
 @api_view(('GET',))
 def articulos_lista_sin_paginacion(request, format=None):
-    articulo = Articulo.objects.filter(estado='A')
-    serializer = ArticuloModelSerializer(articulo)
-    return Response(serializer.data)
+    articulos = Articulo.objects.filter(estado='A')
+    data = []
+    for articulo in articulos:
+        serializer = ArticuloListSerializer(articulo)
+        data.append(serializer.data)
+    return Response(data)
+

@@ -1,12 +1,13 @@
 from django.http import Http404
 from rest_framework import status, mixins, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from personas.models import Persona
-from personas.serializers import PersonaModelSerializers
+from personas.serializers import PersonaModelSerializers, PersonaListSerializer
 
 
 class MyPaginationMixin(object):
@@ -143,17 +144,24 @@ class PersonaProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Persona.objects.filter(estado_activo="V", es_proveedor='V')
     serializer_class = PersonaModelSerializers
     search_fields = (
-        '^id_persona',
-        '^tipo_persona',
-        '^nombre_apellido',
-        '^propietario',
-        '^direccion',
-        '^telefono',
-        '^ruc',
-        '^cedula',
-        '^correo_electronico',
-        '^es_cliente',
-        '^es_proveedor',
-        '^fecha_nacimiento',
-        '^estado_activo',
+        'id_persona',
+        'tipo_persona',
+        'nombre_apellido',
+        'propietario',
+        'direccion',
+        'telefono',
+        'ruc',
+        'cedula',
+        'correo_electronico',
+        'es_cliente',
+        'es_proveedor',
+        'fecha_nacimiento',
+        'estado_activo',
     )
+
+
+@api_view(('GET',))
+def personas_lista_sin_paginacion(request, format=None):
+    personas = Persona.objects.filter(es_cliente='V')
+    serializer = PersonaModelSerializers(personas, many=True)
+    return Response(serializer.data)

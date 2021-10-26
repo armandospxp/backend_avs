@@ -49,3 +49,37 @@ class ArticuloSearchModelSerializer(serializers.ModelSerializer):
                   'precio_mayorista',
                   'precio_especial',
                   ]
+
+
+class ArticuloListSerializer(serializers.Serializer):
+    id_articulo = serializers.IntegerField
+    id_marca = MarcaModelSerializer(read_only=True)
+    codigo_barras = serializers.CharField
+    nombre = serializers.CharField
+    costo = serializers.IntegerField
+    porc_iva = serializers.IntegerField
+    porc_comision = serializers.IntegerField
+    stock_actual = serializers.IntegerField
+    stock_minimo = serializers.IntegerField
+    ultima_compra = serializers.DateField
+    unidad_medida = serializers.CharField
+    precio_unitario = serializers.IntegerField
+    precio_mayorista = serializers.IntegerField
+    precio_especial = serializers.IntegerField
+
+    # class Meta:
+    #     model = Articulo
+    #     fields = ['id_articulo',
+    #               'id_marca',
+    #               'nombre',
+    #               'costo',
+    #               'porc_iva',
+    #               'porc_comision',
+    #               'stock_actual',
+    #               'stock_minimo',
+    #               'ultima_compra',
+    #               'unidad_medida',
+    #               'precio_unitario',
+    #               'precio_mayorista',
+    #               'precio_especial',
+    #               ]
