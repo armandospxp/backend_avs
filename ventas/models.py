@@ -9,20 +9,17 @@ from django import utils
 from utilidades.base_name import BaseModel
 
 
+class DetalleVenta(BaseModel):
+    id_detalle_venta = models.AutoField(primary_key=True)
+    id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
+    cantidad = models.IntegerField(blank=False, null=False, default=1)
+    sub_total = models.IntegerField(blank=False, null=False, default=0)
+
+
 class Venta(BaseModel):
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=date.today)
     hora = models.TimeField(default=timezone.now().strftime("%H:%M:%S"))
     total = models.IntegerField(blank=False, null=False, default=0)
-
-
-class DetalleVenta(BaseModel):
-    id_detalle_venta = models.AutoField(primary_key=True)
-    id_venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
-    cantidad = models.IntegerField(blank=False, null=False, default=1)
-    sub_total = models.IntegerField(blank=False, null=False, default=0)
-
-
-    
+    id_detalle_venta = models.ForeignKey(DetalleVenta, on_delete=models.CASCADE)
