@@ -5,13 +5,15 @@ from ventas.models import Venta, DetalleVenta
 from personas.serializers import PersonaModelSerializers
 
 
-class VentaModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Venta
-        fields = '__all__'
-
-
 class DetalleVentaModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetalleVenta
+        fields = '__all__'
+
+
+class VentaModelSerializer(serializers.ModelSerializer):
+    id_detalle_venta = DetalleVentaModelSerializer()
+
+    class Meta:
+        model = Venta
         fields = '__all__'

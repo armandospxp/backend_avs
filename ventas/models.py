@@ -22,4 +22,4 @@ class Venta(BaseModel):
     fecha = models.DateField(default=date.today)
     hora = models.TimeField
     total = models.IntegerField(blank=False, null=False, default=0)
-    id_detalle_venta = models.ForeignKey(DetalleVenta, null=False, blank=False, on_delete=models.CASCADE)
+    id_detalle_venta = models.ManyToManyField(DetalleVenta, blank=False)

@@ -51,9 +51,8 @@ class VentaView(viewsets.ModelViewSet):
         # nueva_venta.save()
         serializer = VentaModelSerializer(data=request.data)
         data = request.data
-        pk = data.get('id_cliente')
-        # pdb.set_trace()
-        if pk is not None:
+        cliente = data.get('id_cliente')
+        if cliente is not None:
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -72,16 +71,12 @@ class DetalleVentaView(viewsets.ModelViewSet):
         data = request.data
         cantidad = data.get('cantidad')
         pk_articulo = data.get('id_articulo')
-        pk_venta = data.get('id_venta')
         sub_total = actualizar_subtotal(pk_articulo, cantidad)
-        data.copy()
-        data['sub_total'] = sub_total
-        serializer = DetalleVentaModelSerializer(data=data)
+        datos_modificar = data.copy()
+        datos_modificar['sub_total'] = sub_total
+        serializer = DetalleVentaModelSerializer(data=datos_modificar)
         if serializer.is_valid():
-            data = request.data
-            pk_venta = data.get('id_venta')
             actualizar_stock(pk_articulo, 'V', cantidad)
-            actualizar_total(pk_venta, 'S', cantidad, pk_articulo)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -133,15 +128,10 @@ def actualizar_subtotal(pk_articulo, cantidad):
     return sub_total
 
 
-def actualizar_total(pk, estado, cantidad, pk_articulo):
-    """Procedimiento para actualizar el total de venta, al cual esta relacionado uno o varios detalle-ventas.
-    Se obtiene la id de venta, luego se realiza operaciones para actualizar tanto el subtotal de detalle-venta y
-    venta"""
+def actualizar_total(pk, estado):
+    """Procedimiento para actualizar el total de venta"""
     venta = Venta.objects.get(pk=pk)
     subtotal = 0
     if estado == 'S':
-        subtotal = actualizar_subtotal(pk_articulo, cantidad)
         venta.total = int(venta.total) + int(subtotal)
         venta.save()
-    elif estado == 'R':
-        venta.total = venta.total - cantidad
