@@ -1,8 +1,6 @@
-from django.db import models
-from django.db.models import fields
 from rest_framework import serializers
 from ventas.models import Venta, DetalleVenta
-from personas.serializers import PersonaModelSerializers
+from drf_writable_nested import WritableNestedModelSerializer
 
 
 class DetalleVentaModelSerializer(serializers.ModelSerializer):
@@ -11,8 +9,8 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class VentaModelSerializer(serializers.ModelSerializer):
-    id_detalle_venta = DetalleVentaModelSerializer(many=True, read_only=True)
+class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    id_detalle_venta = DetalleVentaModelSerializer(many=True)
 
     class Meta:
         model = Venta
