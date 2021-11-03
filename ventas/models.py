@@ -20,6 +20,6 @@ class Venta(BaseModel):
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=date.today)
-    hora = models.TimeField(default=datetime.now().strftime("%H:%M:%S"))
+    hora = models.TimeField
     total = models.IntegerField(blank=False, null=False, default=0)
-    id_detalle_venta = models.ManyToManyField(DetalleVenta)
+    id_detalle_venta = models.ForeignKey(DetalleVenta, null=False, blank=False, on_delete=models.CASCADE)
