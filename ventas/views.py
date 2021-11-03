@@ -50,6 +50,10 @@ class VentaView(viewsets.ModelViewSet):
         # nueva_venta = Venta.objects.create(id_venta=data["id_venta"], id_cliente=data["id_cliente"], fecha=data['fecha'], hora=data['hora'])
         # nueva_venta.save()
         serializer = VentaModelSerializer(data=request.data)
+        # id_detalle_venta = request['id_detalle_venta']
+        # detalle_serializer = DetalleVentaModelSerializer(id_detalle_venta)
+        # if detalle_serializer.is_valid():
+        #     detalle_serializer.save()
         data = request.data
         cliente = data.get('id_cliente')
         if cliente is not None:
