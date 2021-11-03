@@ -12,7 +12,7 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
 
 
 class VentaModelSerializer(serializers.ModelSerializer):
-    id_detalle_venta = DetalleVentaModelSerializer()
+    id_detalle_venta = DetalleVentaModelSerializer(many=True, read_only=True)
 
     class Meta:
         model = Venta
