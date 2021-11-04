@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rest_framework',
     'corsheaders',
-    'drf_writable_nested',
     'users',
     'articulos',
     'roles',
