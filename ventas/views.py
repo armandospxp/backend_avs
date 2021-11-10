@@ -1,6 +1,8 @@
 import pdb
+from datetime import datetime
+from io import BytesIO
 
-from django.http import response
+from django.http import response, HttpResponse
 from django.shortcuts import render
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status
@@ -96,7 +98,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         queryset = DetalleVenta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk)
-        detalle_venta.estado='H'
+        detalle_venta.estado = 'H'
         detalle_venta.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
