@@ -9,5 +9,5 @@ router.register(r'detalle-ventas', ventas_views.DetalleVentaView, 'detalle-venta
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('factura/<int:id_venta>', imprimir_factura_venta, name='factura'),
+    path('factura/<int:id_venta>/', imprimir_factura_venta, name='factura'),
 ]

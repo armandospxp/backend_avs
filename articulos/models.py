@@ -33,3 +33,6 @@ class Articulo(BaseModel):
     precio_unitario = models.IntegerField()
     precio_mayorista = models.IntegerField()
     precio_especial = models.IntegerField()
+
+    def __str__(self):
+        return self.nombre

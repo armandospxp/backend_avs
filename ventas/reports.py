@@ -46,10 +46,11 @@ def link_callback(uri, rel):
 def imprimir_factura_venta(request, id_venta):
     template_path = 'ventas/venta.html'
 
-    venta = Venta.objects.filter(id_venta=id_venta)
-    # pdb.set_trace()
+    venta = Venta.objects.get(id_venta=id_venta)
+    detalle_venta = venta.id_detalle_venta.all()
     context = {
         'venta': venta,
+        'detalle_venta': detalle_venta,
         'request': request,
     }
     response = HttpResponse(content_type='application/pdf')

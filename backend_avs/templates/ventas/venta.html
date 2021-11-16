@@ -42,18 +42,28 @@
                     <tr>
                         <th>Id Venta</th>
                         <th>Id Cliente</th>
-                        <th>Hora</th>
+                        <th>Fecha</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in venta %}
                     <tr>
-                        <td><span class="small">{{ item.id_venta }}</span></td>
-                        <td class="numero">{{ item.id_cliente }}</td>
-                        <td class="numero">{{ item.fecha }}</td>
-                        <td class="numero">{{ item.total }}</td>
-                        <td class="numero">{{ item.id_detalle_venta.articulo }}</td>
+                        <td><span class="small">{{ venta.id_venta }}</span></td>
+                        <td class="numero">{{ venta.id_cliente.id_persona }}</td>
+                        <td class="numero">{{ venta.fecha }}</td>
+                        <td class="numero">{{ venta.total }}</td>
+                        <td class="numero">{{ venta.id_detalle_venta.id_articulo }}</td>
+                    </tr>
+                    <tr>
+                        <td>Articulo</td>
+                        <td>Cantidad</td>
+                        <td>Subtotal</td>
+                    </tr>
+                    {% for item2 in detalle_venta %}
+                    <tr>
+                        <td class="">{{ item2.id_articulo.nombre }}</td>
+                        <td>{{ item2.cantidad }}</td>
+                        <td>{{ item2.sub_total }}</td>
                     </tr>
                     {% endfor %}
                     <tr>
