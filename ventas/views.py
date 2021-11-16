@@ -55,7 +55,14 @@ class VentaView(viewsets.ModelViewSet):
         if cliente is not None:
             if serializer.is_valid():
                 serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                respuesta = dict(serializer.data)
+                url = 'avs-backend.herokuapp.com/ventas/factura/'
+                pk = str(Venta.objects.last().id_venta)
+                url_nueva = url + pk + '/'
+                respuesta['factura'] = url_nueva
+                # pdb.set_trace()
+                # return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(respuesta, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
