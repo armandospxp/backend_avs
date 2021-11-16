@@ -30,4 +30,4 @@ class Proveedor(BaseModel):
                                      choices=VERDADER_FALSO_CHOICES, default=VERDADERO)
 
     def __str__(self):
-        return '{}'.format(self.nombre+' '+self.apellido)
+        return '{}'.format(self.propietario)
