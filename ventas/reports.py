@@ -54,7 +54,7 @@ def imprimir_factura_venta(request, id_venta):
         'request': request,
     }
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; filename=factura.pdf'
+    response['Content-Disposition'] = 'attachment; filename=factura.pdf'
     template = get_template(template_path)
     html = template.render(context)
 
