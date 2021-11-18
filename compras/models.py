@@ -12,7 +12,7 @@ class OrdenCompra(models.Model):
         (IVA10, 'IVA 10%'),
         (IVA5, 'IVA 5%'),
     ]
-    id_orden_compra = models.BigIntegerField(primary_key=True)
+    id_orden_compra = models.BigAutoField(primary_key=True)
     fecha_entrada = models.DateField(default=date.today)
     id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     cantidad = models.IntegerField(blank=False, null=False, default=1)
