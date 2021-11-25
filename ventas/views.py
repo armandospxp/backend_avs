@@ -13,6 +13,7 @@ from ventas.models import DetalleVenta, Venta
 from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
+from utilidades.numero_letras import numero_a_letras
 
 
 class MyPaginationMixin(object):
@@ -60,6 +61,8 @@ class VentaView(viewsets.ModelViewSet):
                 pk = str(Venta.objects.last().id_venta)
                 url_nueva = url + pk + '/'
                 respuesta['factura'] = url_nueva
+                # se agrega campo monto a letras y se envia el parametro del monto total
+                respuesta['monto_letras'] = numero_a_letras(int(respuesta['total']))
                 # pdb.set_trace()
                 # return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(respuesta, status=status.HTTP_201_CREATED)
