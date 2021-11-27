@@ -7,6 +7,7 @@ class User(AbstractUser):
     """Modelo de usuario.
     Se extiende de la clase base AbstractUser y se agrega campos.
     """
+    rol = models.CharField()
 
     email = models.EmailField(
         'email address',
@@ -15,7 +16,6 @@ class User(AbstractUser):
             'unique': 'A users with that email already exists.'
         }
     )
-    rol = models.CharField
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'password']
 
