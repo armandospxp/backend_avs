@@ -7,7 +7,7 @@ class User(AbstractUser):
     """Modelo de usuario.
     Se extiende de la clase base AbstractUser y se agrega campos.
     """
-    rol_usuario = models.CharField()
+    rol_usuario = models.CharField(null=True, max_length=30)
 
     email = models.EmailField(
         'email address',
