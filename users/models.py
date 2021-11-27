@@ -15,6 +15,7 @@ class User(AbstractUser):
             'unique': 'A users with that email already exists.'
         }
     )
+    rol = models.CharField
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'password']
 
