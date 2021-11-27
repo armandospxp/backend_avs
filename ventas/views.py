@@ -1,5 +1,5 @@
 import pdb
-from datetime import datetime
+from datetime import datetime, date
 from io import BytesIO
 
 from django.http import response, HttpResponse
@@ -9,11 +9,13 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from articulos.models import Articulo
+from personas.models import Persona
 from ventas.models import DetalleVenta, Venta
 from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from utilidades.numero_letras import numero_a_letras
+from django.http import JsonResponse
 
 
 class MyPaginationMixin(object):
@@ -129,6 +131,37 @@ def actualizar_stock(pk, estado, cantidad):
             # articulo.objects.set(stock_actual=stock_actual - cantidad)
             articulo.stock_actual = int(articulo.stock_actual) - int(cantidad)
             articulo.save()
+
+
+def datos_factura_venta(request, id_venta):
+    venta = Venta.objects.get(id_venta=id_venta)
+    detalle_venta = venta.id_detalle_venta.filter()
+    data = []
+    articulo = []
+    pdb.set_trace()
+    for art in detalle_venta:
+        articulo.append({
+            'codigo': art.articulo.codigo_barras,
+            # 'cantidad': art.cantidad,
+            'precio': art.articulo.precio_unitario,
+            'iva': art.articulo.porc_iva,
+            'sub_total': art.sub_total,
+        })
+    data.append({
+        'fecha_emision': date.today(),
+        'nombre_razon': venta.id_cliente.nombre_apellido,
+        'direccion': venta.id_cliente.direccion,
+        'condicion_venta': venta.condicion,
+        'ruc': venta.id_venta.ruc,
+        'total': venta.total,
+        'detalle_venta': articulo,
+    })
+    # context = {
+    #     'venta': VentaModelSerializer(venta),
+    #     'detalle_venta': DetalleVentaModelSerializer(detalle_venta, many=True),
+    #     'request': request,
+    # }
+    return Response(data)
 
 
 def actualizar_subtotal(pk_articulo, cantidad):

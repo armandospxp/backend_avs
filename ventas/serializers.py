@@ -14,4 +14,10 @@ class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSeria
 
     class Meta:
         model = Venta
-        fields = '__all__'
+        fields = ['id_venta',
+                  'id_cliente',
+                  'fecha',
+                  'total',
+                  'id_detalle_venta',
+                  'tipo_factura'
+                  ]

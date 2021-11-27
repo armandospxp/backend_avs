@@ -17,9 +17,16 @@ class DetalleVenta(BaseModel):
 
 
 class Venta(BaseModel):
+    CONTADO = "CON"
+    CREDITO = "CRE"
+    TIPO_FACTURA_CHOICES = [
+        (CONTADO, 'CONTADO'),
+        (CREDITO, 'CREDITO'),
+    ]
     id_venta = models.AutoField(primary_key=True)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=date.today)
     hora = models.TimeField
     total = models.IntegerField(blank=False, null=False, default=0)
     id_detalle_venta = models.ManyToManyField(DetalleVenta, blank=False)
+    tipo_factura = models.CharField(max_length=3, choices=TIPO_FACTURA_CHOICES, default="CON")
