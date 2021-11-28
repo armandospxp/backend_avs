@@ -1,6 +1,7 @@
 from django.http import Http404
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from configuracion.models import Configuracion
@@ -10,6 +11,15 @@ from configuracion.serializers import ConfiguraionModelSerializer
 class ConfiguraiconView(viewsets.ModelViewSet):
     serializer_class = ConfiguraionModelSerializer
     queryset = Configuracion.objects.all()
+
+
+class ConfiguracionSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = Configuracion.objects.filter()
+    serializer_class = ConfiguraionModelSerializer
+    search_fields = ['nombre_impresora',
+                     'numeracion_fija_factura',
+                     ]
 
 # class ConfiguracionDetail(APIView):
 #     """
