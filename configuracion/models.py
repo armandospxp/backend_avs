@@ -2,11 +2,9 @@ from django.db import models
 
 
 class Configuracion(models.Model):
-    id_configuracion = models.AutoField(primary_key=True)
-    nombre_empresa = models.CharField(null=False, max_length=50)
-    comision_x_venta = models.IntegerField(null=False)
-    estado_activo = models.BooleanField(default=True)
-    ruc_empresa = models.CharField(max_length=40)
-    direccion = models.CharField(max_length=50)
-    telefono = models.CharField(max_length=50)
-    pagina_web = models.CharField(null=True, blank=True, max_length=100)
+    id_impresora = models.AutoField(primary_key=True)
+    nombre_impresora = models.CharField(null=False, max_length=50)
+    numeracion_fija_factura = models.CharField(null=False, max_length=10)
+    numero_facrura = models.IntegerField(null=False)
+    coordenada_x = models.CharField(max_length=10)
+    coordenada_y = models.CharField(max_length=10)

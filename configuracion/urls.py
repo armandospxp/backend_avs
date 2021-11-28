@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from configuracion.views import ConfiguracionList, ConfiguracionDetail
+from configuracion.views import ConfiguraiconView
 
-urlpatterns = format_suffix_patterns([
-    path('', ConfiguracionList.as_view(), name='configuracion'),
-    path('<int:pk>/', ConfiguracionDetail.as_view(), name='configuracion_detail'),
-])
+router = routers.DefaultRouter()
+router.register(r'configuracion', ConfiguraiconView, basename='configuracion')
+
+urlpatterns = [
+    path('', include(router.urls)),
+]

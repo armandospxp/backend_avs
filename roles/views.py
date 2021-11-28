@@ -142,15 +142,16 @@ class RolView(viewsets.ModelViewSet):
         nuevo_rol = Rol.objects.create(nombre_rol=data["nombre_rol"])
         nuevo_rol.save()
         for user in data["usuario"]:
-            user_object = User.objects.get(id = user["id"])
+            user_object = User.objects.get(id=user["id"])
             nuevo_rol.usuario.add(user_object)
         for modulo in data["modulo"]:
-            modulo_object = Modulo.objects.get(id_modulo = modulo["id_modulo"])
+            modulo_object = Modulo.objects.get(id_modulo=modulo["id_modulo"])
             nuevo_rol.modulo.add(modulo_object)
 
         serializer = RolModelSerializer(nuevo_rol)
-        
+
         return Response(serializer.data)
+
 
 class ModuloView(viewsets.ModelViewSet):
     queryset = Modulo.objects.all()
@@ -158,8 +159,8 @@ class ModuloView(viewsets.ModelViewSet):
 
 
 class PermisoView(viewsets.ModelViewSet):
-        queryset = Permiso.objects.all()
-        serializer_class = PermisosModelSerializer
+    queryset = Permiso.objects.all()
+    serializer_class = PermisosModelSerializer
 
 
 class RolesSearchViewSet(viewsets.ReadOnlyModelViewSet):
