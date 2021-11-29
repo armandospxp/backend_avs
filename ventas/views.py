@@ -4,6 +4,7 @@ from io import BytesIO
 
 from django.http import response, HttpResponse
 from django.shortcuts import render
+from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -133,27 +134,28 @@ def actualizar_stock(pk, estado, cantidad):
             articulo.save()
 
 
+@api_view(('GET',))
 def datos_factura_venta(request, id_venta):
     venta = Venta.objects.get(id_venta=id_venta)
     detalle_venta = venta.id_detalle_venta.filter()
     data = []
     articulo = []
-    pdb.set_trace()
     for art in detalle_venta:
+        # pdb.set_trace()
         articulo.append({
-            'codigo': art.articulo.codigo_barras,
-            # 'cantidad': art.cantidad,
-            'precio': art.articulo.precio_unitario,
-            'iva': art.articulo.porc_iva,
-            'sub_total': art.sub_total,
+            'codigo': str(art.id_articulo.codigo_barras),
+            'cantidad': str(art.cantidad),
+            'precio': str(art.id_articulo.precio_unitario),
+            'iva': str(art.id_articulo.porc_iva),
+            'sub_total': str(art.sub_total),
         })
     data.append({
         'fecha_emision': date.today(),
-        'nombre_razon': venta.id_cliente.nombre_apellido,
-        'direccion': venta.id_cliente.direccion,
-        'condicion_venta': venta.condicion,
-        'ruc': venta.id_venta.ruc,
-        'total': venta.total,
+        'nombre_razon': str(venta.id_cliente.nombre_apellido),
+        'direccion': str(venta.id_cliente.direccion),
+        'condicion_venta': str(venta.tipo_factura),
+        'ruc': str(venta.id_cliente.ruc),
+        'total': str(venta.total),
         'detalle_venta': articulo,
     })
     # context = {
