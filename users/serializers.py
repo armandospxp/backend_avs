@@ -25,7 +25,6 @@ class UserModelSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
-            'rol_usuario',
         )
 
 
@@ -188,6 +187,8 @@ class UserSignUpSerializer(serializers.Serializer):
 
     first_name = serializers.CharField(min_length=2, max_length=50)
     last_name = serializers.CharField(min_length=2, max_length=100)
+    rol_usuario = serializers.CharField(max_length=50)
+    configuracion = serializers.IntegerField
 
     def validate(self, data):
         passwd = data['password']
