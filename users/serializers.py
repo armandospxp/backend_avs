@@ -128,6 +128,8 @@ class UserUpdateSerializer(serializers.Serializer):
 
     first_name = serializers.CharField(min_length=2, max_length=50)
     last_name = serializers.CharField(min_length=2, max_length=100)
+    rol_usuario = serializers.CharField(max_length=50)
+    configuracion = serializers.IntegerField
 
     # password = serializers.CharField(min_length=8, max_length=64)
     # password_confirmation = serializers.CharField(min_length=8, max_length=64)
