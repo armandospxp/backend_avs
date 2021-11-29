@@ -55,10 +55,23 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
-        data = {
-            'users': UserModelSerializer(user).data,
-            'access_token': token
-        }
+        rol = str(user.rol_usuario)
+        if rol.upper() == 'CAJERO' and user.configuracion is not None:
+            impresora = str(user.configuracion.nombre_impresora)
+            coordenada_x = str(user.configuracion.coordenada_x)
+            coordenada_y = str(user.configuracion.coordenada_y)
+            data = {
+                'users': UserModelSerializer(user).data,
+                'access_token': token,
+                'nombre_impresora': impresora,
+                'coordenada_x': coordenada_x,
+                'coordenada_y': coordenada_y,
+            }
+        else:
+            data = {
+                'users': UserModelSerializer(user).data,
+                'access_token': token,
+            }
         return Response(data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['post'])
