@@ -156,6 +156,7 @@ def datos_factura_venta(request, id_venta):
         'condicion_venta': str(venta.tipo_factura),
         'ruc': str(venta.id_cliente.ruc),
         'total': str(venta.total),
+        'total_letras': numero_a_letras(int(venta.total)),
         'detalle_venta': articulo,
     })
     # context = {
