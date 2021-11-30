@@ -68,7 +68,7 @@ class VentaView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = VentaModelSerializer(data=request.data)
         data = request.data
-        data['id_usuario'] = request.user
+        data['id_usuario'] = request.user.pk
         cliente = data.get('id_cliente')
         if cliente is not None:
             if serializer.is_valid():
