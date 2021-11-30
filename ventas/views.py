@@ -12,7 +12,7 @@ from rest_framework.serializers import Serializer
 from articulos.models import Articulo
 from personas.models import Persona
 from ventas.models import DetalleVenta, Venta
-from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer
+from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer, VentaListModelSerializer
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from utilidades.numero_letras import numero_a_letras
@@ -53,6 +53,17 @@ class VentaView(viewsets.ModelViewSet):
     def get_queryset(self):
         venta = Venta.objects.filter(estado='A').order_by('-id_venta')
         return venta
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = VentaListModelSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
         serializer = VentaModelSerializer(data=request.data)
