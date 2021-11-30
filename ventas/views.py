@@ -71,6 +71,13 @@ class VentaView(viewsets.ModelViewSet):
                 return Response(respuesta, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, pk=None):
+        queryset = Venta.objects.all()
+        detalle_venta = get_object_or_404(queryset, pk=pk)
+        detalle_venta.estado = 'H'
+        detalle_venta.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class DetalleVentaView(viewsets.ModelViewSet):
     serializer_class = DetalleVentaModelSerializer
@@ -104,7 +111,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
 
     def destroy(self, request, pk=None):
         queryset = DetalleVenta.objects.all()
-        detalle_venta = get_object_or_404(queryset, pk)
+        detalle_venta = get_object_or_404(queryset, pk=pk)
         detalle_venta.estado = 'H'
         detalle_venta.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
