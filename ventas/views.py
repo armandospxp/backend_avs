@@ -217,12 +217,9 @@ class VentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Venta.objects.filter()
     serializer_class = VentaListModelSerializer
     search_fields = ['id_venta',
-                     'id_usuario',
-                     'id_cliente',
-                     'nombre_usuario',
-                     'nombre_cliente',
-                     'numero_factura',
-                     'tipo_factura']
+                     'id_usuario__first_name',
+                     'id_usuario__last_name',
+                     'id_cliente__nombre_apellido']
 
 
 def actualizar_subtotal(pk_articulo, cantidad):
