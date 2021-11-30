@@ -49,7 +49,7 @@ class VentaView(viewsets.ModelViewSet):
     queryset = Venta.objects.all()
 
     def get_queryset(self):
-        venta = Venta.objects.filter(estado='A')
+        venta = Venta.objects.filter(estado='A').order_by('-id_venta')
         return venta
 
     def create(self, request, *args, **kwargs):
