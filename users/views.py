@@ -74,7 +74,7 @@ class UserViewSet(viewsets.GenericViewSet):
                 'users': UserModelSerializer(user).data,
                 'access_token': token,
                 'rol': str(user.rol_usuario),
-                'id_configuracion': str(user.configuracion.id_impresora),
+                'id_configuracion': 0,
                 'coordenada_x': 0,
                 'coordenada_y': 0,
             }
