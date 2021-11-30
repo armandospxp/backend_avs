@@ -1,6 +1,7 @@
 from django.http import Http404
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,6 +21,13 @@ class ConfiguracionSearchViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['nombre_impresora',
                      'numeracion_fija_factura',
                      ]
+
+
+@api_view(('GET',))
+def configuracion_lista_sin_paginacion(request, format=None):
+    configuracion = Configuracion.objects.filter()
+    serializer = ConfiguraionModelSerializer(configuracion, many=True)
+    return Response(serializer.data)
 
 # class ConfiguracionDetail(APIView):
 #     """
