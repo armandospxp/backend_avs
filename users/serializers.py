@@ -26,6 +26,7 @@ class UserModelSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'rol_usuario',
+            'configuracion'
         )
 
 
