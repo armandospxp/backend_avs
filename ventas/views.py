@@ -49,7 +49,7 @@ class VentaView(viewsets.ModelViewSet):
     queryset = Venta.objects.all()
 
     def get_queryset(self):
-        venta = Venta.objects.all()
+        venta = Venta.objects.filter(estado='A')
         return venta
 
     def create(self, request, *args, **kwargs):
@@ -81,7 +81,7 @@ class VentaView(viewsets.ModelViewSet):
 
 class DetalleVentaView(viewsets.ModelViewSet):
     serializer_class = DetalleVentaModelSerializer
-    queryset = DetalleVenta.objects.all()
+    queryset = DetalleVenta.objects.filter(estado='A')
 
     def get_queryset(self):
         detalle_venta = DetalleVenta.objects.all()
