@@ -1,6 +1,8 @@
 import pdb
 
 from rest_framework import serializers
+
+from utilidades.numero_letras import numero_a_letras
 from ventas.models import Venta, DetalleVenta
 from drf_writable_nested import WritableNestedModelSerializer
 
@@ -45,6 +47,7 @@ class VentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelS
     nombre_cliente = serializers.SerializerMethodField()
     nombre_usuario = serializers.SerializerMethodField()
     numero_factura = serializers.SerializerMethodField()
+    monto_letras = serializers.SerializerMethodField()
 
     class Meta:
         model = Venta
@@ -57,7 +60,8 @@ class VentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelS
                   'tipo_factura',
                   'numero_factura',
                   'nombre_cliente',
-                  'nombre_usuario'
+                  'nombre_usuario',
+                  'monto_letras'
                   ]
 
     def get_nombre_cliente(self, obj):
@@ -73,6 +77,9 @@ class VentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelS
     def get_numero_factura(self, obj):
         return str(obj.id_usuario.configuracion.numeracion_fija_factura) + str(
             obj.id_usuario.configuracion.numero_factura)
+
+    def get_monto_letras(self, obj):
+        return numero_a_letras(int(obj.total))
 
 
 class DetalleVentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):

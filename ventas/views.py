@@ -5,6 +5,7 @@ from io import BytesIO
 from django.http import response, HttpResponse
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status
 from rest_framework.response import Response
@@ -69,7 +70,7 @@ class VentaView(viewsets.ModelViewSet):
     def aumentar_numero_factura(self, pk_impresora):
         impresora = get_object_or_404(Configuracion, pk=pk_impresora)
         if impresora.numero_factura <= impresora.numero_final:
-            impresora.numero_factura = impresora.numero_factura+1
+            impresora.numero_factura = impresora.numero_factura + 1
             impresora.save()
         else:
             raise status.HTTP_400_BAD_REQUEST
@@ -92,7 +93,7 @@ class VentaView(viewsets.ModelViewSet):
                 id_impresora = int(request.user.configuracion.id_impresora)
                 self.aumentar_numero_factura(id_impresora)
                 numero_factura = str(self.request.user.configuracion.numero_factura)
-                numero_factura_completo = str(self.request.user.configuracion.numeracion_fija_factura)+numero_factura
+                numero_factura_completo = str(self.request.user.configuracion.numeracion_fija_factura) + numero_factura
                 respuesta['numero_factura'] = numero_factura_completo
 
                 # pdb.set_trace()
@@ -132,7 +133,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
             articulo = get_object_or_404(Articulo, pk=pk_articulo)
             respuesta['nombre_articulo'] = str(articulo.nombre)
             respuesta['tipo_iva'] = str(articulo.porc_iva)
-            sub_total_iva = (int(articulo.porc_iva)/100)*int(articulo.precio_unitario)
+            sub_total_iva = (int(articulo.porc_iva) / 100) * int(articulo.precio_unitario)
             respuesta['sub_total_iva'] = str(sub_total_iva)
             pdb.set_trace()
             return Response(respuesta, status=status.HTTP_201_CREATED)
@@ -209,6 +210,19 @@ def datos_factura_venta(request, id_venta):
     #     'request': request,
     # }
     return Response(data)
+
+
+class VentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = Venta.objects.filter()
+    serializer_class = VentaListModelSerializer
+    search_fields = ['id_venta',
+                     'id_usuario',
+                     'id_cliente',
+                     'nombre_usuario',
+                     'nombre_cliente',
+                     'numero_factura',
+                     'tipo_factura']
 
 
 def actualizar_subtotal(pk_articulo, cantidad):
