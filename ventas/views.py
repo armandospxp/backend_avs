@@ -10,6 +10,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from articulos.models import Articulo
+from configuracion.models import Configuracion
 from personas.models import Persona
 from ventas.models import DetalleVenta, Venta
 from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer, VentaListModelSerializer
@@ -65,6 +66,14 @@ class VentaView(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    def aumentar_numero_factura(self, pk_impresora):
+        impresora = get_object_or_404(Configuracion, pk=pk_impresora)
+        if impresora.numero_factura <= impresora.numero_final:
+            impresora.numero_factura = impresora.numero_factura+1
+            impresora.save()
+        else:
+            raise status.HTTP_400_BAD_REQUEST
+
     def create(self, request, *args, **kwargs):
         serializer = VentaModelSerializer(data=request.data)
         data = request.data
@@ -80,6 +89,12 @@ class VentaView(viewsets.ModelViewSet):
                 respuesta['factura'] = url_nueva
                 # se agrega campo monto a letras y se envia el parametro del monto total
                 respuesta['monto_letras'] = numero_a_letras(int(respuesta['total']))
+                id_impresora = int(request.user.configuracion.id_impresora)
+                self.aumentar_numero_factura(id_impresora)
+                numero_factura = str(self.request.user.configuracion.numero_factura)
+                numero_factura_completo = str(self.request.user.configuracion.numeracion_fija_factura)+numero_factura
+                respuesta['numero_factura'] = numero_factura_completo
+
                 # pdb.set_trace()
                 # return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(respuesta, status=status.HTTP_201_CREATED)
@@ -112,7 +127,15 @@ class DetalleVentaView(viewsets.ModelViewSet):
         if serializer.is_valid():
             actualizar_stock(pk_articulo, 'V', cantidad)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            respuesta = dict(serializer.data)
+            pk_articulo = int(respuesta['id_articulo'])
+            articulo = get_object_or_404(Articulo, pk=pk_articulo)
+            respuesta['nombre_articulo'] = str(articulo.nombre)
+            respuesta['tipo_iva'] = str(articulo.porc_iva)
+            sub_total_iva = (int(articulo.porc_iva)/100)*int(articulo.precio_unitario)
+            respuesta['sub_total_iva'] = str(sub_total_iva)
+            pdb.set_trace()
+            return Response(respuesta, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
