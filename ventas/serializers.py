@@ -16,6 +16,7 @@ class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSeria
         model = Venta
         fields = ['id_venta',
                   'id_cliente',
+                  'id_usuario',
                   'fecha',
                   'total',
                   'id_detalle_venta',

@@ -6,6 +6,7 @@ from personas.models import Persona
 from django.utils import timezone
 from django import utils
 
+from users.models import User
 from utilidades.base_name import BaseModel
 
 
@@ -24,6 +25,7 @@ class Venta(BaseModel):
         (CREDITO, 'CREDITO'),
     ]
     id_venta = models.AutoField(primary_key=True)
+    id_usuario = models.ForeignKey(User, default=13, on_delete=models.CASCADE)
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=date.today)
     hora = models.TimeField

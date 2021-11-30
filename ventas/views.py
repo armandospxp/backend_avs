@@ -17,6 +17,7 @@ from django.http import HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from utilidades.numero_letras import numero_a_letras
 from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
 
 
 class MyPaginationMixin(object):
@@ -47,6 +48,7 @@ class MyPaginationMixin(object):
 class VentaView(viewsets.ModelViewSet):
     serializer_class = VentaModelSerializer
     queryset = Venta.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         venta = Venta.objects.filter(estado='A').order_by('-id_venta')
@@ -55,6 +57,7 @@ class VentaView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = VentaModelSerializer(data=request.data)
         data = request.data
+        data['id_usuario'] = request.user
         cliente = data.get('id_cliente')
         if cliente is not None:
             if serializer.is_valid():
