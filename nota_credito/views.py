@@ -2,6 +2,7 @@ import pdb
 
 from django.shortcuts import render
 from rest_framework import viewsets, status
+from rest_framework.filters import SearchFilter
 from rest_framework.generics import get_object_or_404
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -11,6 +12,8 @@ from articulos.models import Articulo
 from nota_credito.models import NotaCreditoCliente, DetalleNotaCredito
 from nota_credito.serializers import NotaCreditoVentaModelSerializer, DetalleNotaCreditoVentaModelSerializer
 from ventas.models import Venta
+
+
 # from nota_credito.serializers import AUX
 
 
@@ -72,3 +75,13 @@ class DetalleNotaCreditoVentaView(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class NotaCreditoVentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = NotaCreditoCliente.objects.filter()
+    serializer_class = NotaCreditoVentaModelSerializer
+    search_fields = ['id_nota_credito_cliente',
+                     'id_venta__id_detalle_venta__id_articulo__nombre',
+                     'id_venta__id_detalle_venta__id_articulo__codigo_barras',
+                     'id_venta__id_cliente__nombre_apellido']
