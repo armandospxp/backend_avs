@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'proveedores',
     'utilidades',
     'compras',
+    'nota_credito',
 ]
 
 MIDDLEWARE = [

@@ -20,6 +20,7 @@ urlpatterns = [
                   path('configuracion/', include(('configuracion.urls', 'configuracion'), namespace='configuracion')),
                   path('cajas/', include(('cajas.urls', 'cajas'), namespace='cajas')),
                   path('ventas/', include(('ventas.urls', 'ventas'), namespace='ventas')),
+                  path('nota-credito/', include(('nota_credito.urls', 'nota-credito'), namespace='nota-credito')),
                   path('orden-compras/', include(('compras.urls', 'compras'), namespace='compras')),
                   path('', include(('users.urls', 'users'), namespace='users')),
                   path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
