@@ -30,7 +30,13 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
         return obj.id_articulo.nombre
 
     def get_precio_unitario(self, obj):
-        return obj.id_articulo.precio_unitario
+        if obj.cantidad < 3:
+            valor = obj.id_articulo.precio_unitario
+        elif 3 < obj.cantidad < 12:
+            valor = obj.id_articulo.precio_mayorista
+        else:
+            valor = obj.id_articulo.precio_especial
+        return valor
 
     def get_codigo_articulo(self, obj):
         return obj.id_articulo.codigo_barras
