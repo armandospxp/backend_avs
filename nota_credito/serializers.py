@@ -1,8 +1,16 @@
+import pdb
+
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
 
 from nota_credito.models import DetalleNotaCredito, NotaCreditoCliente
 from utilidades.numero_letras import numero_a_letras
+from ventas.models import Venta, DetalleVenta
+
+AUX_ID_VENTA = None
+AUX_ID_DETALLE_VENTA = None
+AUX_CANTIDAD = ""
 
 
 class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
@@ -18,9 +26,9 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
 
     def get_sub_total_iva(self, obj):
         if obj.id_articulo.porc_iva == 10:
-            dato = int((int(obj.id_articulo.precio_unitario)*int(obj.cantidad))/11)
+            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 11)
         else:
-            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad))/21)
+            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 21)
         return str(dato)
 
     def get_tipo_iva(self, obj):
@@ -30,9 +38,13 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
         return obj.id_articulo.nombre
 
     def get_precio_unitario(self, obj):
-        if obj.cantidad < 3:
+        AUX_ID_VENTA = obj.id_venta.id_venta
+        detalle_venta = get_object_or_404(DetalleVenta.objects.filter(venta=AUX_ID_VENTA))
+        AUX_CANTIDAD = int(detalle_venta.cantidad)
+        # pdb.set_trace()
+        if AUX_CANTIDAD < 3:
             valor = obj.id_articulo.precio_unitario
-        elif 3 < obj.cantidad < 12:
+        elif 3 < AUX_CANTIDAD < 12:
             valor = obj.id_articulo.precio_mayorista
         else:
             valor = obj.id_articulo.precio_especial
