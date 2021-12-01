@@ -1,9 +1,13 @@
-from django.urls import path
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path, include
+from rest_framework import routers
 
-from cajas.views import CajaList, CajaDetail
+from cajas.views import CajaView, ArqueoCajaView, MovimientoCajaView
 
-urlpatterns = format_suffix_patterns([
-    path('', CajaList.as_view(), name='caja'),
-    path('<int:pk>/', CajaDetail.as_view(), name='caja_detail'),
-])
+router = routers.DefaultRouter()
+router.register(r'cajas', CajaView, basename='cajas')
+router.register(r'arqueo-caja', ArqueoCajaView, 'arqueo_caja')
+router.register(r'movimiento-caja', MovimientoCajaView, 'movimiento-caja')
+
+urlpatterns = [
+    path('', include(router.urls)),
+    ]
