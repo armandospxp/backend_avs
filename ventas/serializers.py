@@ -40,6 +40,10 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
 
 class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     id_detalle_venta = DetalleVentaModelSerializer(many=True)
+    nombre_cliente = serializers.SerializerMethodField()
+    nombre_usuario = serializers.SerializerMethodField()
+    numero_factura = serializers.SerializerMethodField()
+    monto_letras = serializers.SerializerMethodField()
 
     class Meta:
         model = Venta
@@ -49,8 +53,29 @@ class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSeria
                   'fecha',
                   'total',
                   'id_detalle_venta',
-                  'tipo_factura'
+                  'tipo_factura',
+                  'numero_factura',
+                  'nombre_cliente',
+                  'nombre_usuario',
+                  'monto_letras'
                   ]
+
+    def get_nombre_cliente(self, obj):
+        try:
+            dato = obj.id_cliente.nombre_apellido
+        except:
+            dato = "SIN NOMBRE"
+        return dato
+
+    def get_nombre_usuario(self, obj):
+        return obj.id_usuario.first_name + ' ' + obj.id_usuario.last_name
+
+    def get_numero_factura(self, obj):
+        return str(obj.id_usuario.configuracion.numeracion_fija_factura) + str(
+            obj.id_usuario.configuracion.numero_factura)
+
+    def get_monto_letras(self, obj):
+        return numero_a_letras(int(obj.total))
 
 
 class VentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
