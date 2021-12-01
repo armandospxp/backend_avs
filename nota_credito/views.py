@@ -50,7 +50,6 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
         detalle_nota_credito = data.get('id_detalle_nota_credito')
-        pdb.set_trace()
         serializer = NotaCreditoVentaModelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
