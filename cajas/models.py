@@ -26,9 +26,3 @@ class MovimientoCaja(models.Model):
     id_empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
     tipo_movimiento = models.CharField(blank=False, null=False, max_length=1)
     monto = models.BigIntegerField(blank=False, null=False)
-
-
-class ComprobanteMovimiento(models.Model):
-    id_comprobante_movimiento = models.AutoField(primary_key=True)
-    id_movimiento_caja = models.ForeignKey(MovimientoCaja, on_delete=models.CASCADE)
-    tipo_comprobante = models.CharField(null=False, blank=False, max_length=1)
