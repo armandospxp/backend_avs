@@ -12,6 +12,7 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
     tipo_iva = serializers.SerializerMethodField()
     nombre_articulo = serializers.SerializerMethodField()
     precio_unitario = serializers.SerializerMethodField()
+    codigo_articulo = serializers.SerializerMethodField()
 
     class Meta:
         model = DetalleVenta
@@ -32,6 +33,9 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
 
     def get_precio_unitario(self, obj):
         return obj.id_articulo.precio_unitario
+
+    def get_codigo_articulo(self, obj):
+        return obj.id_articulo.codigo_barras
 
 
 class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
