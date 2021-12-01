@@ -49,7 +49,6 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         data = request.data
-        detalle_nota_credito = data.get('id_detalle_nota_credito')
         serializer = NotaCreditoVentaModelSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -59,6 +58,12 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
             venta = get_object_or_404(Venta.objects.all(), pk=id_venta)
             venta.total = venta.total - monto_total
             venta.save()
+            detalle_nota_credito = DetalleNotaCredito.objects.latest('id_detalle_nota_credito')
+            cantidad = int(detalle_nota_credito.cantidad)
+            id_articulo = int(detalle_nota_credito.id_articulo.id_articulo)
+            articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
+            articulo.stock_actual = articulo.stock_actual + cantidad
+            articulo.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
