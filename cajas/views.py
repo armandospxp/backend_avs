@@ -99,4 +99,5 @@ class MovimientoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['id_movimiento_caja',
                      'id_empleado__first_name',
                      'id_empleado__last_name',
-                     'tipo_movimiento']
+                     'tipo_movimiento',
+                     'id_empleado__username']
