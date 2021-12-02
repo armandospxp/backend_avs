@@ -19,10 +19,18 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_sub_total_iva(self, obj):
-        if obj.id_articulo.porc_iva == 10:
-            dato = int((int(obj.id_articulo.precio_unitario)*int(obj.cantidad))/11)
+        if obj.id_articulo.porc_iva == 10 and obj.cantidad < 3:
+            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 10 and 3 < obj.cantidad < 12:
+            dato = int((int(obj.id_articulo.precio_mayorista) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 10 and obj.cantidad > 12:
+            dato = int((int(obj.id_articulo.precio_especial) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 5 and obj.cantidad < 3:
+            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 21)
+        elif obj.id_articulo.porc_iva == 5 and 3 < obj.cantidad < 12:
+            dato = int((int(obj.id_articulo.precio_mayorista) * int(obj.cantidad)) / 21)
         else:
-            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad))/21)
+            dato = int((int(obj.id_articulo.precio_especial) * int(obj.cantidad)) / 21)
         return str(dato)
 
     def get_tipo_iva(self, obj):
@@ -32,7 +40,7 @@ class DetalleVentaModelSerializer(serializers.ModelSerializer):
         return obj.id_articulo.nombre
 
     def get_precio_unitario(self, obj):
-        if obj.cantidad <3:
+        if obj.cantidad < 3:
             valor = obj.id_articulo.precio_unitario
         elif 3 < obj.cantidad < 12:
             valor = obj.id_articulo.precio_mayorista

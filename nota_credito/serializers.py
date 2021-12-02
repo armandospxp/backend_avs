@@ -25,10 +25,21 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_sub_total_iva(self, obj):
-        if obj.id_articulo.porc_iva == 10:
+        AUX_ID_VENTA = obj.id_venta.id_venta
+        detalle_venta = get_object_or_404(DetalleVenta.objects.filter(venta=AUX_ID_VENTA))
+        AUX_CANTIDAD = int(detalle_venta.cantidad)
+        if obj.id_articulo.porc_iva == 10 and AUX_CANTIDAD < 3:
             dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 10 and 3 < AUX_CANTIDAD < 12:
+            dato = int((int(obj.id_articulo.precio_mayorista) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 10 and AUX_CANTIDAD > 12:
+            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 11)
+        elif obj.id_articulo.porc_iva == 5 and AUX_CANTIDAD < 3:
+            dato = int((int(obj.id_articulo.precio_mayorista) * int(obj.cantidad)) / 21)
+        elif obj.id_articulo.porc_iva == 5 and 3 < AUX_CANTIDAD < 12:
+            dato = int((int(obj.id_articulo.precio_mayorista) * int(obj.cantidad)) / 21)
         else:
-            dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 21)
+            dato = int((int(obj.id_articulo.precio_especial) * int(obj.cantidad)) / 21)
         return str(dato)
 
     def get_tipo_iva(self, obj):
