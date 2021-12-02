@@ -38,7 +38,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
             return Response(error, status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
         datos['monto_comprobante'] = int(datos['monto_comprobante']) + int(instance.monto_comprobante)
-        serializer = self.get_serializer(instance, data=data, partial=True)
+        serializer = self.get_serializer(instance, data=datos, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
