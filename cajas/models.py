@@ -8,12 +8,14 @@ from users.models import User
 
 class ArqueoCaja(models.Model):
     id_arqueo_caja = models.AutoField(primary_key=True)
-    id_empleado = models.ForeignKey(Persona, on_delete=models.CASCADE)
-    monto_apertura = models.BigIntegerField(null=False, blank=False)
-    monto_cierre = models.BigIntegerField(null=False, blank=False)
-    fecha_apertura = models.DateField(null=False, blank=False)
-    fecha_cierre = models.DateField(null=False, blank=False)
-    hora_cierre = models.TimeField(null=False, blank=False, default=datetime.now().time().strftime("%H:%M:%S"))
+    id_empleado = models.ForeignKey(User, on_delete=models.CASCADE)
+    monto_apertura = models.PositiveIntegerField(null=False, blank=False, default=0)
+    monto_cierre = models.PositiveIntegerField(null=False, blank=False, default=0)
+    monto_calculado = models.IntegerField(default=0)
+    fecha_apertura = models.DateField(null=False, blank=False, default=date.today)
+    fecha_cierre = models.DateField(null=True, blank=True)
+    hora_cierre = models.TimeField(null=True, blank=True)
+    monto_comprobante = models.PositiveIntegerField(default=0)
 
 
 class MovimientoCaja(models.Model):
