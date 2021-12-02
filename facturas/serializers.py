@@ -33,8 +33,12 @@ class DetalleFacturaCompraModelSerializer(serializers.ModelSerializer):
 
 class FacturaCompraModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     id_detalle_factura_compra = DetalleFacturaCompraModelSerializer(many=True)
+    nombre_proveedor = serializers.SerializerMethodField()
 
     class Meta:
         model = FacturaCompra
         fields = '__all__'
+
+    def get_nombre_proveedor(self, obj):
+        return obj.id_proveedor.nombre_apellido
 
