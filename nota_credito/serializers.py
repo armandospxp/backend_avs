@@ -76,8 +76,7 @@ class NotaCreditoVentaModelSerializer(WritableNestedModelSerializer, serializers
         return obj.id_venta.id_usuario.first_name + ' ' + obj.id_venta.id_usuario.last_name
 
     def get_numero_factura(self, obj):
-        return str(obj.id_venta.id_usuario.configuracion.numeracion_fija_factura) + str(
-            obj.id_venta.id_usuario.configuracion.numero_factura)
+        return obj.id_venta.numero_factura_asignado
 
     def get_monto_letras(self, obj):
         return numero_a_letras(int(obj.monto_total))

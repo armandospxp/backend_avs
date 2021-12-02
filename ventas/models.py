@@ -32,3 +32,4 @@ class Venta(BaseModel):
     total = models.IntegerField(blank=False, null=False, default=0)
     id_detalle_venta = models.ManyToManyField(DetalleVenta, blank=False)
     tipo_factura = models.CharField(max_length=3, choices=TIPO_FACTURA_CHOICES, default="CON")
+    numero_factura_asignado = models.CharField(blank=True, null=True, max_length=30)

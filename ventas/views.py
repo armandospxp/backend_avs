@@ -82,6 +82,7 @@ class VentaView(viewsets.ModelViewSet):
         cliente = data.get('id_cliente')
         if cliente is not None:
             if serializer.is_valid():
+
                 serializer.save()
                 respuesta = dict(serializer.data)
                 url = 'avs-backend.herokuapp.com/ventas/factura/'
@@ -94,8 +95,11 @@ class VentaView(viewsets.ModelViewSet):
                 self.aumentar_numero_factura(id_impresora)
                 numero_factura = str(self.request.user.configuracion.numero_factura)
                 numero_factura_completo = str(self.request.user.configuracion.numeracion_fija_factura) + numero_factura
+                venta = get_object_or_404(Venta, pk=pk)
+                venta.numero_factura_asignado = numero_factura_completo
+                venta.save()
+                # pdb.set_trace()
                 respuesta['numero_factura'] = numero_factura_completo
-
                 # pdb.set_trace()
                 # return Response(serializer.data, status=status.HTTP_201_CREATED)
                 return Response(respuesta, status=status.HTTP_201_CREATED)
