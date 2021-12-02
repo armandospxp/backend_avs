@@ -1,16 +1,8 @@
 from rest_framework import status, viewsets
 from rest_framework.filters import SearchFilter
 
-from cajas.models import Caja, ArqueoCaja, MovimientoCaja
-from cajas.serializers import CajaModelSerializer, ArqueoCajaModelSerializer, MovimientoCajaModelSerializer
-
-
-class CajaView(viewsets.ModelViewSet):
-    """
-    ViewSet de Caja
-    """
-    serializer_class = CajaModelSerializer
-    queryset = Caja.objects.all()
+from cajas.models import ArqueoCaja, MovimientoCaja
+from cajas.serializers import ArqueoCajaModelSerializer, MovimientoCajaModelSerializer
 
 
 class ArqueoCajaView(viewsets.ModelViewSet):
@@ -27,15 +19,6 @@ class MovimientoCajaView(viewsets.ModelViewSet):
         """
     serializer_class = MovimientoCajaModelSerializer
     queryset = MovimientoCaja.objects.all()
-
-
-class CajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
-    filter_backends = [SearchFilter]
-    queryset = Caja.objects.filter()
-    serializer_class = CajaModelSerializer
-    search_fields = ['id_caja',
-                     'id_empleado__nombre_apellido',
-                     'descripcion']
 
 
 class ArqueoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):

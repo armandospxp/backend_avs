@@ -11,6 +11,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.serializers import Serializer
 from articulos.models import Articulo
+from cajas.models import MovimientoCaja
 from configuracion.models import Configuracion
 from personas.models import Persona
 from ventas.models import DetalleVenta, Venta
@@ -82,7 +83,6 @@ class VentaView(viewsets.ModelViewSet):
         cliente = data.get('id_cliente')
         if cliente is not None:
             if serializer.is_valid():
-
                 serializer.save()
                 respuesta = dict(serializer.data)
                 url = 'avs-backend.herokuapp.com/ventas/factura/'
@@ -102,6 +102,9 @@ class VentaView(viewsets.ModelViewSet):
                 respuesta['numero_factura'] = numero_factura_completo
                 # pdb.set_trace()
                 # return Response(serializer.data, status=status.HTTP_201_CREATED)
+                movimiento_caja = MovimientoCaja.objects.create(id_empleado=request.user, tipo_movimiento='V',
+                                                               monto=int(respuesta['total']))
+                movimiento_caja.save()
                 return Response(respuesta, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
