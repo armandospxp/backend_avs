@@ -1,3 +1,4 @@
+import pdb
 from datetime import date, datetime
 
 from django.db.models import Sum
@@ -27,6 +28,15 @@ class ArqueoCajaView(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, *args, **kwargs):
+        # kwargs['partial'] = True
+        data = request.data
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -70,8 +80,8 @@ class ArqueoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ArqueoCaja.objects.filter()
     serializer_class = ArqueoCajaModelSerializer
     permission_classes = [IsAuthenticated]
-    search_fields = ['id_caja',
-                     'id_empleado__nombre_apellido',
+    search_fields = ['id_empleado__first_name',
+                     'id_empleado__last_name',
                      'id_arqueo_caja']
 
 
@@ -81,6 +91,6 @@ class MovimientoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MovimientoCajaModelSerializer
     permission_classes = [IsAuthenticated]
     search_fields = ['id_movimiento_caja',
-                     'id_empleado__nombre_apellido',
+                     'id_empleado__first_name',
+                     'id_empleado__last_name',
                      'tipo_movimiento']
-
