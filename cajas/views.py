@@ -32,11 +32,17 @@ class ArqueoCajaView(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         # kwargs['partial'] = True
         data = request.data
+        datos = data.copy()
+        if datos == {} or datos is None:
+            error = {'error': 'No puede enviar datos vacios'}
+            return Response(error, status.HTTP_400_BAD_REQUEST)
         instance = self.get_object()
+        datos['monto_comprobante'] = int(datos['monto_comprobante']) + int(instance.monto_comprobante)
         serializer = self.get_serializer(instance, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)

@@ -16,6 +16,7 @@ class ArqueoCaja(models.Model):
     fecha_cierre = models.DateField(null=True, blank=True)
     hora_cierre = models.TimeField(null=True, blank=True)
     monto_comprobante = models.PositiveIntegerField(default=0)
+    descripcion_comprobante = models.CharField(null=True, max_length=100)
 
 
 class MovimientoCaja(models.Model):
