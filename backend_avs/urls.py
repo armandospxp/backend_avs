@@ -22,6 +22,7 @@ urlpatterns = [
                   path('ventas/', include(('ventas.urls', 'ventas'), namespace='ventas')),
                   path('nota-credito/', include(('nota_credito.urls', 'nota-credito'), namespace='nota-credito')),
                   path('orden-compras/', include(('compras.urls', 'compras'), namespace='compras')),
+                  path('facturas/', include(('facturas.urls', 'facturas'), namespace='facturas')),
                   path('', include(('users.urls', 'users'), namespace='users')),
                   path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
                   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

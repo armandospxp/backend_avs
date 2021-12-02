@@ -1,5 +1,3 @@
-import pdb
-
 from rest_framework import serializers
 
 from utilidades.numero_letras import numero_a_letras
