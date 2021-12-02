@@ -29,7 +29,7 @@ class Venta(BaseModel):
     id_cliente = models.ForeignKey(Persona, null=False, blank=False, on_delete=models.CASCADE)
     fecha = models.DateField(default=date.today)
     hora = models.TimeField(default=datetime.now().time().strftime("%H:%M:%S"))
-    total = models.IntegerField(blank=False, null=False, default=0)
+    total = models.PositiveIntegerField(blank=False, null=False, default=0)
     id_detalle_venta = models.ManyToManyField(DetalleVenta, blank=False)
     tipo_factura = models.CharField(max_length=3, choices=TIPO_FACTURA_CHOICES, default="CON")
     numero_factura_asignado = models.CharField(blank=True, null=True, max_length=30)
