@@ -73,11 +73,13 @@ class ArqueoCajaView(viewsets.ModelViewSet):
                 id_empleado=instance.id_empleado).aggregate(Sum('monto')))
         suma_movimientos = movimientos_dia['monto__sum']
         comprobantes = dict(
-            RetiroDineroCaja.objects.filter(id_arqueo_caja=instance).aggregate(Sum('monto_comprobante')))
+            RetiroDineroCaja.objects.filter(id_arquero_caja=instance).aggregate(Sum('monto_comprobante')))
         if comprobantes == {} or comprobantes is None:
             suma_comprobantes = 0
         else:
             suma_comprobantes = comprobantes['monto_comprobante__sum']
+        if suma_comprobantes is None:
+            suma_comprobantes = 0
         datos['monto_calculado'] = int(datos['monto_apertura']) + (int(suma_movimientos)) - suma_comprobantes
         serializer = self.get_serializer(instance, data=datos, partial=partial)
         serializer.is_valid(raise_exception=True)
