@@ -20,7 +20,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        if request.user.rol_usuario.upper() == 'CAJERO':
+        if request.user.rol_usuario.upper() != 'ADMINISTRADOR':
             query = ArqueoCaja.objects.filter(id_empleado=request.user)
         else:
             query = self.filter_queryset(self.get_queryset())
