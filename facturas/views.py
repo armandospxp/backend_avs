@@ -28,4 +28,4 @@ class FacturaCompraSearchViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = FacturaCompraModelSerializer
     search_fields = ['id_factura_compra',
                      'numero_factura',
-                     'id_proveedor__nombre_apellido']
+                     'id_proveedor__propietario']
