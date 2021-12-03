@@ -2,7 +2,7 @@ import pdb
 
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
-from rest_framework.generics import get_object_or_404
+from django.shortcuts import get_object_or_404
 
 from articulos.models import Articulo
 from nota_credito.models import DetalleNotaCredito, NotaCreditoCliente, NotaCreditoProveedor, \
@@ -115,7 +115,7 @@ class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, seriali
 
     def get_codigo_articulo(self, obj):
         pk = obj.id_articulo.pk
-        articulo = get_object_or_404(Articulo.objects.all(), pk)
+        articulo = get_object_or_404(Articulo, pk)
         articulo.stock_actual = articulo.stock_actual - obj.cantidad
         articulo.save()
         return obj.id_articulo.codigo_barras
