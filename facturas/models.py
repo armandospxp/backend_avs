@@ -14,9 +14,9 @@ class Factura(BaseModel):
     ]
     id_factura = models.AutoField(primary_key=True)
     fecha_vencimiento = models.DateField
-    timbrado = models.IntegerField(max_length=10)
+    timbrado = models.IntegerField()
     numeracion_comienzo_factura = models.IntegerField
-    cantidad_facturas = models.IntegerField(max_length=3)
+    cantidad_facturas = models.IntegerField()
     tipo_factura = models.CharField(max_length=3, choices=TIPO_FACTURA_CHOICES, default=CONTADO)
 
 

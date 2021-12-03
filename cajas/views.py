@@ -80,6 +80,9 @@ class ArqueoCajaView(viewsets.ModelViewSet):
             suma_comprobantes = comprobantes['monto_comprobante__sum']
         if suma_comprobantes is None:
             suma_comprobantes = 0
+        pdb.set_trace()
+        if suma_movimientos is None:
+            suma_movimientos = 0
         datos['monto_calculado'] = int(datos['monto_apertura']) + (int(suma_movimientos)) - suma_comprobantes
         serializer = self.get_serializer(instance, data=datos, partial=partial)
         serializer.is_valid(raise_exception=True)
