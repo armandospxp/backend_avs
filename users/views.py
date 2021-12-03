@@ -2,6 +2,7 @@
 
 # Django REST Framework
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
@@ -147,8 +148,30 @@ class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class UserUpdatePasswordView(APIView):
-
     serializer_class = UserUpdatePassword
+
+    def put(self, request, pk, format=None):
+        print(pk)
+        user = User.objects.get(id=pk)
+        serializer = UserUpdatePassword(data=request.data)
+        if serializer.is_valid(self):
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserResetPasswordView(APIView):
+    serializer_class = UserUpdatePassword
+
+    def post(self, request):
+        data = request.data
+        user = get_object_or_404(User, email=data['email'])
+        if user is not None:
+            self.envio_email_recupercacion(self, user)
+        return Response(status=status.HTTP_200_OK)
+
+    def envio_email_recuperacion(self, user):
+        pass
 
     def put(self, request, pk, format=None):
         print(pk)

@@ -41,5 +41,5 @@ class FacturaCompraModelSerializer(WritableNestedModelSerializer, serializers.Mo
         fields = '__all__'
 
     def get_nombre_proveedor(self, obj):
-        return obj.id_proveedor.nombre_apellido
+        return obj.id_proveedor.propietario
 
