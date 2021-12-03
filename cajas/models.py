@@ -15,6 +15,13 @@ class ArqueoCaja(models.Model):
     fecha_apertura = models.DateField(null=False, blank=False, default=date.today)
     fecha_cierre = models.DateField(null=True, blank=True)
     hora_cierre = models.TimeField(null=True, blank=True)
+    # monto_comprobante = models.PositiveIntegerField(default=0)
+    # descripcion_comprobante = models.CharField(null=True, max_length=100)
+
+
+class RetiroDineroCaja(models.Model):
+    id_retiro_dinero_caja = models.AutoField(primary_key=True)
+    id_arquero_caja = models.ForeignKey(ArqueoCaja, on_delete=models.CASCADE)
     monto_comprobante = models.PositiveIntegerField(default=0)
     descripcion_comprobante = models.CharField(null=True, max_length=100)
 

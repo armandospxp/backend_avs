@@ -7,8 +7,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from cajas.models import ArqueoCaja, MovimientoCaja
-from cajas.serializers import ArqueoCajaModelSerializer, MovimientoCajaModelSerializer
+from cajas.models import ArqueoCaja, MovimientoCaja, RetiroDineroCaja
+from cajas.serializers import ArqueoCajaModelSerializer, MovimientoCajaModelSerializer, RetiroDineroCajaModelSerializer
 
 
 class ArqueoCajaView(viewsets.ModelViewSet):
@@ -72,7 +72,12 @@ class ArqueoCajaView(viewsets.ModelViewSet):
             MovimientoCaja.objects.filter(fecha__range=(fecha_inicio, fecha_fin)).filter(
                 id_empleado=instance.id_empleado).aggregate(Sum('monto')))
         suma_movimientos = movimientos_dia['monto__sum']
-        suma_comprobantes = int(datos['monto_comprobante'])
+        comprobantes = dict(
+            RetiroDineroCaja.objects.filter(id_arqueo_caja=instance).aggregate(Sum('monto_comprobante')))
+        if comprobantes == {} or comprobantes is None:
+            suma_comprobantes = 0
+        else:
+            suma_comprobantes = comprobantes['monto_comprobante__sum']
         datos['monto_calculado'] = int(datos['monto_apertura']) + (int(suma_movimientos)) - suma_comprobantes
         serializer = self.get_serializer(instance, data=datos, partial=partial)
         serializer.is_valid(raise_exception=True)
@@ -94,6 +99,15 @@ class MovimientoCajaView(viewsets.ModelViewSet):
         """
     serializer_class = MovimientoCajaModelSerializer
     queryset = MovimientoCaja.objects.all()
+    permission_classes = [IsAuthenticated]
+
+
+class RetiroDineroCajaView(viewsets.ModelViewSet):
+    """
+        ViewSet de RetiroDineroCaja
+        """
+    serializer_class = RetiroDineroCajaModelSerializer
+    queryset = RetiroDineroCaja.objects.all()
     permission_classes = [IsAuthenticated]
 
 
