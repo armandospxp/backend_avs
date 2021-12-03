@@ -34,4 +34,3 @@ class FacturaCompra(BaseModel):
     id_proveedor = models.ForeignKey(Persona, on_delete=models.CASCADE)
     total = models.PositiveIntegerField(default=0)
     id_detalle_factura_compra = models.ManyToManyField(DetalleFacturaCompra)
-

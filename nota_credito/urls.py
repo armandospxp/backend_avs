@@ -7,6 +7,8 @@ from nota_credito.views import NotaCreditoVentaSearchViewSet
 router = routers.DefaultRouter()
 router.register(r'nota-credito-venta', nota_credito_views.NotaCreditoVentaView, basename='nota-credito-venta')
 router.register(r'detalle-nota-credito-venta', nota_credito_views.DetalleNotaCreditoVentaView, 'detalle-nota-credito-venta')
+router.register(r'nota-credito-proveedor', nota_credito_views.NotaCreditoProveedorView, basename='nota-credito-proveedor')
+
 
 urlpatterns = [
     path('', include(router.urls)),

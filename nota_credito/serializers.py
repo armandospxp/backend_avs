@@ -4,7 +4,8 @@ from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
-from nota_credito.models import DetalleNotaCredito, NotaCreditoCliente
+from nota_credito.models import DetalleNotaCredito, NotaCreditoCliente, NotaCreditoProveedor, \
+    DetalleNotaCreditoProveedor
 from utilidades.numero_letras import numero_a_letras
 from ventas.models import Venta, DetalleVenta
 
@@ -95,3 +96,17 @@ class NotaCreditoVentaModelSerializer(WritableNestedModelSerializer, serializers
 
     def get_id_cliente(self, obj):
         return obj.id_venta.id_cliente.pk
+
+
+class DetalleNotaCreditoProveedorModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DetalleNotaCreditoProveedor
+        fields = '__all__'
+
+
+class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    id_detalle_nota_credito_proveedor = DetalleNotaCreditoProveedorModelSerializer(many=True)
+
+    class Meta:
+        model = NotaCreditoProveedor
+        fields = '__all__'

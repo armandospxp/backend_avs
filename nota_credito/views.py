@@ -9,8 +9,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from articulos.models import Articulo
-from nota_credito.models import NotaCreditoCliente, DetalleNotaCredito
-from nota_credito.serializers import NotaCreditoVentaModelSerializer, DetalleNotaCreditoVentaModelSerializer
+from nota_credito.models import NotaCreditoCliente, DetalleNotaCredito, NotaCreditoProveedor, \
+    DetalleNotaCreditoProveedor
+from nota_credito.serializers import NotaCreditoVentaModelSerializer, DetalleNotaCreditoVentaModelSerializer, \
+    DetalleNotaCreditoProveedorModelSerializer, NotaCreditoProveedorModelSerializer
 from ventas.models import Venta
 
 
@@ -88,3 +90,15 @@ class NotaCreditoVentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
                      'id_venta__id_detalle_venta__id_articulo__nombre',
                      'id_venta__id_detalle_venta__id_articulo__codigo_barras',
                      'id_venta__id_cliente__nombre_apellido']
+
+
+class NotaCreditoProveedorView(viewsets.ModelViewSet):
+    serializer_class = NotaCreditoProveedorModelSerializer
+    queryset = NotaCreditoProveedor.objects.filter(estado='A')
+    permission_classes = [IsAuthenticated]
+
+
+class DetalleNotaCreditoProveedorView(viewsets.ModelViewSet):
+    serializer_class = DetalleNotaCreditoProveedorModelSerializer
+    queryset = DetalleNotaCreditoProveedor.objects.filter(estado='A')
+    permission_classes = [IsAuthenticated]
