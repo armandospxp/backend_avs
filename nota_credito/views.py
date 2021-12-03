@@ -97,6 +97,22 @@ class NotaCreditoProveedorView(viewsets.ModelViewSet):
     queryset = NotaCreditoProveedor.objects.filter(estado='A')
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        serializer = NotaCreditoProveedorModelSerializer(data=data)
+        # pdb.set_trace()
+        if serializer.is_valid():
+            serializer.save()
+            detalle_nota_credito_proveedor = DetalleNotaCreditoProveedor.objects.latest('id_detalle_nota_credito_proveedor')
+            cantidad = int(detalle_nota_credito_proveedor.cantidad)
+            id_articulo = int(detalle_nota_credito_proveedor.id_articulo.id_articulo)
+            articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
+            articulo.stock_actual = articulo.stock_actual - cantidad
+            articulo.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class DetalleNotaCreditoProveedorView(viewsets.ModelViewSet):
     serializer_class = DetalleNotaCreditoProveedorModelSerializer

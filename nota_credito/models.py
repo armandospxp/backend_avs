@@ -34,6 +34,6 @@ class DetalleNotaCreditoProveedor(BaseModel):
 class NotaCreditoProveedor(BaseModel):
     id_nota_credito_proveedor = models.AutoField(primary_key=True)
     id_factura_compra = models.ForeignKey(FacturaCompra,on_delete=models.CASCADE)
-    id_detalle_nota_credito_proveedor = models.ManyToManyField(DetalleNotaCredito, blank=False)
+    id_detalle_nota_credito_proveedor = models.ManyToManyField(DetalleNotaCreditoProveedor, blank=False)
     fecha = models.DateField(default=date.today)
     monto_total = models.PositiveIntegerField(default=0)

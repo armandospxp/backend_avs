@@ -106,16 +106,8 @@ class DetalleNotaCreditoProveedorModelSerializer(serializers.ModelSerializer):
 
 
 class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
-    codigo_articulo = serializers.SerializerMethodField()
     id_detalle_nota_credito_proveedor = DetalleNotaCreditoProveedorModelSerializer(many=True)
 
     class Meta:
         model = NotaCreditoProveedor
         fields = '__all__'
-
-    def get_codigo_articulo(self, obj):
-        pk = obj.id_articulo.pk
-        articulo = get_object_or_404(Articulo, pk)
-        articulo.stock_actual = articulo.stock_actual - obj.cantidad
-        articulo.save()
-        return obj.id_articulo.codigo_barras
