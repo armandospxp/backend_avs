@@ -4,6 +4,7 @@ from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
+from articulos.models import Articulo
 from nota_credito.models import DetalleNotaCredito, NotaCreditoCliente, NotaCreditoProveedor, \
     DetalleNotaCreditoProveedor
 from utilidades.numero_letras import numero_a_letras
@@ -105,8 +106,16 @@ class DetalleNotaCreditoProveedorModelSerializer(serializers.ModelSerializer):
 
 
 class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+    codigo_articulo = serializers.SerializerMethodField()
     id_detalle_nota_credito_proveedor = DetalleNotaCreditoProveedorModelSerializer(many=True)
 
     class Meta:
         model = NotaCreditoProveedor
         fields = '__all__'
+
+    def get_codigo_articulo(self, obj):
+        pk = obj.id_articulo.pk
+        articulo = get_object_or_404(Articulo.objects.all(), pk)
+        articulo.stock_actual = articulo.stock_actual - obj.cantidad
+        articulo.save()
+        return obj.id_articulo.codigo_barras
