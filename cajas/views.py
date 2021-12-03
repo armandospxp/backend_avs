@@ -21,7 +21,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.user.rol_usuario.upper() != 'ADMINISTRADOR':
-            query = ArqueoCaja.objects.filter(id_empleado=request.user)
+            query = ArqueoCaja.objects.order_by('-id_arqueo_caja').filter(id_empleado=request.user)
         else:
             query = self.filter_queryset(self.get_queryset())
         queryset = query
@@ -73,7 +73,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
                 id_empleado=instance.id_empleado).aggregate(Sum('monto')))
         suma_movimientos = movimientos_dia['monto__sum']
         suma_comprobantes = int(datos['monto_comprobante'])
-        datos['monto_calculado'] = int(datos['monto_cierre']) - (int(suma_movimientos) + suma_comprobantes)
+        datos['monto_calculado'] = int(datos['monto_apertura']) + (int(suma_movimientos)) - suma_comprobantes
         serializer = self.get_serializer(instance, data=datos, partial=partial)
         serializer.is_valid(raise_exception=True)
         # datos = dict(serializer.data)
