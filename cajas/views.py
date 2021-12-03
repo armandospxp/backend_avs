@@ -19,6 +19,21 @@ class ArqueoCajaView(viewsets.ModelViewSet):
     queryset = ArqueoCaja.objects.order_by('-id_arqueo_caja')
     permission_classes = [IsAuthenticated]
 
+    def list(self, request, *args, **kwargs):
+        if request.user.rol_usuario.upper() == 'CAJERO':
+            query = ArqueoCaja.objects.filter(id_empleado=request.user)
+        else:
+            query = self.filter_queryset(self.get_queryset())
+        queryset = query
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, *args, **kwargs):
         data = request.data
         datos_modificados = data.copy()
