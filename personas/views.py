@@ -165,3 +165,10 @@ def personas_lista_sin_paginacion(request, format=None):
     personas = Persona.objects.filter(es_cliente='V')
     serializer = PersonaModelSerializers(personas, many=True)
     return Response(serializer.data)
+
+
+@api_view(('GET',))
+def personas_proveedor_sin_paginacion(request, format=None):
+    personas = Persona.objects.filter(es_proveedor='V')
+    serializer = PersonaModelSerializers(personas, many=True)
+    return Response(serializer.data)
