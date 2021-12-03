@@ -118,3 +118,12 @@ class DetalleNotaCreditoProveedorView(viewsets.ModelViewSet):
     serializer_class = DetalleNotaCreditoProveedorModelSerializer
     queryset = DetalleNotaCreditoProveedor.objects.filter(estado='A')
     permission_classes = [IsAuthenticated]
+
+
+class NotaCreditoProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = NotaCreditoProveedor.objects.filter()
+    serializer_class = NotaCreditoProveedorModelSerializer
+    search_fields = ['id_nota_credito_proveedor',
+                     'id_factura_compra__id_proveedor__propietario',
+                     'fecha']

@@ -2,6 +2,7 @@ from django.db import models
 
 from articulos.models import Articulo
 from personas.models import Persona
+from proveedores.models import Proveedor
 from utilidades.base_name import BaseModel
 
 
@@ -31,6 +32,6 @@ class DetalleFacturaCompra(BaseModel):
 class FacturaCompra(BaseModel):
     id_factura_compra = models.AutoField(primary_key=True)
     numero_factura = models.CharField(max_length=100)
-    id_proveedor = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     total = models.PositiveIntegerField(default=0)
     id_detalle_factura_compra = models.ManyToManyField(DetalleFacturaCompra)
