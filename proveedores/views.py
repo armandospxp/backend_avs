@@ -1,5 +1,6 @@
 from django.http import Http404
 from rest_framework import status, mixins, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
@@ -101,3 +102,10 @@ class ProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
                      'correo_electronico',
                      'fecha_nacimiento',
                      'estado_activo']
+
+
+@api_view(('GET',))
+def proveedores_lista_sin_paginacion(request, format=None):
+    proveedor = Proveedor.objects.all()
+    serializer = ProveedorModelSerializer(proveedor, many=True)
+    return Response(serializer.data)

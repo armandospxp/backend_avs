@@ -31,3 +31,5 @@ class Proveedor(BaseModel):
 
     def __str__(self):
         return '{}'.format(self.propietario)
+
+
