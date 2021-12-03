@@ -16,7 +16,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
         ViewSet de ArqueoCaja
         """
     serializer_class = ArqueoCajaModelSerializer
-    queryset = ArqueoCaja.objects.all()
+    queryset = ArqueoCaja.objects.order_by('-id_arqueo_caja')
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
@@ -54,7 +54,8 @@ class ArqueoCajaView(viewsets.ModelViewSet):
         fecha_inicio = datos['fecha_apertura']
         fecha_fin = datos['fecha_cierre']
         movimientos_dia = dict(
-            MovimientoCaja.objects.filter(fecha__range=(fecha_inicio, fecha_fin)).aggregate(Sum('monto')))
+            MovimientoCaja.objects.filter(fecha__range=(fecha_inicio, fecha_fin)).filter(
+                id_empleado=instance.id_empleado).aggregate(Sum('monto')))
         suma_movimientos = movimientos_dia['monto__sum']
         suma_comprobantes = int(datos['monto_comprobante'])
         datos['monto_calculado'] = int(datos['monto_cierre']) - (int(suma_movimientos) + suma_comprobantes)
