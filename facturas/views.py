@@ -16,7 +16,7 @@ class FacturaCompraView(viewsets.ModelViewSet):
         ViewSet de Factura Compra
         """
     serializer_class = FacturaCompraModelSerializer
-    queryset = FacturaCompra.objects.filter(estado='A')
+    queryset = FacturaCompra.objects.filter(estado='A').order_by('-id_factura_compra')
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
