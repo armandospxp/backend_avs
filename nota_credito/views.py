@@ -32,6 +32,7 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
         data = request.data
         serializer = NotaCreditoVentaModelSerializer(data=data)
         if serializer.is_valid():
+            pdb.set_trace()
             serializer.save()
             datos = dict(serializer.data)
             id_venta = int(datos['id_venta'])
@@ -42,13 +43,14 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
                 venta.save()
             else:
                 raise status.HTTP_400_BAD_REQUEST
-            detalle_nota_credito = DetalleNotaCredito.objects.latest('id_detalle_nota_credito')
-
-            cantidad = int(detalle_nota_credito.cantidad)
-            id_articulo = int(detalle_nota_credito.id_articulo.id_articulo)
-            articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
-            articulo.stock_actual = articulo.stock_actual + cantidad
-            articulo.save()
+            nota_credito_cliente = NotaCreditoCliente.objects.latest('id_nota_credito_cliente')
+            detalle_nota_credito = DetalleNotaCredito.objects.filter(notacreditocliente=nota_credito_cliente)
+            for detalle in detalle_nota_credito:
+                cantidad = int(detalle.cantidad)
+                id_articulo = int(detalle.id_articulo.id_articulo)
+                articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
+                articulo.stock_actual = articulo.stock_actual + cantidad
+                articulo.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -69,7 +71,6 @@ class DetalleNotaCreditoVentaView(viewsets.ModelViewSet):
             serializer.save()
             datos = serializer.data
             id_detalle_nota_credito = datos['id_detalle_nota_credito']
-            pdb.set_trace()
             detalle_nota_credito = get_object_or_404(DetalleNotaCredito.objects.all(), pk=id_detalle_nota_credito)
             for detalle in detalle_nota_credito:
                 id_articulo = detalle.id_articulo
@@ -100,18 +101,32 @@ class NotaCreditoProveedorView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         data = request.data
         serializer = NotaCreditoProveedorModelSerializer(data=data)
-        # pdb.set_trace()
         if serializer.is_valid():
             serializer.save()
-            detalle_nota_credito_proveedor = DetalleNotaCreditoProveedor.objects.latest('id_detalle_nota_credito_proveedor')
-            cantidad = int(detalle_nota_credito_proveedor.cantidad)
-            id_articulo = int(detalle_nota_credito_proveedor.id_articulo.id_articulo)
-            articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
-            articulo.stock_actual = articulo.stock_actual - cantidad
-            articulo.save()
+            nota_credito_proveedor = NotaCreditoProveedor.objects.latest('id_nota_credito_proveedor')
+            detalle_nota_credito_proveedor = DetalleNotaCreditoProveedor.objects.filter(notacreditoproveedor=nota_credito_proveedor)
+            for detalle in detalle_nota_credito_proveedor:
+                cantidad = int(detalle.cantidad)
+                id_articulo = int(detalle.id_articulo.id_articulo)
+                articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
+                articulo.stock_actual = articulo.stock_actual - cantidad
+                articulo.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.estado = 'H'
+        instance.save()
+        detalle_nota_credito_proveedor = DetalleNotaCreditoProveedor.objects.filter(notacreditoproveedor=instance.pk)
+        for detalle in detalle_nota_credito_proveedor:
+            cantidad = int(detalle.cantidad)
+            id_articulo = int(detalle.id_articulo.id_articulo)
+            articulo = get_object_or_404(Articulo, pk=id_articulo)
+            articulo.stock_actual = articulo.stock_actual + cantidad
+            articulo.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class DetalleNotaCreditoProveedorView(viewsets.ModelViewSet):

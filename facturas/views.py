@@ -31,6 +31,7 @@ class FacturaCompraView(viewsets.ModelViewSet):
                 id_articulo = int(detalle.id_articulo.id_articulo)
                 articulo = get_object_or_404(Articulo, pk=id_articulo)
                 articulo.stock_actual = articulo.stock_actual + cantidad
+                articulo.costo = detalle.costo_unitario
                 articulo.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
