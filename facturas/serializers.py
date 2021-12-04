@@ -21,11 +21,6 @@ class DetalleFacturaCompraModelSerializer(serializers.ModelSerializer):
         return obj.id_articulo.nombre
 
     def get_codigo_articulo(self, obj):
-        pk = obj.id_articulo.pk
-        articulo = get_object_or_404(Articulo, pk=pk)
-        articulo.costo = obj.costo_unitario
-        articulo.stock_actual = articulo.stock_actual + obj.cantidad
-        articulo.save()
         return obj.id_articulo.codigo_barras
 
     def get_iva(self, obj):

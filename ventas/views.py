@@ -98,7 +98,13 @@ class VentaView(viewsets.ModelViewSet):
                 venta = get_object_or_404(Venta, pk=pk)
                 venta.numero_factura_asignado = numero_factura_completo
                 venta.save()
-                # pdb.set_trace()
+                detalle_venta = DetalleVenta.objects.filter(venta=venta)
+                for detalle in detalle_venta:
+                    cantidad = int(detalle.cantidad)
+                    id_articulo = int(detalle.id_articulo.id_articulo)
+                    articulo = get_object_or_404(Articulo.objects.all(), pk=id_articulo)
+                    articulo.stock_actual = articulo.stock_actual - cantidad
+                    articulo.save()
                 respuesta['numero_factura'] = numero_factura_completo
                 # pdb.set_trace()
                 # return Response(serializer.data, status=status.HTTP_201_CREATED)
