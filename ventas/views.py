@@ -148,7 +148,6 @@ class DetalleVentaView(viewsets.ModelViewSet):
             respuesta['tipo_iva'] = str(articulo.porc_iva)
             sub_total_iva = (int(articulo.porc_iva) / 100) * int(articulo.precio_unitario)
             respuesta['sub_total_iva'] = str(sub_total_iva)
-            pdb.set_trace()
             return Response(respuesta, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

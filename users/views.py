@@ -57,7 +57,7 @@ class UserViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         user, token = serializer.save()
         rol = str(user.rol_usuario)
-        if rol.upper() == 'CAJERO' and user.configuracion is not None:
+        if user.configuracion is not None:
             impresora = str(user.configuracion.nombre_impresora)
             coordenada_x = str(user.configuracion.coordenada_x)
             coordenada_y = str(user.configuracion.coordenada_y)
