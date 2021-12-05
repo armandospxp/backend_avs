@@ -16,6 +16,7 @@ urlpatterns = format_suffix_patterns([
     path('articulos-lista/', articulos_lista_sin_paginacion, name='listado_articulos'),
     path('ajuste-stock/', AjusteStockView.as_view({
         'get': 'retrieve',
+        'get': 'list',
         'post': 'create',
         'delete': 'destroy'
     })),
