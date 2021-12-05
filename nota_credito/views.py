@@ -103,13 +103,13 @@ class NotaCreditoProveedorView(viewsets.ModelViewSet):
         data = request.data
         serializer = NotaCreditoProveedorModelSerializer(data=data)
         if serializer.is_valid():
+            serializer.save()
             nota_credito_proveedor = NotaCreditoProveedor.objects.latest('id_nota_credito_proveedor')
             pk_factura_compra = nota_credito_proveedor.id_factura_compra.pk
             factura_compra = get_object_or_404(FacturaCompra.objects.all(), pk=pk_factura_compra)
-            if nota_credito_proveedor.monto_total <= factura_compra.total and factura_compra.total_nota_credito<= factura_compra.total:
+            if nota_credito_proveedor.monto_total <= factura_compra.total:
                 factura_compra.total_nota_credito = factura_compra.total_nota_credito + nota_credito_proveedor.monto_total
                 factura_compra.save()
-                serializer.save()
             else:
                 error = {"error": "No el monto de nota de credito excede al monto total de compra de la factura"}
                 return Response(error, status=status.HTTP_400_BAD_REQUEST)
