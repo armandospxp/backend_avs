@@ -50,6 +50,6 @@ class AjusteStock(BaseModel):
     id_ajuste_stock = models.AutoField(primary_key=True)
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     tipo_ajuste = models.CharField(max_length=1, choices=TIPO_AJUSTE_CHOICES)
-    id_ususario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    id_usuario = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     cantidad = models.PositiveIntegerField(default=0)
     motivo_ajuste = models.CharField(max_length=200)
