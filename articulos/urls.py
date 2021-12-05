@@ -3,7 +3,7 @@ from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from articulos.views import ArticuloList, ArticuloDetail, ArticuloSearchViewSet, MarcaSearchViewSet, \
-    articulos_lista_sin_paginacion, AjusteStockView
+    articulos_lista_sin_paginacion, AjusteStockView, AjusteStockSearchViewSet
 
 router = routers.DefaultRouter()
 router.register(r'ajuste-stock', AjusteStockView, basename='ajuste-stock')
@@ -20,4 +20,5 @@ urlpatterns = format_suffix_patterns([
         'post': 'create',
         'delete': 'destroy'
     })),
+    path('busqueda-ajuste/', AjusteStockSearchViewSet.as_view({'get': 'list'}), name='busqueda-ajuste-stock')
 ])
