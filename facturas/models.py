@@ -35,3 +35,4 @@ class FacturaCompra(BaseModel):
     id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     total = models.PositiveIntegerField(default=0)
     id_detalle_factura_compra = models.ManyToManyField(DetalleFacturaCompra)
+    total_nota_credito = models.PositiveIntegerField(default=0)
