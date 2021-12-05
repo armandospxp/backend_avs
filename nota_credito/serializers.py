@@ -108,7 +108,7 @@ class DetalleNotaCreditoProveedorModelSerializer(serializers.ModelSerializer):
 class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     id_detalle_nota_credito_proveedor = DetalleNotaCreditoProveedorModelSerializer(many=True)
     nombre_proveedor = serializers.SerializerMethodField()
-    numero_factura = serializers.SerializerMethodField
+    numero_factura = serializers.SerializerMethodField()
 
     class Meta:
         model = NotaCreditoProveedor
