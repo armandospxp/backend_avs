@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from articulos.models import Articulo, Marca
+from articulos.models import Articulo, Marca, AjusteStock
 
 
 class ArticuloModelSerializer(serializers.ModelSerializer):
@@ -67,19 +67,8 @@ class ArticuloListSerializer(serializers.Serializer):
     precio_mayorista = serializers.IntegerField
     precio_especial = serializers.IntegerField
 
-    # class Meta:
-    #     model = Articulo
-    #     fields = ['id_articulo',
-    #               'id_marca',
-    #               'nombre',
-    #               'costo',
-    #               'porc_iva',
-    #               'porc_comision',
-    #               'stock_actual',
-    #               'stock_minimo',
-    #               'ultima_compra',
-    #               'unidad_medida',
-    #               'precio_unitario',
-    #               'precio_mayorista',
-    #               'precio_especial',
-    #               ]
+
+class AjusteStockModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AjusteStock
+        fields = '__all__'

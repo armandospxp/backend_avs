@@ -95,7 +95,7 @@ class NotaCreditoVentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 class NotaCreditoProveedorView(viewsets.ModelViewSet):
     serializer_class = NotaCreditoProveedorModelSerializer
-    queryset = NotaCreditoProveedor.objects.filter(estado='A')
+    queryset = NotaCreditoProveedor.objects.filter(estado='A').order_by('-id_nota_credito_proveedor')
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):

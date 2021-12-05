@@ -1,16 +1,18 @@
 import pdb
 
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer, ArticuloSearchModelSerializer, \
-    ArticuloListSerializer
-from articulos.models import Articulo, Marca
+    ArticuloListSerializer, AjusteStockModelSerializer
+from articulos.models import Articulo, Marca, AjusteStock
 
 
 class BasicPagination(PageNumberPagination):
@@ -180,3 +182,43 @@ def articulos_lista_sin_paginacion(request, format=None):
     serializer = ArticuloModelSerializer(articulos, many=True)
     return Response(serializer.data)
 
+
+class AjusteStockView(viewsets.ModelViewSet):
+    serializer_class = AjusteStockModelSerializer
+    queryset = AjusteStock.objects.filter(estado='A')
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        datos = data.copy()
+        datos['id_usuario'] = int(request.user.pk)
+        serializer = AjusteStockModelSerializer(data=datos)
+        if serializer.is_valid():
+            pk_articulo = int(datos['id_articulo'])
+            tipo_ajuste = str(datos['tipo_ajuste'])
+            cantidad = int(datos['cantidad'])
+            serializer.save()
+            articulo = get_object_or_404(Articulo, pk=pk_articulo)
+            if tipo_ajuste == 'A':
+                articulo.stock_actual = articulo.stock_actual + cantidad
+                articulo.save()
+            elif tipo_ajuste == 'B':
+                articulo.stock_actual = articulo.stock_actual - cantidad
+            else:
+                pass
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.estado = 'H'
+        instance.save()
+        pk_articulo = instance.id_articulo.id_articulo
+        articulo = get_object_or_404(Articulo, pk=pk_articulo)
+        if instance.tipo_ajuste == 'A':
+            articulo.stock_actual = articulo.stock_actual - int(instance.cantidad)
+        elif instance.tipo_ajuste == 'B':
+            articulo.stock_actual = articulo.stock_actual + int(instance.cantidad)
+        else:
+            pass
+        return Response(status=status.HTTP_204_NO_CONTENT)
