@@ -74,7 +74,9 @@ class VentaView(viewsets.ModelViewSet):
             impresora.numero_factura = impresora.numero_factura + 1
             impresora.save()
         else:
-            raise status.HTTP_400_BAD_REQUEST
+            error = {'error': "No hay mas numeracion para la impresora, error del sistema, favor actualize talonario "
+                              "de facturas"}
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
         serializer = VentaModelSerializer(data=request.data)
