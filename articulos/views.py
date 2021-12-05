@@ -222,3 +222,13 @@ class AjusteStockView(viewsets.ModelViewSet):
         else:
             pass
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AjusteStockSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    filter_backends = [SearchFilter]
+    queryset = AjusteStock.objects.filter()
+    serializer_class = AjusteStockModelSerializer
+    search_fields = ['id_articulo',
+                     'id_articulo__nombre',
+                     'id_articulo__codigo_barras',
+                     'id_articulo__id_marca__descripcion']
