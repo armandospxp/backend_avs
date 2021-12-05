@@ -185,7 +185,7 @@ def articulos_lista_sin_paginacion(request, format=None):
 
 class AjusteStockView(viewsets.ModelViewSet):
     serializer_class = AjusteStockModelSerializer
-    queryset = AjusteStock.objects.filter(estado='A')
+    queryset = AjusteStock.objects.filter(estado='A').order_by('-id_ajuste_stock')
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
