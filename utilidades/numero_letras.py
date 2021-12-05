@@ -121,7 +121,10 @@ def leer_decenas(numero):
     decena, unidad = divmod(numero, 10)
     if numero <= 19:
         resultado = DECENAS[unidad]
-    elif numero <= 29:
+    elif numero == 20 and unidad == 0:
+        resultado = 'veinte'
+                    #% UNIDADES[unidad]
+    elif 20 < numero <= 29:
         resultado = 'veinti%s' % UNIDADES[unidad]
     else:
         resultado = DIEZ_DIEZ[decena]
@@ -132,12 +135,18 @@ def leer_decenas(numero):
 
 def leer_centenas(numero):
     centena, decena = divmod(numero, 100)
-    if numero == 0:
+    if decena == 0 and centena == 1:
         resultado = 'cien'
     else:
         resultado = CIENTOS[centena]
         if decena > 0:
             resultado = '%s %s' % (resultado, leer_decenas(decena))
+    # if numero == 0:
+    #     resultado = 'cien'
+    # else:
+    #     resultado = CIENTOS[centena]
+    #     if decena > 0:
+    #         resultado = '%s %s' % (resultado, leer_decenas(decena))
     return resultado
 
 
