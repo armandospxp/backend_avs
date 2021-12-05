@@ -74,6 +74,8 @@ class NotaCreditoVentaModelSerializer(WritableNestedModelSerializer, serializers
     numero_factura = serializers.SerializerMethodField()
     monto_letras = serializers.SerializerMethodField()
     id_cliente = serializers.SerializerMethodField()
+    codigo_articulo = serializers.SerializerMethodField()
+    nombre_articulo = serializers.SerializerMethodField()
 
     class Meta:
         model = NotaCreditoCliente
@@ -98,11 +100,26 @@ class NotaCreditoVentaModelSerializer(WritableNestedModelSerializer, serializers
     def get_id_cliente(self, obj):
         return obj.id_venta.id_cliente.pk
 
+    def get_codigo_articulo(self, obj):
+        return obj.id_articulo.codigo_barras
+
+    def get_nombre_articulo(self, obj):
+        return obj.id_articulo.nombre
+
 
 class DetalleNotaCreditoProveedorModelSerializer(serializers.ModelSerializer):
+    codigo_articulo = serializers.SerializerMethodField()
+    nombre_articulo = serializers.SerializerMethodField()
+
     class Meta:
         model = DetalleNotaCreditoProveedor
         fields = '__all__'
+
+    def get_codigo_articulo(self, obj):
+        return obj.id_articulo.codigo_barras
+
+    def get_nombre_articulo(self, obj):
+        return obj.id_articulo.nombre
 
 
 class NotaCreditoProveedorModelSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
