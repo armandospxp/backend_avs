@@ -112,7 +112,9 @@ class VentaView(viewsets.ModelViewSet):
                                                                monto=int(respuesta['total']))
                 movimiento_caja.save()
                 return Response(respuesta, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        error = {"error": "Debe de ingresar el cliente"}
+        return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
         queryset = Venta.objects.all()
