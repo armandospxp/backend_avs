@@ -33,7 +33,6 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
         data = request.data
         serializer = NotaCreditoVentaModelSerializer(data=data)
         if serializer.is_valid():
-            pdb.set_trace()
             serializer.save()
             datos = dict(serializer.data)
             id_venta = int(datos['id_venta'])
