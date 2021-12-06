@@ -7,7 +7,8 @@ from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from reportes.serializers import ReporteArticulosVendidos, ReporteTopVendendores
+from articulos.models import Articulo
+from reportes.serializers import ReporteArticulosVendidos, ReporteTopVendendores, ReporteListaArticulosStock
 from ventas.models import DetalleVenta, Venta
 
 
@@ -42,7 +43,6 @@ class ReporteCantidadVendidaDia(viewsets.GenericViewSet):
     """ Vista de cantidad de ventas hechas en el dia"""
 
     permission_classes = [IsAuthenticated]
-    serializer_class = None
 
     def list(self, request):
         query = Venta.objects.all().filter(fecha=date.today()).filter(estado='A').count()
@@ -58,3 +58,17 @@ class ReporteCantidadVendidaMes(viewsets.GenericViewSet):
             fecha__range=(date.today() - timedelta(date.today().day + 1), date.today())).filter(estado='A').count()
         dict_query = {'cantidad_ventas_mes': query}
         return Response(dict_query, status=status.HTTP_200_OK)
+
+
+class ReporteStockActualMinimoArtiuclos(viewsets.GenericViewSet):
+    """Vista de stock actual y minimo de todos los articulos"""
+
+    permission_classes = [IsAuthenticated]
+    serializer_class = ReporteListaArticulosStock
+
+    def list(self, request):
+        query = Articulo.objects.all().values('id_articulo', 'codigo_barras', 'stock_minimo', 'stock_actual').order_by('id_articulo')
+        serializer = ReporteListaArticulosStock(query, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+

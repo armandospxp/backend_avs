@@ -18,3 +18,10 @@ class ReporteTopVendendores(serializers.Serializer):
 
     def get_nombre_apellido(self, obj):
         return obj['id_usuario__first_name']+' '+obj['id_usuario__last_name']
+
+
+class ReporteListaArticulosStock(serializers.Serializer):
+    id_articulo = serializers.IntegerField()
+    codigo_barras = serializers.CharField()
+    stock_minimo = serializers.IntegerField()
+    stock_actual = serializers.IntegerField()
