@@ -204,6 +204,7 @@ class AjusteStockView(viewsets.ModelViewSet):
                 articulo.save()
             elif tipo_ajuste == 'B':
                 articulo.stock_actual = articulo.stock_actual - cantidad
+                articulo.save()
             else:
                 pass
             return Response(serializer.data, status=status.HTTP_201_CREATED)
