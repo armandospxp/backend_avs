@@ -192,6 +192,7 @@ class AjusteStockView(viewsets.ModelViewSet):
         data = request.data
         datos = data.copy()
         datos['id_usuario'] = int(request.user.pk)
+        datos['motivo_ajuste'] = datos['motivo_ajuste'].upper()
         serializer = AjusteStockModelSerializer(data=datos)
         if serializer.is_valid():
             pk_articulo = int(datos['id_articulo'])
