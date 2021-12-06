@@ -19,5 +19,5 @@ urlpatterns = [
     path('users/<int:pk>/', user_views.UserDetail.as_view(), name='user_detail'),
     path('users/', user_views.UserList.as_view(), name='user_detail'),
     path('users/busqueda/', user_views.UserSearchViewSet.as_view({'get': 'list'}), name='user_detail'),
-    path('users/cambiopassword/<int:pk>/', user_views.UserUpdatePasswordView.as_view(), name='user_change_password12'),
+    path('users/cambiopassword/', user_views.UserUpdatePasswordView.as_view(), name='user_change_password12'),
 ]

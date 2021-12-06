@@ -1,12 +1,16 @@
 """Users views."""
 
 # Django REST Framework
+import pdb
+
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter
+from rest_framework.generics import UpdateAPIView
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 # Serializers
@@ -147,16 +151,58 @@ class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
 
-class UserUpdatePasswordView(APIView):
-    serializer_class = UserUpdatePassword
+# class UserUpdatePasswordView(APIView):
+#     serializer_class = UserUpdatePassword
+#
+#     def put(self, request, format=None):
+#         data = request.data
+#         pk_usuario = data['id_usuario']
+#         user = User.objects.get(pk=pk_usuario)
+#         # pdb.set_trace()
+#         serializer = UserUpdatePassword(data=request.data)
+#         if serializer.is_valid(self):
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk, format=None):
-        print(pk)
-        user = User.objects.get(id=pk)
-        serializer = UserUpdatePassword(data=request.data)
-        if serializer.is_valid(self):
-            serializer.save()
-            return Response(serializer.data)
+class UserUpdatePasswordView(UpdateAPIView):
+    """
+        An endpoint for changing password.
+        """
+    serializer_class = UserUpdatePassword
+    model = User
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.data
+        pk_usuario = obj['id_usuario']
+        usuario = User.objects.get(pk=pk_usuario)
+        return usuario
+
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # chequea que user sea administrador
+            if request.user.rol_usuario.upper() != 'ADMINISTRADOR':
+                return Response({"permisos": ["Necesita ser usuario administrador para resetear las contraseñas"]},
+                                status=status.HTTP_400_BAD_REQUEST)
+            # Chequea que password y password_confirmation seran iguales
+            if serializer.data.get("password") != serializer.data.get("password_confirmation"):
+                return Response({"password": ["Las contraseñas no coinciden"]}, status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Contraseña actualizada con exito',
+                'data': []
+            }
+
+            return Response(response)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
