@@ -28,8 +28,10 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
 
     def get_sub_total_iva(self, obj):
         AUX_ID_VENTA = obj.id_venta.id_venta
-        detalle_venta = get_object_or_404(DetalleVenta.objects.filter(venta=AUX_ID_VENTA))
-        AUX_CANTIDAD = int(detalle_venta.cantidad)
+        detalle_venta = DetalleVenta.objects.filter(venta=AUX_ID_VENTA).filter(id_articulo=obj.id_articulo)
+        global AUX_CANTIDAD
+        for d in detalle_venta:
+            AUX_CANTIDAD = d.cantidad
         if obj.id_articulo.porc_iva == 10 and AUX_CANTIDAD < 3:
             dato = int((int(obj.id_articulo.precio_unitario) * int(obj.cantidad)) / 11)
         elif obj.id_articulo.porc_iva == 10 and 3 < AUX_CANTIDAD < 12:
@@ -52,9 +54,11 @@ class DetalleNotaCreditoVentaModelSerializer(serializers.ModelSerializer):
 
     def get_precio_unitario(self, obj):
         AUX_ID_VENTA = obj.id_venta.id_venta
-        detalle_venta = get_object_or_404(DetalleVenta.objects.filter(venta=AUX_ID_VENTA))
-        AUX_CANTIDAD = int(detalle_venta.cantidad)
-        # pdb.set_trace()
+        # detalle_venta = get_object_or_404(DetalleVenta.objects.filter(venta=AUX_ID_VENTA))
+        detalle_venta = DetalleVenta.objects.filter(venta=AUX_ID_VENTA).filter(id_articulo=obj.id_articulo)
+        global AUX_CANTIDAD
+        for d in detalle_venta:
+            AUX_CANTIDAD = d.cantidad
         if AUX_CANTIDAD < 3:
             valor = obj.id_articulo.precio_unitario
         elif 3 < AUX_CANTIDAD < 12:
