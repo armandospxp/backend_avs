@@ -122,6 +122,18 @@ class ReporteTotaldeVentas(viewsets.GenericViewSet):
         cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        fecha_inicio = str(data['fecha_inicio'])
+        fecha_fin = str(data['fecha_fin'])
+        query = "select sum(v.total) from public.ventas_venta v where v.estado='A' and v.fecha between %s and %s;"
+        with connection.cursor() as cursor:
+            cursor.execute(query, [fecha_inicio, fecha_fin])
+            suma = cursor.fetchone()
+            respuesta = {'total_compras': suma[0]}
+            cursor.close()
+        return Response(respuesta, status=status.HTTP_200_OK)
+
 
 class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
     """Vista para el vendedor con mayor numero de ventas"""
