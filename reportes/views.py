@@ -92,6 +92,7 @@ class ReporteTotaldeCompras(viewsets.GenericViewSet):
             cursor.execute(query)
             suma = cursor.fetchone()
             respuesta = {'total_compras': suma[0]}
+        cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
 
@@ -106,6 +107,7 @@ class ReporteTotaldeVentas(viewsets.GenericViewSet):
             cursor.execute(query)
             suma = cursor.fetchone()
             respuesta = {'total_ventas': suma[0]}
+        cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
 
@@ -122,6 +124,7 @@ class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
             respuesta = {'id': vendedor[0],
                          'nombre_vendedor': vendedor[1],
                          'ventas_totales': vendedor[2]}
+            cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
 
@@ -140,4 +143,5 @@ class ReporteArticulosMasVendidosSql(viewsets.GenericViewSet):
             respuesta = {'nombre_articulo': row[0],
                          'cantidad': row[1]}
             a.append(respuesta)
+        cursor.close()
         return Response(a, status=status.HTTP_200_OK)
