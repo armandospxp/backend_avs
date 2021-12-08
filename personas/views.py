@@ -1,16 +1,20 @@
+# django
 from django.http import Http404
-from rest_framework import status, mixins, viewsets
+# rest-framework
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+# modelo de Personas
 from personas.models import Persona
+# serializer de Personas
 from personas.serializers import PersonaModelSerializers, PersonaListSerializer
 
 
 class MyPaginationMixin(object):
+    """Paginacion para Personas"""
     pagination_class = PageNumberPagination
 
     @property
@@ -37,7 +41,7 @@ class MyPaginationMixin(object):
 
 class PerosnaDetail(APIView):
     """
-    Retorna, actualiza o borra una instancia de Caja.
+    Retorna, actualiza o borra una instancia de Personas.
     """
     serializer_class = PersonaModelSerializers
 
@@ -67,7 +71,7 @@ class PerosnaDetail(APIView):
 
 
 class PersonaList(APIView, MyPaginationMixin):
-    """Lista los articulos o los crea"""
+    """Lista las Personas o los crea"""
     serializer_class = PersonaModelSerializers
 
     def get(self, request, format=None):
@@ -119,6 +123,7 @@ class PersonaProveedorList(APIView, MyPaginationMixin):
 
 
 class PersonaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Buscador para la vista de personas"""
     filter_backends = [SearchFilter]
     queryset = Persona.objects.filter(estado_activo="V")
     serializer_class = PersonaModelSerializers
@@ -140,6 +145,7 @@ class PersonaSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class PersonaProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Buscador para proveedores"""
     filter_backends = [SearchFilter]
     queryset = Persona.objects.filter(estado_activo="V", es_proveedor='V')
     serializer_class = PersonaModelSerializers
@@ -162,6 +168,8 @@ class PersonaProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(('GET',))
 def personas_lista_sin_paginacion(request, format=None):
+    """Listado para personas sin paginacion.
+    Para los buscadores del imput de clientes"""
     personas = Persona.objects.filter(es_cliente='V')
     serializer = PersonaModelSerializers(personas, many=True)
     return Response(serializer.data)

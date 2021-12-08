@@ -1,13 +1,15 @@
-import pdb
+# python datetime
 from datetime import date, datetime
-
+# django
 from django.db.models import Sum
+# rest-framework
 from rest_framework import status, viewsets
 from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+# modelos de cajas
 from cajas.models import ArqueoCaja, MovimientoCaja, RetiroDineroCaja
+# serializadores de cajas
 from cajas.serializers import ArqueoCajaModelSerializer, MovimientoCajaModelSerializer, RetiroDineroCajaModelSerializer
 
 
@@ -20,6 +22,9 @@ class ArqueoCajaView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
+        """Listado de arqueo de cajas
+        Si el usuario tiene rol administrador puede ver todos los arqueos, sino el ususario podra visualizar solo
+        los arqueos que el haya creado"""
         if request.user.rol_usuario.upper() != 'ADMINISTRADOR':
             query = ArqueoCaja.objects.order_by('-id_arqueo_caja').filter(id_empleado=request.user)
         else:
@@ -35,6 +40,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
+        """Crear un arqueo de caja"""
         data = request.data
         datos_modificados = data.copy()
         datos_modificados['id_empleado'] = int(request.user.pk)
@@ -45,7 +51,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
-        # kwargs['partial'] = True
+        """Vista para actualizar monto comprobante"""
         data = request.data
         datos = data.copy()
         if datos == {} or datos is None:
@@ -60,6 +66,7 @@ class ArqueoCajaView(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
+        """Vista para cerrar un arqueo de caja"""
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
         data = request.data
@@ -116,6 +123,7 @@ class RetiroDineroCajaView(viewsets.ModelViewSet):
 
 
 class ArqueoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Vista para la busqueda de arqueo de cajas"""
     filter_backends = [SearchFilter]
     queryset = ArqueoCaja.objects.filter()
     serializer_class = ArqueoCajaModelSerializer
@@ -126,6 +134,7 @@ class ArqueoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class MovimientoCajaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Vista para la busqueda de movimiento de cajas"""
     filter_backends = [SearchFilter]
     queryset = MovimientoCaja.objects.filter()
     serializer_class = MovimientoCajaModelSerializer

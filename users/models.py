@@ -1,7 +1,7 @@
-# Django
+# django
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+# modelo de configuracion
 from configuracion.models import Configuracion
 
 

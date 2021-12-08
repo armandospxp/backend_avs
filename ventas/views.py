@@ -1,29 +1,33 @@
-import pdb
-from datetime import datetime, date
-from io import BytesIO
-
-from django.http import response, HttpResponse
-from django.shortcuts import render
+# python datetime
+from datetime import date
+# rest-framework
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.serializers import Serializer
-from articulos.models import Articulo
-from cajas.models import MovimientoCaja
-from configuracion.models import Configuracion
-from personas.models import Persona
-from ventas.models import DetalleVenta, Venta
-from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer, VentaListModelSerializer
-from django.http import HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404
-from utilidades.numero_letras import numero_a_letras
-from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
+# modelo articulos
+from articulos.models import Articulo
+# modelo cajas
+from cajas.models import MovimientoCaja
+# modelo configuracion
+from configuracion.models import Configuracion
+# modelo ventas
+from ventas.models import DetalleVenta, Venta
+# serializadores de ventas
+from ventas.serializers import VentaModelSerializer, DetalleVentaModelSerializer, VentaListModelSerializer
+# libreria de django http
+from django.http import HttpResponseNotAllowed
+# libreria de django.shortcuts
+from django.shortcuts import get_object_or_404
+# libreria numero_a_letras de utilidades
+from utilidades.numero_letras import numero_a_letras
+
 
 
 class MyPaginationMixin(object):
+    """Clase de paginacion para listado"""
     pagination_class = PageNumberPagination
 
     @property
@@ -49,15 +53,18 @@ class MyPaginationMixin(object):
 
 
 class VentaView(viewsets.ModelViewSet):
+    """Vista de Ventas"""
     serializer_class = VentaModelSerializer
     queryset = Venta.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        """Obtener el listado"""
         venta = Venta.objects.filter(estado='A').order_by('-id_venta')
         return venta
 
     def list(self, request, *args, **kwargs):
+        """Listado de Ventas"""
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
@@ -69,6 +76,7 @@ class VentaView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def aumentar_numero_factura(self, pk_impresora):
+        """Funcion para aumentar el numero_factura del modelo de configuracion"""
         impresora = get_object_or_404(Configuracion, pk=pk_impresora)
         if impresora.numero_factura <= impresora.numero_final:
             impresora.numero_factura = impresora.numero_factura + 1
@@ -79,6 +87,7 @@ class VentaView(viewsets.ModelViewSet):
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def create(self, request, *args, **kwargs):
+        """Crear una Venta"""
         serializer = VentaModelSerializer(data=request.data)
         data = request.data
         data['id_usuario'] = int(request.user.pk)
@@ -119,6 +128,7 @@ class VentaView(viewsets.ModelViewSet):
         return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
+        """Eliminar logicamente una Venta"""
         queryset = Venta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk=pk)
         detalle_venta.estado = 'H'
@@ -127,14 +137,17 @@ class VentaView(viewsets.ModelViewSet):
 
 
 class DetalleVentaView(viewsets.ModelViewSet):
+    """Detalle de las Ventas"""
     serializer_class = DetalleVentaModelSerializer
     queryset = DetalleVenta.objects.filter(estado='A')
 
     def get_queryset(self):
+        """Obtener el listado de Ventas"""
         detalle_venta = DetalleVenta.objects.all()
         return detalle_venta
 
     def create(self, request, *args, **kwargs):
+        """Crear Detalle Venta"""
         data = request.data
         cantidad = data.get('cantidad')
         pk_articulo = data.get('id_articulo')
@@ -156,6 +169,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
+        """Obtener un detalle Venta"""
         queryset = DetalleVenta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk=pk)
         serializer = DetalleVentaModelSerializer(detalle_venta)
@@ -164,6 +178,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def destroy(self, request, pk=None):
+        """Eliminar Detalle Venta"""
         queryset = DetalleVenta.objects.all()
         detalle_venta = get_object_or_404(queryset, pk=pk)
         detalle_venta.estado = 'H'
@@ -171,6 +186,7 @@ class DetalleVentaView(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, pk):
+        """Actualizar un Detalle Venta"""
         detalle_venta = self.get_object(pk)
         serializer = DetalleVentaModelSerializer(detalle_venta, data=request.data)
         if serializer.is_valid():
@@ -197,6 +213,7 @@ def actualizar_stock(pk, estado, cantidad):
 
 @api_view(('GET',))
 def datos_factura_venta(request, id_venta):
+    """Funcion para devolver datos de una factura"""
     venta = Venta.objects.get(id_venta=id_venta)
     detalle_venta = venta.id_detalle_venta.filter()
     data = []
@@ -229,6 +246,7 @@ def datos_factura_venta(request, id_venta):
 
 
 class VentaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Busqueda de ventas"""
     filter_backends = [SearchFilter]
     queryset = Venta.objects.filter()
     serializer_class = VentaListModelSerializer

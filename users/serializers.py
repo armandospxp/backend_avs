@@ -17,6 +17,7 @@ from users.models import User
 
 
 class UserModelSerializer(serializers.ModelSerializer):
+    """Serializador de User, basado en ModelSerialzer"""
     class Meta:
         model = User
         fields = (
@@ -31,6 +32,7 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.Serializer):
+    """Serializador para el login del usuario"""
     # Campos que vamos a requerir
     email = serializers.EmailField()
     password = serializers.CharField(min_length=8, max_length=64)
@@ -52,19 +54,15 @@ class UserLoginSerializer(serializers.Serializer):
         return self.context['users'], token.key
 
 
-# class UserUpdatePassword(serializers.ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['password', 'password_confirmation']
-
-
 class UserUpdatePassword(serializers.Serializer):
+    """Serializer para actualizar password de un Usuario"""
     id_usuario = serializers.IntegerField()
     password = serializers.CharField(min_length=8, max_length=64)
     password_confirmation = serializers.CharField(min_length=8, max_length=64)
 
 
 class UserUpdateSerializer(serializers.Serializer):
+    """Serializer para actualizar """
     email = serializers.EmailField(
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -100,11 +98,7 @@ class UserUpdateSerializer(serializers.Serializer):
     # password_confirmation = serializers.CharField(min_length=8, max_length=64)
 
     def validate(self, data):
-        # passwd = data['password']
-        # passwd_conf = data['password_confirmation']
-        # if passwd != passwd_conf:
-        #     raise serializers.ValidationError("Las contraseñas no coinciden")
-        # password_validation.validate_password(passwd)
+        """Validar los datos"""
 
         image = None
         if 'photo' in data:
@@ -158,6 +152,7 @@ class UserSignUpSerializer(serializers.Serializer):
     configuracion = serializers.IntegerField
 
     def validate(self, data):
+        """Validar los datos"""
         passwd = data['password']
         passwd_conf = data['password_confirmation']
         if passwd != passwd_conf:
@@ -176,6 +171,7 @@ class UserSignUpSerializer(serializers.Serializer):
         return data
 
     def create(self, data):
+        """Crear usuario"""
         data.pop('password_confirmation')
         user = User.objects.create_user(**data)
         return user

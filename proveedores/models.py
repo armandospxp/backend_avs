@@ -1,10 +1,13 @@
-from typing import Tuple
+# django
 from django.db import models
-
+# Modelo Base de utilidades
 from utilidades.base_name import BaseModel
 
 
 class Proveedor(BaseModel):
+    """Modelo de proveedor.
+    Los tipos de personeria se clasifican en Fisica y Juridica
+    """
     FISICA = 'F'
     JURIDICA = 'J'
     VERDADERO = 'V'

@@ -1,7 +1,9 @@
+# django
 from django.db import models
 
 
 class Configuracion(models.Model):
+    """Modelo de configuracion"""
     id_impresora = models.AutoField(primary_key=True)
     nombre_impresora = models.CharField(null=False, max_length=50)
     numeracion_fija_factura = models.CharField(null=False, max_length=10)

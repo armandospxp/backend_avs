@@ -1,6 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""Libreria para la conversion de numeros a letras, esta libreria es un fork del original, con opciones
+a monedas en guaranies
+link del repositorio : https://gist.github.com/efrenfuentes/3785655
+"""
+
 __author__ = 'efrenfuentes'
 
 MONEDA_SINGULAR = 'guarani'

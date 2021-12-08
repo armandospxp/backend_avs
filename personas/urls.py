@@ -1,9 +1,12 @@
+# django
 from django.urls import path
+# rest-framework
 from rest_framework.urlpatterns import format_suffix_patterns
-
+# views de Personas
 from personas.views import PersonaList, PerosnaDetail, PersonaProveedorList, PersonaClienteList, PersonaSearchViewSet, \
     PersonaProveedorSearchViewSet, personas_lista_sin_paginacion
 
+"""Urls de personas"""
 urlpatterns = format_suffix_patterns([
     path('', PersonaList.as_view(), name='personas'),
     path('<int:pk>/', PerosnaDetail.as_view(), name='persona_detail'),

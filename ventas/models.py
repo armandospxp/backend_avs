@@ -1,16 +1,19 @@
+# django
 from django.db import models
+# python
 from datetime import date, datetime
-from django.db.models.base import Model
+# modelo de articulos
 from articulos.models import Articulo
+# modelo de personas
 from personas.models import Persona
-from django.utils import timezone
-from django import utils
-
+# modelo de usuarios
 from users.models import User
+# modelo base de utilidades
 from utilidades.base_name import BaseModel
 
 
 class DetalleVenta(BaseModel):
+    """Modeo de Detalle Ventas"""
     id_detalle_venta = models.AutoField(primary_key=True)
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     cantidad = models.IntegerField(blank=False, null=False, default=1)
@@ -18,6 +21,7 @@ class DetalleVenta(BaseModel):
 
 
 class Venta(BaseModel):
+    """Modelo de Ventas"""
     CONTADO = "CON"
     CREDITO = "CRE"
     TIPO_FACTURA_CHOICES = [

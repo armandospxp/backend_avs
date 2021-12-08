@@ -1,15 +1,19 @@
+# django
 from django.db import models
-
+# modelo de usuarios
 from users.models import User
+# modelo base de utilidades
 from utilidades.base_name import BaseModel
 
 
 class Marca(BaseModel):
+    """Modelo de marcas"""
     id_marca = models.CharField(primary_key=True, max_length=64)
     descripcion = models.CharField(max_length=100)
 
 
 class Articulo(BaseModel):
+    """Modelo de articulos"""
     KILOGRAMOS = "KG"
     CAJA = "CJ"
     UNIDAD = "UN"
@@ -41,6 +45,7 @@ class Articulo(BaseModel):
 
 
 class AjusteStock(BaseModel):
+    """Modelo de ajuste de stock"""
     ALTA = "A"
     BAJA = "B"
     TIPO_AJUSTE_CHOICES = [

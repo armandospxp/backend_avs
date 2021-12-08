@@ -1,7 +1,10 @@
+# python datetime
 from datetime import date
-
+# django
 from django.db import models
+# modelo de provedores
 from proveedores.models import Proveedor
+# modelo de articulos
 from articulos.models import Articulo
 
 

@@ -1,12 +1,13 @@
+# python datetime
 from datetime import date, datetime
-
+# django
 from django.db import models
-
-from personas.models import Persona
+# modelo de usuarios
 from users.models import User
 
 
 class ArqueoCaja(models.Model):
+    """Modelo de arqueo de caja"""
     id_arqueo_caja = models.AutoField(primary_key=True)
     id_empleado = models.ForeignKey(User, on_delete=models.CASCADE)
     monto_apertura = models.PositiveIntegerField(null=False, blank=False, default=0)
@@ -15,11 +16,10 @@ class ArqueoCaja(models.Model):
     fecha_apertura = models.DateField(null=False, blank=False, default=date.today)
     fecha_cierre = models.DateField(null=True, blank=True)
     hora_cierre = models.TimeField(null=True, blank=True)
-    # monto_comprobante = models.PositiveIntegerField(default=0)
-    # descripcion_comprobante = models.CharField(null=True, max_length=100)
 
 
 class RetiroDineroCaja(models.Model):
+    """Modelo de retiro de dinero de caja"""
     id_retiro_dinero_caja = models.AutoField(primary_key=True)
     id_arquero_caja = models.ForeignKey(ArqueoCaja, on_delete=models.CASCADE)
     monto_comprobante = models.PositiveIntegerField(default=0)
@@ -27,6 +27,7 @@ class RetiroDineroCaja(models.Model):
 
 
 class MovimientoCaja(models.Model):
+    """Modelo de movimiento de caja"""
     VENTA = "V"
     RETIRO = "R"
     TIPO_FACTURA_CHOICES = [

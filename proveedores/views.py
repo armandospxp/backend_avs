@@ -1,16 +1,20 @@
+# django
 from django.http import Http404
-from rest_framework import status, mixins, viewsets
+# rest-framework
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+# modelo de Proveedores
 from proveedores.models import Proveedor
+# serializador de Proveedores
 from proveedores.serializers import ProveedorModelSerializer
 
 
 class MyPaginationMixin(object):
+    """Paginacion para Proveedores"""
     pagination_class = PageNumberPagination
 
     @property
@@ -37,22 +41,25 @@ class MyPaginationMixin(object):
 
 class ProveedorDetail(APIView):
     """
-    Retorna, actualiza o borra una instancia de Caja.
+    Vista de Proveedores.
     """
     serializer_class = ProveedorModelSerializer
 
     def get_object(self, pk):
+        """Obtener una lista de Proveedores"""
         try:
             return Proveedor.objects.get(pk=pk)
         except Proveedor.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
+        """Obtener un proveedor por su Id"""
         persona = self.get_object(pk)
         serializer = ProveedorModelSerializer(persona)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        """Actualizar proveedor"""
         persona = self.get_object(pk)
         serializer = ProveedorModelSerializer(persona, data=request.data)
         if serializer.is_valid():
@@ -61,13 +68,14 @@ class ProveedorDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        caja = self.get_object(pk)
-        caja.delete()
+        """Borrar un Proveedor"""
+        persona = self.get_object(pk)
+        persona.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProveedorList(APIView, MyPaginationMixin):
-    """Lista los articulos o los crea"""
+    """Lista los Proveedores o los crea"""
     serializer_class = ProveedorModelSerializer
 
     def get(self, request, format=None):
@@ -90,6 +98,7 @@ class ProveedorList(APIView, MyPaginationMixin):
 
 
 class ProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Busqueda de Proveedores"""
     filter_backends = [SearchFilter]
     queryset = Proveedor.objects.filter(estado_activo="V")
     serializer_class = ProveedorModelSerializer
@@ -106,6 +115,7 @@ class ProveedorSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(('GET',))
 def proveedores_lista_sin_paginacion(request, format=None):
+    """Lista sin paginar de Proveedores"""
     proveedor = Proveedor.objects.all()
     serializer = ProveedorModelSerializer(proveedor, many=True)
     return Response(serializer.data)

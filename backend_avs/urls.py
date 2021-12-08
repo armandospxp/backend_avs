@@ -1,4 +1,4 @@
-"""Main URLs module."""
+"""Modulo principa de URLs de todas los modulos."""
 
 from django.conf import settings
 from django.urls import include, path

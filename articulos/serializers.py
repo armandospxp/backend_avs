@@ -1,9 +1,11 @@
+# rest-framework
 from rest_framework import serializers
-
+# modelos de articulos
 from articulos.models import Articulo, Marca, AjusteStock
 
 
 class ArticuloModelSerializer(serializers.ModelSerializer):
+    """Serialzador de articulos"""
     class Meta:
         model = Articulo
         fields = ['id_articulo',
@@ -24,12 +26,14 @@ class ArticuloModelSerializer(serializers.ModelSerializer):
 
 
 class MarcaModelSerializer(serializers.ModelSerializer):
+    """Serializador de Marca"""
     class Meta:
         model = Marca
         fields = '__all__'
 
 
 class ArticuloSearchModelSerializer(serializers.ModelSerializer):
+    """Serializador para la busqueda de articulos"""
     id_marca = MarcaModelSerializer(read_only=True)
 
     class Meta:
@@ -52,6 +56,7 @@ class ArticuloSearchModelSerializer(serializers.ModelSerializer):
 
 
 class ArticuloListSerializer(serializers.Serializer):
+    """Serializador para lista de articulos"""
     id_articulo = serializers.IntegerField
     id_marca = MarcaModelSerializer(read_only=True)
     codigo_barras = serializers.CharField
@@ -69,6 +74,7 @@ class ArticuloListSerializer(serializers.Serializer):
 
 
 class AjusteStockModelSerializer(serializers.ModelSerializer):
+    """Serializador para ajuste de articulos"""
     class Meta:
         model = AjusteStock
         fields = '__all__'

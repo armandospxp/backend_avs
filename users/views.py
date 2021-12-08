@@ -1,8 +1,6 @@
 """Users views."""
 
 # Django REST Framework
-import pdb
-
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
@@ -25,6 +23,7 @@ from users.serializers import UserSignUpSerializer
 
 
 class MyPaginationMixin(object):
+    """Paginacion para users"""
     pagination_class = PageNumberPagination
 
     @property
@@ -50,6 +49,7 @@ class MyPaginationMixin(object):
 
 
 class UserViewSet(viewsets.GenericViewSet):
+    """Vistas de usuarios"""
     queryset = User.objects.filter(is_active=True)
     serializer_class = UserModelSerializer
 
@@ -110,7 +110,7 @@ class UserList(APIView, MyPaginationMixin):
 
 class UserDetail(APIView):
     """
-    Retorna, actualiza o borra una instancia de Caja.
+    Vista detallada de usuario
     """
     serializer_class = UserModelSerializer
 
@@ -151,23 +151,9 @@ class UserSearchViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
 
-# class UserUpdatePasswordView(APIView):
-#     serializer_class = UserUpdatePassword
-#
-#     def put(self, request, format=None):
-#         data = request.data
-#         pk_usuario = data['id_usuario']
-#         user = User.objects.get(pk=pk_usuario)
-#         # pdb.set_trace()
-#         serializer = UserUpdatePassword(data=request.data)
-#         if serializer.is_valid(self):
-#             serializer.save()
-#             return Response(serializer.data)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class UserUpdatePasswordView(UpdateAPIView):
     """
-        An endpoint for changing password.
+        Un endpoint para cambiar contraseña
         """
     serializer_class = UserUpdatePassword
     model = User
@@ -207,6 +193,7 @@ class UserUpdatePasswordView(UpdateAPIView):
 
 
 class UserResetPasswordView(APIView):
+    """Vista para reestablecer contraseña de usuario"""
     serializer_class = UserUpdatePassword
 
     def post(self, request):

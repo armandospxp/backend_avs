@@ -14,6 +14,7 @@ from users import views as user_views
 router = DefaultRouter()
 router.register(r'users', user_views.UserViewSet, basename='users')
 
+"""Urls de usuarios"""
 urlpatterns = [
     path('', include(router.urls)),
     path('users/<int:pk>/', user_views.UserDetail.as_view(), name='user_detail'),

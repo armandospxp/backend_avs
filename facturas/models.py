@@ -1,12 +1,15 @@
+# django
 from django.db import models
-
+# modelo de articulos
 from articulos.models import Articulo
-from personas.models import Persona
+# modelo de proveedores
 from proveedores.models import Proveedor
+# modelo base de utilidades
 from utilidades.base_name import BaseModel
 
 
 class Factura(BaseModel):
+    """Modelo de facturas de compra"""
     CONTADO = 'CON'
     CREDITO = 'CRE'
     TIPO_FACTURA_CHOICES = [
@@ -22,6 +25,7 @@ class Factura(BaseModel):
 
 
 class DetalleFacturaCompra(BaseModel):
+    """Modelo de detalle facturas de compra"""
     id_detalle_factura_compra = models.AutoField(primary_key=True)
     id_articulo = models.ForeignKey(Articulo, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=0)
@@ -30,6 +34,7 @@ class DetalleFacturaCompra(BaseModel):
 
 
 class FacturaCompra(BaseModel):
+    """Modelo de factura compra"""
     id_factura_compra = models.AutoField(primary_key=True)
     numero_factura = models.CharField(max_length=100)
     id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)

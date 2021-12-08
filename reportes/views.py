@@ -1,14 +1,20 @@
+# python datetime
 import pdb
-from datetime import date, datetime, timedelta
-
+from datetime import date, timedelta
+# django
 from django.db.models import Sum, Count
+from django.db import connection
+# rest-framework
 from rest_framework import status, viewsets
-from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
+# modelo articulos
 from articulos.models import Articulo
+# serializador de reportes
 from reportes.serializers import ReporteArticulosVendidos, ReporteTopVendendores, ReporteListaArticulosStock
+# modelo de factura compra
+from facturas.models import FacturaCompra
+# modelo de ventas
 from ventas.models import DetalleVenta, Venta
 
 
@@ -67,8 +73,23 @@ class ReporteStockActualMinimoArtiuclos(viewsets.GenericViewSet):
     serializer_class = ReporteListaArticulosStock
 
     def list(self, request):
-        query = Articulo.objects.all().values('id_articulo', 'codigo_barras', 'stock_minimo', 'stock_actual').order_by('id_articulo')
+        query = Articulo.objects.all().values('id_articulo', 'codigo_barras', 'stock_minimo', 'stock_actual').order_by(
+            'id_articulo')
         serializer = ReporteListaArticulosStock(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class ReporteTotaldeCompras(viewsets.GenericViewSet):
+    """Vista para la suma total de compras hechas"""
+
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        # total_factura_compra = FacturaCompra.objects.filter(estado='A').sum('total')
+        query = "select sum(f.total) from public.facturas_facturacompra f where f.estado='A';"
+        # factura_compra = FacturaCompra.objects.raw(query)
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            suma = cursor.fetchone()
+            respuesta = {'total_compras': suma}
+        return Response(respuesta, status=status.HTTP_200_OK)

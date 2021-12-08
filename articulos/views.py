@@ -1,7 +1,7 @@
-import pdb
-
+# django
 from django.http import Http404
 from django.shortcuts import get_object_or_404
+# rest-framework
 from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
@@ -10,16 +10,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+# serializadores de articulos
 from articulos.serializers import ArticuloModelSerializer, MarcaModelSerializer, ArticuloSearchModelSerializer, \
-    ArticuloListSerializer, AjusteStockModelSerializer
+    AjusteStockModelSerializer
+# modelo de articulos
 from articulos.models import Articulo, Marca, AjusteStock
 
 
 class BasicPagination(PageNumberPagination):
+    """Ordenacion de paginas para articulos"""
     page_size_query_param = 'limit'
 
 
 class MyPaginationMixin(object):
+    """Paginacion para articulos"""
     pagination_class = PageNumberPagination
 
     @property
@@ -51,17 +55,20 @@ class ArticuloDetail(APIView):
     serializer_class = ArticuloModelSerializer
 
     def get_object(self, pk):
+        """Obtener un articulo especifico"""
         try:
             return Articulo.objects.get(pk=pk)
         except Articulo.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
+        """Obtener articulo"""
         articulo = self.get_object(pk)
         serializer = ArticuloModelSerializer(articulo)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        """Actualizar un articulo"""
         articulo = self.get_object(pk)
         serializer = ArticuloModelSerializer(articulo, data=request.data)
         if serializer.is_valid():
@@ -70,6 +77,7 @@ class ArticuloDetail(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        """Borrar logicamente un articulo"""
         articulo = self.get_object(pk)
         articulo.estado = 'H'
         articulo.save()
@@ -81,6 +89,7 @@ class ArticuloList(APIView, MyPaginationMixin):
     serializer_class = ArticuloModelSerializer
 
     def get(self, request, format=None):
+        """Obtiene todos los articulos"""
         articulo = Articulo.objects.filter(estado='A')
         page = self.paginate_queryset(articulo)
         if page is not None:
@@ -91,6 +100,7 @@ class ArticuloList(APIView, MyPaginationMixin):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """Crea un nuevo articulo"""
         serializer = ArticuloModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -105,17 +115,20 @@ class MarcaDetail(APIView, MyPaginationMixin):
     serializer_class = MarcaModelSerializer
 
     def get_object(self, pk):
+        """Obtener una marca particular"""
         try:
             return Marca.objects.get(pk=pk)
         except Marca.DoesNotExist:
             raise Http404
 
     def get(self, request, pk, format=None):
+        """Obtener una marca"""
         marca = self.get_object(pk)
         serializer = MarcaModelSerializer(marca)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        """Actualizar una marca"""
         marca = self.get_object(pk)
         serializer = ArticuloModelSerializer(marca, data=request.data)
         if serializer.is_valid():
@@ -124,6 +137,7 @@ class MarcaDetail(APIView, MyPaginationMixin):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
+        """Borrar logicamente una marca"""
         marca = self.get_object(pk)
         marca.estado = 'H'
         marca.save()
@@ -136,11 +150,13 @@ class MarcaList(APIView):
     serializer_class = MarcaModelSerializer
 
     def get(self, request, format=None):
+        """Obtener las marcas"""
         marca = Marca.objects.filter(estado='A')
         serializer = MarcaModelSerializer(marca, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        """Crear una nueva marca en el sistema"""
         serializer = MarcaModelSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -149,6 +165,7 @@ class MarcaList(APIView):
 
 
 class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Buscador para articulos"""
     filter_backends = [SearchFilter]
     queryset = Articulo.objects.filter()
     serializer_class = ArticuloSearchModelSerializer
@@ -169,6 +186,7 @@ class ArticuloSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Buscador para marcas"""
     filter_backends = [SearchFilter]
     queryset = Marca.objects.filter()
     serializer_class = MarcaModelSerializer
@@ -178,17 +196,20 @@ class MarcaSearchViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(('GET',))
 def articulos_lista_sin_paginacion(request, format=None):
+    """Lista sin paginar de articulos, para busqueda en input"""
     articulos = Articulo.objects.filter(estado='A')
     serializer = ArticuloModelSerializer(articulos, many=True)
     return Response(serializer.data)
 
 
 class AjusteStockView(viewsets.ModelViewSet):
+    """ViewSet de ajuste de stock"""
     serializer_class = AjusteStockModelSerializer
     queryset = AjusteStock.objects.filter(estado='A').order_by('-id_ajuste_stock')
     permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
+        """Crear un ajuste de stock"""
         data = request.data
         datos = data.copy()
         datos['id_usuario'] = int(request.user.pk)
@@ -200,6 +221,9 @@ class AjusteStockView(viewsets.ModelViewSet):
             cantidad = int(datos['cantidad'])
             serializer.save()
             articulo = get_object_or_404(Articulo, pk=pk_articulo)
+            """Dependiendo del tipo de ajuste:
+            A para alta, se suma la cantidad al stock del articulo a realizar su ajuste
+            B para baja, se resta la cantidad al stock del articulo a realizar su ajuste"""
             if tipo_ajuste == 'A':
                 articulo.stock_actual = articulo.stock_actual + cantidad
                 articulo.save()
@@ -212,6 +236,7 @@ class AjusteStockView(viewsets.ModelViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
+        """Se borra logicamente el ajuste realizado, y se reestablece el stock depdendiento si fue una alta o baja"""
         instance = self.get_object()
         instance.estado = 'H'
         instance.save()
@@ -227,6 +252,7 @@ class AjusteStockView(viewsets.ModelViewSet):
 
 
 class AjusteStockSearchViewSet(viewsets.ReadOnlyModelViewSet):
+    """Busqueda de ajuste de stock"""
     filter_backends = [SearchFilter]
     queryset = AjusteStock.objects.filter()
     serializer_class = AjusteStockModelSerializer
