@@ -84,7 +84,7 @@ class ReporteTotaldeCompras(viewsets.GenericViewSet):
 
     permission_classes = [IsAuthenticated]
 
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
         # total_factura_compra = FacturaCompra.objects.filter(estado='A').sum('total')
         query = "select sum(f.total) from public.facturas_facturacompra f where f.estado='A';"
         # factura_compra = FacturaCompra.objects.raw(query)
@@ -93,6 +93,18 @@ class ReporteTotaldeCompras(viewsets.GenericViewSet):
             suma = cursor.fetchone()
             respuesta = {'total_compras': suma[0]}
         cursor.close()
+        return Response(respuesta, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        fecha_inicio = str(data['fecha_inicio'])
+        fecha_fin = str(data['fecha_fin'])
+        query = "select sum(f.total) from public.facturas_facturacompra f where f.estado='A' and f.fecha_creacion between %s and %s;"
+        with connection.cursor() as cursor:
+            cursor.execute(query, [fecha_inicio, fecha_fin])
+            suma = cursor.fetchone()
+            respuesta = {'total_compras': suma[0]}
+            cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
 
