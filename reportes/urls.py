@@ -4,12 +4,13 @@ from django.urls import path
 # app de reportes
 from reportes.views import ReporteArticulosMasVendidos, ReporteTopVendedores, ReporteCantidadVendidaDia, \
     ReporteCantidadVendidaMes, ReporteStockActualMinimoArtiuclos, ReporteTotaldeCompras, ReporteTotaldeVentas, \
-    ReporteVendedorMayorVenta, ReporteArticulosMasVendidosSql
+    ReporteVendedorMayorVenta, ReporteArticulosMasVendidosSql, ReporteVendedoresVentasSql
 
 """Urls de reportes"""
 urlpatterns = [
     path('reporte-articulos/', ReporteArticulosMasVendidos.as_view({'get': 'list'}), name='reporte-articulos'),
-    path('reporte-vendedores/', ReporteTopVendedores.as_view({'get': 'list'}), name='reporte-vendedores'),
+    path('reporte-vendedores/', ReporteVendedoresVentasSql.as_view({'get': 'list',
+                                                                    'post': 'create'}), name='reporte-vendedores'),
     path('reporte-ventas-dia/', ReporteCantidadVendidaDia.as_view({'get': 'list'}), name='reporte-ventas-dia'),
     path('reporte-ventas-mes/', ReporteCantidadVendidaMes.as_view({'get': 'list'}), name='reporte-ventas-mes'),
     path('reporte-total-compras/', ReporteTotaldeCompras.as_view({'get': 'list',

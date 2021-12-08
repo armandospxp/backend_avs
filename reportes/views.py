@@ -141,7 +141,7 @@ class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request):
-        query = "select distinct u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' group by total, u.first_name, u.last_name, u.id order by total desc;"
+        query = "select u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' group by u.id order by total desc;"
         with connection.cursor() as cursor:
             cursor.execute(query)
             vendedor = cursor.fetchone()
@@ -152,7 +152,7 @@ class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
         return Response(respuesta, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
-        query = "select distinct u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' and v.fecha between %s and %s group by total, u.first_name, u.last_name, u.id order by total desc;"
+        query = "select distinct u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' and v.fecha between %s and %s group by u.id order by total desc;"
         data = request.data
         fecha_inicio = data['fecha_inicio']
         fecha_fin = data['fecha_fin']
@@ -196,6 +196,43 @@ class ReporteArticulosMasVendidosSql(viewsets.GenericViewSet):
         for row in articulos:
             respuesta = {'nombre_articulo': row[0],
                          'cantidad': row[1]}
+            a.append(respuesta)
+        cursor.close()
+        return Response(a, status=status.HTTP_200_OK)
+
+
+class ReporteVendedoresVentasSql(viewsets.GenericViewSet):
+    """Vista para la suma total de los vendedores con las ventas que mas se vendio"""
+
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query = "select u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' group by u.id order by total desc;"
+        a = []
+        cursor = connection.cursor()
+        cursor.execute(query)
+        articulos = cursor.fetchall()
+        for row in articulos:
+            respuesta = {'id': row[0],
+                         'nombre_apellido': row[1],
+                         'total': row[2]}
+            a.append(respuesta)
+        cursor.close()
+        return Response(a, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        query = "select u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' and v.fecha between %s and %s group by u.id order by total desc;"
+        data = request.data
+        fecha_inicio = data['fecha_inicio']
+        fecha_fin = data['fecha_fin']
+        a = []
+        cursor = connection.cursor()
+        cursor.execute(query, [fecha_inicio, fecha_fin])
+        articulos = cursor.fetchall()
+        for row in articulos:
+            respuesta = {'id': row[0],
+                         'nombre_apellido': row[1],
+                         'total': row[2]}
             a.append(respuesta)
         cursor.close()
         return Response(a, status=status.HTTP_200_OK)
