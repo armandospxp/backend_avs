@@ -91,5 +91,35 @@ class ReporteTotaldeCompras(viewsets.GenericViewSet):
         with connection.cursor() as cursor:
             cursor.execute(query)
             suma = cursor.fetchone()
-            respuesta = {'total_compras': suma}
+            respuesta = {'total_compras': suma[0]}
+        return Response(respuesta, status=status.HTTP_200_OK)
+
+
+class ReporteTotaldeVentas(viewsets.GenericViewSet):
+    """Vista para la suma total de ventas hechas"""
+
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query = "select sum(v.total) from public.ventas_venta v where v.estado='A';"
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            suma = cursor.fetchone()
+            respuesta = {'total_ventas': suma[0]}
+        return Response(respuesta, status=status.HTTP_200_OK)
+
+
+class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
+    """Vista para la suma total de ventas hechas"""
+
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query = "select distinct u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' group by total, u.first_name, u.last_name, u.id order by total desc;"
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            vendedor = cursor.fetchone()
+            respuesta = {'id': vendedor[0],
+                         'nombre_vendedor': vendedor[1],
+                         'ventas_totales': vendedor[2]}
         return Response(respuesta, status=status.HTTP_200_OK)
