@@ -110,7 +110,7 @@ class ReporteTotaldeVentas(viewsets.GenericViewSet):
 
 
 class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
-    """Vista para la suma total de ventas hechas"""
+    """Vista para el vendedor con mayor numero de ventas"""
 
     permission_classes = [IsAuthenticated]
 
@@ -123,3 +123,21 @@ class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
                          'nombre_vendedor': vendedor[1],
                          'ventas_totales': vendedor[2]}
         return Response(respuesta, status=status.HTTP_200_OK)
+
+
+class ReporteArticulosMasVendidosSql(viewsets.GenericViewSet):
+    """Vista para la suma total de los articulos que mas se vendio"""
+
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query = "select ar.nombre nombre_articulo, count(dt.id_articulo_id) cantidad from ventas_detalleventa dt join articulos_articulo ar on dt.id_articulo_id = ar.id_articulo join ventas_venta_id_detalle_venta it on it.detalleventa_id = dt.id_detalle_venta join ventas_venta v on v.id_venta = it.venta_id where v.estado='A' group by ar.nombre  order by cantidad desc;"
+        a = []
+        cursor = connection.cursor()
+        cursor.execute(query)
+        articulos = cursor.fetchall()
+        for row in articulos:
+            respuesta = {'nombre_articulo': row[0],
+                         'cantidad': row[1]}
+            a.append(respuesta)
+        return Response(a, status=status.HTTP_200_OK)
