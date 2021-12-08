@@ -151,6 +151,20 @@ class ReporteVendedorMayorVenta(viewsets.GenericViewSet):
             cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
+    def create(self, request, *args, **kwargs):
+        query = "select distinct u.id, u.first_name||' '||u.last_name nombre_apellido, sum(v.total) total from public.users_user u join public.ventas_venta v on v.id_usuario_id = u.id where v.estado='A' and v.fecha between %s and %s group by total, u.first_name, u.last_name, u.id order by total desc;"
+        data = request.data
+        fecha_inicio = data['fecha_inicio']
+        fecha_fin = data['fecha_fin']
+        with connection.cursor() as cursor:
+            cursor.execute(query, [fecha_inicio, fecha_fin])
+            vendedor = cursor.fetchone()
+            respuesta = {'id': vendedor[0],
+                         'nombre_vendedor': vendedor[1],
+                         'ventas_totales': vendedor[2]}
+            cursor.close()
+        return Response(respuesta, status=status.HTTP_200_OK)
+
 
 class ReporteArticulosMasVendidosSql(viewsets.GenericViewSet):
     """Vista para la suma total de los articulos que mas se vendio"""
@@ -162,6 +176,22 @@ class ReporteArticulosMasVendidosSql(viewsets.GenericViewSet):
         a = []
         cursor = connection.cursor()
         cursor.execute(query)
+        articulos = cursor.fetchall()
+        for row in articulos:
+            respuesta = {'nombre_articulo': row[0],
+                         'cantidad': row[1]}
+            a.append(respuesta)
+        cursor.close()
+        return Response(a, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        query = "select ar.nombre nombre_articulo, count(dt.id_articulo_id) cantidad from ventas_detalleventa dt join articulos_articulo ar on dt.id_articulo_id = ar.id_articulo join ventas_venta_id_detalle_venta it on it.detalleventa_id = dt.id_detalle_venta join ventas_venta v on v.id_venta = it.venta_id where v.estado='A' and v.fecha between %s and %s group by ar.nombre  order by cantidad desc;"
+        data = request.data
+        fecha_inicio = data['fecha_inicio']
+        fecha_fin = data['fecha_fin']
+        a = []
+        cursor = connection.cursor()
+        cursor.execute(query, [fecha_inicio, fecha_fin])
         articulos = cursor.fetchall()
         for row in articulos:
             respuesta = {'nombre_articulo': row[0],
