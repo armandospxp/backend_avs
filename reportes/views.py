@@ -73,7 +73,7 @@ class ReporteStockActualMinimoArtiuclos(viewsets.GenericViewSet):
     serializer_class = ReporteListaArticulosStock
 
     def list(self, request):
-        query = Articulo.objects.all().values('id_articulo', 'codigo_barras', 'stock_minimo', 'stock_actual').order_by(
+        query = Articulo.objects.all().values('id_articulo', 'codigo_barras', 'stock_minimo', 'stock_actual', 'nombre').order_by(
             'id_articulo')
         serializer = ReporteListaArticulosStock(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

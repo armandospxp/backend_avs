@@ -25,6 +25,7 @@ class ReporteTopVendendores(serializers.Serializer):
 class ReporteListaArticulosStock(serializers.Serializer):
     """Serializador de Reporte de Stock de Articulos"""
     id_articulo = serializers.IntegerField()
+    nombre = serializers.CharField()
     codigo_barras = serializers.CharField()
     stock_minimo = serializers.IntegerField()
     stock_actual = serializers.IntegerField()
