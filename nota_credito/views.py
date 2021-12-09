@@ -39,7 +39,7 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
             id_venta = int(datos['id_venta'])
             monto_total = int(datos['monto_total'])
             venta = get_object_or_404(Venta.objects.all(), pk=id_venta)
-            if venta.total_nota_credito <= venta.total or venta.total_nota_credito <= venta.total_nota_credito + monto_total:
+            if venta.total_nota_credito <= venta.total and venta.total_nota_credito <= venta.total_nota_credito + monto_total:
                 """Si la nota de credito no supera el total de monto de venta se crea la nota y se guarda una info
                 de la cantidad de nota de credito en la venta"""
                 venta.total_nota_credito = venta.total_nota_credito + monto_total
