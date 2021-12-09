@@ -130,7 +130,7 @@ class ReporteTotaldeVentas(viewsets.GenericViewSet):
         with connection.cursor() as cursor:
             cursor.execute(query, [fecha_inicio, fecha_fin])
             suma = cursor.fetchone()
-            respuesta = {'total_compras': suma[0]}
+            respuesta = {'total_ventas': suma[0]}
             cursor.close()
         return Response(respuesta, status=status.HTTP_200_OK)
 
