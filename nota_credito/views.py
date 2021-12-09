@@ -45,7 +45,8 @@ class NotaCreditoVentaView(viewsets.ModelViewSet):
                 venta.total_nota_credito = venta.total_nota_credito + monto_total
                 venta.save()
             else:
-                raise status.HTTP_400_BAD_REQUEST
+                error = {'error': 'No puede ingresar un monto de nota de credito que supere al total de dicha venta'}
+                return Response(error, status=status.HTTP_400_BAD_REQUEST)
             nota_credito_cliente = NotaCreditoCliente.objects.latest('id_nota_credito_cliente')
             detalle_nota_credito = DetalleNotaCredito.objects.filter(notacreditocliente=nota_credito_cliente)
             for detalle in detalle_nota_credito:
