@@ -79,7 +79,8 @@ class VentaModelSerializer(WritableNestedModelSerializer, serializers.ModelSeria
                   'numero_factura',
                   'nombre_cliente',
                   'nombre_usuario',
-                  'monto_letras'
+                  'monto_letras',
+                  'total_nota_credito'
                   ]
 
     def get_nombre_cliente(self, obj):
@@ -123,7 +124,8 @@ class VentaListModelSerializer(WritableNestedModelSerializer, serializers.ModelS
                   'numero_factura',
                   'nombre_cliente',
                   'nombre_usuario',
-                  'monto_letras'
+                  'monto_letras',
+                  'total_nota_credito'
                   ]
 
     def get_nombre_cliente(self, obj):
