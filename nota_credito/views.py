@@ -117,7 +117,7 @@ class NotaCreditoProveedorView(viewsets.ModelViewSet):
             nota_credito_proveedor = NotaCreditoProveedor.objects.latest('id_nota_credito_proveedor')
             pk_factura_compra = nota_credito_proveedor.id_factura_compra.pk
             factura_compra = get_object_or_404(FacturaCompra.objects.all(), pk=pk_factura_compra)
-            if nota_credito_proveedor.monto_total <= factura_compra.total:
+            if nota_credito_proveedor.monto_total <= factura_compra.total and factura_compra.total_nota_credito + nota_credito_proveedor.monto_total <= factura_compra.total:
                 """De igual forma que en nota de credito venta, si el monto de la nota de credito de proveedor
                 no supera el monto del total de factura se crea la nota de credito"""
                 factura_compra.total_nota_credito = factura_compra.total_nota_credito + nota_credito_proveedor.monto_total
